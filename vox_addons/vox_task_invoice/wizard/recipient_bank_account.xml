@@ -1,0 +1,34 @@
+<odoo>
+    <data>
+        <record id="update_recipient_bank_action_view" model="ir.ui.view">
+            <field name="name">Update Confirmation Date</field>
+            <field name="model">update.recipient.bank</field>
+            <field name="arch" type="xml">
+
+                <form string="Update Recipient Bank">
+
+                    <group>
+                        <field name="move_id" invisible="1"/>
+                        <field name="partner_bank_id"/>
+
+                    </group>
+                    <footer>
+                        <button type="object" name="action_post"
+                                string="Update Recipient Bank" class="btn-primary"/>
+                        <button special="cancel" string="Cancel" class="btn-default"/>
+                    </footer>
+                </form>
+
+            </field>
+        </record>
+
+
+        <record id="update_recipient_bank_action" model="ir.actions.act_window">
+            <field name="name">Update Recipient Bank</field>
+            <field name="res_model">update.recipient.bank</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="update_recipient_bank_action_view"/>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

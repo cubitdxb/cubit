@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <report
+            id="std_rated_sale_report_xls"
+            model="fta.report.xls"
+            string="FTA Report"
+            report_type="xlsx"
+            name="vox_fta_report.vox_fta_report_xls.xslx"
+            file="vox_fta_report.vox_fta_report_xls.xslx"
+            menu="False"
+            attachment_use="False"/>
+</odoo>

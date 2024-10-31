@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="update_gross_profit_action" model="ir.actions.act_window">
+        <field name="name">Update Gross profit</field>
+        <field name="res_model">update.gross.profit</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+
+    <record id="update_gross_form" model="ir.ui.view">
+        <field name="name">Update Gross profit</field>
+        <field name="model">update.gross.profit</field>
+        <field name="arch" type="xml">
+            <form string="Update Gross profit">
+                <group>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </group>
+                <footer>
+
+                    <button name="update_gross_profit" string="Update Gross Profit" type="object" class="oe_highlight"/>
+<!--                    or-->
+                     <button name="update_invoice_number" string="Update Invoice in sale" type="object" class="oe_highlight"/>
+                    or
+                    <button name="update_invoice_quantity" string="Update Invoice QTY in sale" type="object" class="oe_highlight"/>
+                    or
+
+                    <button name="update_vendor_bills" string="Update Vendor BILLS" type="object" class="oe_highlight"/>
+
+<!--                    <button name="update_total_amount" string="Update Total Amount in account" type="object" class="oe_highlight"/>-->
+<!--                    or-->
+
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+     <menuitem action="update_gross_profit_action" id="update_gross_profit_menu" name="Update Gross profit"
+               parent="sale.menu_sales_config" sequence="55"/>
+</odoo>

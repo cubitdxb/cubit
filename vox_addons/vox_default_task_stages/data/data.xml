@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- Task Stages -->
+    <record id="project_task_initial" model="project.task.type">
+        <field name="sequence">10</field>
+        <field name="name">Initial</field>
+        <field name="task_default" eval="True" />
+    </record>
+    <record id="project_task_inprogress" model="project.task.type">
+        <field name="sequence">20</field>
+        <field name="name">In Progress</field>
+        <field name="task_default" eval="True" />
+    </record>
+    <record id="project_task_onhold" model="project.task.type">
+        <field name="sequence">30</field>
+        <field name="name">On Hold</field>
+        <field name="task_default" eval="True" />
+    </record>
+    <record id="project_task_completed" model="project.task.type">
+        <field name="sequence">40</field>
+        <field name="name">Completed</field>
+        <field name="task_default" eval="True" />
+    </record>
+
+</odoo>

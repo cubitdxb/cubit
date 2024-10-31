@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sale_order_form_inherited" model="ir.ui.view">
+            <field name="name">sale.order.form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/header/button[@name='action_quotation_send']"
+                       position="after">
+                    <button name="%(vox_task_template.create_project_action)d"
+                            attrs="{'invisible': ['|',('state', 'not in' , ['sale', 'progress','done']),('project_id','!=',False)]}"
+                            string="Create Project"
+                            type="action"/>
+                    <button name="reset_purchase_qty"
+                            type="object" string="Reset Purchase qty"/>
+                </xpath>
+
+                <xpath expr="//field[@name='order_line']//tree//field[@name='product_id']" position="after">
+                    <field name="global_discount_line" invisible="1"/>
+                    <field name="service_global_discount_line" invisible="1"/>
+                </xpath>
+
+                <!--                <field name="amount_tax" position="before">-->
+                <!--                    <field name="discount_type" invisible="1"/>-->
+                <!--                    <field name="discount_distribution_type" required="1"/>-->
+                <!--                    <field name="line_taxes_ids" widget="many2many_tags" invisible="1"/>-->
+                <!--                    <field name="distribution_tax_ids" string="Tax Codes"-->
+                <!--                           attrs="{'invisible': [('discount_distribution_type', '!=' , 'against_tax')],'required': [('discount_distribution_type', '=' , 'against_tax')]}"-->
+                <!--                           widget="many2many_tags" domain="[('id', 'in', line_taxes_ids)]"-->
+                <!--                           options="{'no_create': True, 'no_open': True}"/>-->
+
+                <!--                    <field name="discount_amount" widget="monetary"-->
+                <!--                           options="{'currency_field': 'currency_id'}"/>-->
+                <!--                    <field name="service_discount_amount" widget="monetary"-->
+                <!--                           options="{'currency_field': 'currency_id'}"/>-->
+                <!--                    <field name="amount_gross" string="Total Taxable Amount" invisible="1"/>-->
+                <!--                </field>-->
+
+
+                <field name="amount_total" position="after">
+                    <field name="amount_total_cost" widget="monetary" options="{'currency_field': 'currency_id'}"
+                           string="Sales Cost (XLS)"/>
+                    <field name="purchase_price_total" string="Purchase Order Released"/>
+                    <field name="line_cost_price_total" string="Sales Cost"/>
+                    <field name="cubit_service_cost_price_total" string="Cubit Services"/>
+                    <field name="actual_cost_price_total" string="Total Final Cost"/>
+                    <field name="additional_cost" force_save="1"/>
+                    <field name="profit" string="Gross Profit" force_save="1"/>
+                </field>
+
+                <field name="amount_untaxed" position="before">
+                    <field name="amount_gross" widget="monetary"
+                           options="{'currency_field': 'currency_id'}"/>
+                    <field name="discount_type" invisible="1"/>
+                    <field name="discount_distribution_type" required="1"/>
+                    <field name="line_taxes_ids" widget="many2many_tags" invisible="1"/>
+                    <field name="distribution_tax_ids" string="Tax Codes"
+                           attrs="{'invisible': [('discount_distribution_type', '!=' , 'against_tax')],'required': [('discount_distribution_type', '=' , 'against_tax')]}"
+                           widget="many2many_tags" domain="[('id', 'in', line_taxes_ids)]"
+                           options="{'no_create': True, 'no_open': True}"/>
+
+                    <field name="discount_amount" widget="monetary"
+                           options="{'currency_field': 'currency_id'}"/>
+                    <field name="service_discount_amount" widget="monetary"
+                           options="{'currency_field': 'currency_id'}"/>
+                    <field name="option_discount_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <field name="amount_gross" string="Total Taxable Amount" invisible="1"/>
+                </field>
+
+            </field>
+        </record>
+
+        <record id="sale_move_product_form_inherited_discount_distribution_net_taxable" model="ir.ui.view">
+            <field name="name">product.sale_order.form.inherited.discount.distribution.net.taxable</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="crm_lead_fields.sale_move_product_form_inherited"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//notebook/page/field[@name='order_line']/tree/field[@name='price_included']"
+                       position="before">
+                    <field name="total_price" sum="Total" optional="show"/>
+                    <field name="discount_distribution" sum="Total" optional="show"/>
+                    <field name="option_discount" optional="show" sum="Total"/>
+                    <field name="net_taxable" sum="Total" optional="show" invisible="1"/>
+                </xpath>
+
+                <xpath expr="//button[@name='action_confirm']" position="after">
+                    <button name="update_option_discount_action" type="object"
+                            string="Update Option Discount" class="oe_highlight"
+                            context="{'default_sale_id': active_id}"
+                            attrs="{'invisible': [('state', 'in', ['sale','done','second_level_margin_approval','second_level_email_approval','send_for_lpo_email_margin_approval'])]}"/>
+                </xpath>
+
+
+            </field>
+        </record>
+    </data>
+</odoo>

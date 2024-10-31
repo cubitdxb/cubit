@@ -1,0 +1,36 @@
+<odoo>
+    <data>
+        <record id="cheque_tracker_selection_form" model="ir.ui.view">
+            <field name="name">cheque.tracker.selection.form</field>
+            <field name="model">cheque.tracker.selection</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group col="2">
+                        <field name="name"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="cheque_tracker_selection_tree" model="ir.ui.view">
+            <field name="name">cheque.tracker.selection.tree</field>
+            <field name="model">cheque.tracker.selection</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="cheque_tracker_selection_action" model="ir.actions.act_window">
+            <field name="name">Cheque Tracker Status</field>
+            <field name="res_model">cheque.tracker.selection</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+        </record>
+
+        <menuitem id="cheque_tracker_selection_menu" action="cheque_tracker_selection_action"
+                  name="Cheque Tracker Status"
+                  parent="account.account_account_menu" sequence="100"/>
+    </data>
+</odoo>

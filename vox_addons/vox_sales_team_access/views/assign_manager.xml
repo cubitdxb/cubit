@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="users_view_assign_report_managers" model="ir.ui.view">
+        <field name="name">users.view.assign.report.managers</field>
+        <field name="model">assign.users.manager</field>
+        <field name="arch" type="xml">
+            <form string="Add Reporting Lead">
+                <group class="oe_title">
+                    <field name="user_id" options="{'no_create': True,'no_edit': True, 'no_open': True}"/>
+                </group>
+                <footer>
+                    <button name="add_report_manager" string="Add Reporting Lead" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="res_users_report_lead_assign_action" model="ir.actions.act_window">
+        <field name="name">Assign Reporting Lead</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">assign.users.manager</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="users_view_assign_report_managers"/>
+        <field name="target">new</field>
+    </record>
+
+
+</odoo>

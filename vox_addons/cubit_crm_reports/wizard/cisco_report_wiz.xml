@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+		<record id="cisco_wizard_view_form_wiz" model="ir.ui.view">
+			<field name="name">cisco.report.wizard.form</field>
+			<field name="model">cisco.report.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Cisco Report">
+				<group>
+					<group>
+						<field name="date_from" required="1"/>
+					</group>
+					<group >
+						<field name="date_to" required="1"/>
+					</group>
+					</group>
+					<footer>
+						<button string="Download XLSX" name="action_print_xls" 
+							type="object" class="btn-primary" />
+						<button string="Close" class="btn-default" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+		
+		<record id="action_cisco_wiz_report" model="ir.actions.act_window">
+			<field name="name">Cisco Report</field>
+			<field name="res_model">cisco.report.wizard</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="cisco_wizard_view_form_wiz"/>
+			<field name="target">new</field>
+		</record>
+		
+		<menuitem id="menu_cisco_report" name="Cisco Report"
+			action="cubit_crm_reports.action_cisco_wiz_report" parent="crm.crm_menu_report" sequence="13" />
+		
+		<record id="action_cisco_report_report_xls" model="ir.actions.report">
+			<field name="name">Cisco Report</field>
+			<field name="model">cisco.report.wizard</field>
+			<field name="report_type">xlsx</field>
+            <field name="report_name">cubit_crm_reports.report_cisco_xls</field>
+            <field name="report_file">cubit_crm_reports.report_cisco_xls</field>
+            <field name="binding_type">report</field>
+		</record>
+</odoo>

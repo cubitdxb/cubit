@@ -1,0 +1,28 @@
+<odoo>
+    <record id="disable_field_project_project_form_inherited" model="ir.ui.view">
+        <field name="name">disable.project.project.form.inherit</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="vox_task_template.project_project_form_inherited"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='sale_id']" position="before">
+                <field name="disable_required_fields"/>
+
+            </xpath>
+
+            <field name="level_one_user_ids" position="attributes">
+                 <attribute name="required">0</attribute>
+                <attribute name="attrs">{'required':[('disable_required_fields','!=',True)]}</attribute>
+            </field>
+            <field name="level_two_user_ids" position="attributes">
+                 <attribute name="required">0</attribute>
+                <attribute name="attrs">{ 'required':[('disable_required_fields','!=',True)]}</attribute>
+            </field>
+            <field name="user_ids" position="attributes">
+                 <attribute name="required">0</attribute>
+                <attribute name="attrs">{ 'required':[('disable_required_fields','!=',True)]}</attribute>
+            </field>
+        </field>
+    </record>
+
+
+</odoo>

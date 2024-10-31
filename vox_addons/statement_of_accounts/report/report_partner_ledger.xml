@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_partner_ledger">
+        <template  id="report_header_custom" inherit_id="report.external_layout_header">
+<!--             <t t-set="o" t-value="docs"/>-->
+            <t t-if="o and 'company_id' in o">
+                  <t t-set="company" t-value="o.company_id"/>
+             </t>
+              <t t-if="not o or not 'company_id' in o">
+                  <t t-set="company" t-value="res_company"/>
+              </t>
+
+            <xpath expr="//div[@class='header']" position="replace">
+                <div class="header">
+                    <div class="row">
+                        <div class="col-4 text-left">
+                            <br/>
+                            <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo" width="150"/>
+
+                        </div>
+
+                        <div class="col-8 text-left">
+                        <br/>
+
+                            <h2>
+
+                                <strong>
+                               Partner Ledger
+                                </strong>
+                            </h2>
+                        </div>
+<!--                        <div class="col-2 text-left"/>-->
+
+
+                    </div>
+                </div>
+
+            </xpath>
+        </template>
+        <template id="custom_layout_footer" inherit_id="report.external_layout_footer">
+            <xpath expr="//div[@class='footer']" position="replace">
+                <div class="footer">
+                    <div class="row">
+                         <div class="col-2 text-left"/>
+                        <div class="col-8 text-center">
+                       </div>
+                        <div class="col-2 text-right">
+                            <br/> <br/> <br/> <br/>
+<!--                                 Page: <span class="page"/> of <span class="topage"/>-->
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+
+        </template>
+
+        <t t-call="web.html_container">
+            <t t-call="web.internal_layout">
+
+                <t t-foreach="docs" t-as="p">
+                    <div class="page">
+
+                        <table width="100%"   style="border: 0px solid white;border-collapse: collapse">
+                        <tr>
+                            <td width="60%"  style="padding:5px;vertical-align: top;">
+                                <span style="font-size:17px;font-weight: bold;">
+                                    To :
+                                    </span><br/>
+                                   <t t-if="p.name"><span t-field="p.name"/><br/></t>
+                                    <t t-if="p.street"><span t-field="p.street"/>&amp;nbsp;</t>
+                                    <t t-if="p.street2"><span t-field="p.street2"/></t>
+                                    <t t-if="p.street or p.street2"><br/></t>
+    <!--                                <t t-if="o.partner_id.zip">P.O. Box <span t-field="o.partner_id.zip"/><br/></t>-->
+                                    <t t-if="p.city"><span t-field="p.city"/>&amp;nbsp;</t>
+                                    <t t-if="p.country_id.name"><span t-field="p.country_id.name"/></t>
+                                    <t t-if="p.country_id or p.city"><br/></t>
+
+                                    <t t-if="p.phone"><i class="fa fa-phone"/> <span t-field="p.phone"/><br/></t>
+                                <t t-if="p.email"><i class="fa envelope-o"/> <span t-field="p.email"/><br/></t>
+                                    <t t-if="p.vat"><t t-esc="p.company_id.country_id.vat_label or 'Tax ID'"/>: <span t-field="p.vat"/><br/></t>
+                            </td>
+                            <td width="40%"  style="border: 0px solid white;padding:5px;vertical-align: top;">
+                                <table width="100%" align="left" style="border: 1px solid black;">
+                                    <tr>
+                                        <td align="left" width="40%" style="border: 0px solid white;padding:5px;"><strong>Date</strong></td>
+                                        <td align="left" width="3%"  style="border: 0px solid white;padding:5px;"><strong>:  </strong></td>
+                                        <td align="left" width="57%"  style="border: 0px solid white;padding:5px;">
+                                            <span t-esc="currdate" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="left"  style="border: 0px solid white;padding:5px;"><strong>Period</strong></td>
+                                        <td align="left"  style="border: 0px solid white;padding:5px;"><strong>:  </strong></td>
+                                        <td align="left"   style="border: 0px solid white;padding:5px;">
+                                            <span t-esc="start_date" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/> to
+                                            <span t-esc="end_date" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="left"  style="border: 0px solid white;padding:5px;"><strong>Opening Balance</strong></td>
+                                        <td align="left"  style="border: 0px solid white;padding:5px;"><strong>:  </strong></td>
+                                        <td align="left"   style="border: 0px solid white;padding:5px;">
+                                             <span  t-esc="'{0:,.2f}'.format(line_items[p.id]['balfwd'])"/>
+                                        </td>
+                                    </tr>
+                                    <tr style="background-color:light-grey;">
+                                        <td align="left"  style="border: 0px solid white;padding:5px;"><strong>Closing Balance</strong></td>
+                                        <td align="left"  style="border: 0px solid white;padding:5px;"><strong>:  </strong></td>
+                                        <td align="left"   style="border: 0px solid white;padding:5px;">
+                                             <span  t-esc="'{0:,.2f}'.format(line_items[p.id]['balfinal'])"/>
+                                        </td>
+                                    </tr>
+
+
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                        <br/>
+
+                        <table   style="border: 1px solid black;border-collapse: collapse;width:100%;">
+                            <thead>
+                                <tr>
+                                    <th style="border: 1px solid black;padding:5px;width:13%;text-align: center;background:light-grey;">Date</th>
+                                    <th style="border: 1px solid black;padding:5px;width:13%;text-align: center;background:light-grey;">Transaction</th>
+                                    <th style="border: 1px solid black;padding:5px;width:35%;text-align: center;background:light-grey;">Description</th>
+                                    <th style="border: 1px solid black;padding:5px;width:12%;text-align: center;background:light-grey;">Debit</th>
+                                    <th style="border: 1px solid black;padding:5px;width:12%;text-align: center;background:light-grey;">Credit</th>
+                                    <th style="border: 1px solid black;padding:5px;width:15%;text-align: center;background:light-grey;">Balance</th>
+                                </tr>
+                            </thead>
+                                <tbody style="border: 1px solid black;border-collapse: collapse">
+                                    <t t-set="balance" t-value="0.0"/>
+                                    <tr>
+                                        <td  style="border: 1px solid black;padding:5px;text-align: left;">
+                                            <span t-esc="start_date" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
+                                        </td>
+                                        <td  style="border: 1px solid black;padding:5px;text-align: left;">
+
+                                        </td>
+                                        <td  style="border: 1px solid black;padding:5px;text-align: left;">
+                                            Opening Balance
+                                        </td>
+                                        <td style="border: 1px solid black;padding:5px;text-align: right;">
+
+
+                                        </td>
+                                        <td  style="border: 1px solid black;padding:5px;text-align: right;">
+
+                                        </td>
+                                        <td  style="border: 1px solid black;padding:5px;text-align: right;">
+                                            <span  t-esc="'{0:,.2f}'.format(line_items[p.id]['balfwd'])"/>
+                                            <t t-set="balance" t-value="line_items[p.id]['balfwd']"/>
+                                        </td>
+
+                                    </tr>
+
+
+                                    <tr t-foreach="line_items[p.id]['aml']" t-as="line">
+                                        <td  style="border: 1px solid black;padding:5px;text-align: left;">
+                                            <span t-field="line.move_id.date" t-options='{"format": "dd-MM-yyyy"}'/>
+                                        </td>
+                                        <td  style="border: 1px solid black;padding:5px;text-align: left;">
+                                            <span t-esc="line.move_name"/>
+
+                                        </td>
+                                        <td  style="border: 1px solid black;padding:5px;text-align: left;">
+                                            <span t-esc="line.ref"/>
+                                            <span t-esc="line_items[p.id]['aml_so'][line.id]"/>
+                                        </td>
+                                        <td style="border: 1px solid black;padding:5px;text-align: right;">
+                                            <span t-if="line.debit" t-esc="'{0:,.2f}'.format(line.debit)"/>
+                                            <t t-set="balance" t-value="balance+line.debit"/>
+
+                                        </td>
+                                        <td  style="border: 1px solid black;padding:5px;text-align: right;">
+                                                <span t-if="line.credit" t-esc="'{0:,.2f}'.format(line.credit)"/>
+                                                <t t-set="balance" t-value="balance-line.credit"/>
+                                        </td>
+                                        <td  style="border: 1px solid black;padding:5px;text-align: right;">
+                                            <span  t-esc="'{0:,.2f}'.format(balance)"/>
+                                        </td>
+
+                                    </tr>
+                                  </tbody>
+                        </table>
+                    </div>
+                    <p style="page-break-after: always;"><br/></p>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

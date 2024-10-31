@@ -1,0 +1,87 @@
+<odoo>
+    <data>
+
+
+        <record id="sale_move_product_form_inherited_form" model="ir.ui.view">
+            <field name="name">product.sale_order.form.inherited</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="crm_lead_fields.sale_move_product_form_inherited"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//button[@name='action_create_revision']" position="attributes">
+                    <attribute name="states">draft,sent,second_level_margin_approval,second_level_email_approval
+                    </attribute>
+                    <!--                <button name="action_create_revision" states="draft,sent" string="Create Revision" type="object"/>-->
+
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="sale_approve_margin_inherited" model="ir.ui.view">
+            <field name="name">margin.sale_order.form.inherited</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+
+                <field name="date_order" position="after">
+                    <field name="approved_margin" forcesave="1" invisible="1"/>
+                    <field name="margin_visibility" invisible="1"/>
+                    <field name="cubit_service" forcesave="1" invisible="1"/>
+                    <field name="margin_visibility_one_two" invisible="1"/>
+                    <field name="margin_visibility_one" invisible="1"/>
+                    <field name="margin_visibility_two" invisible="1"/>
+                    <field name="margin_approve_one_two" invisible="1"/>
+                    <field name="margin_approve_one" invisible="1"/>
+                    <field name="margin_approve_two" invisible="1"/>
+                    <!--                    <field name="margin_visibility_level_4" invisible="1"/>-->
+                    <!--                    <field name="margin_visibility_level_3" invisible="1"/>-->
+                    <!--                    <field name="is_level_4_margin_approval" invisible="1"/>-->
+                    <!--                    <field name="is_level_3_margin_approval" invisible="1"/>-->
+                    <!--                    <field name="is_level_4_email_approval" invisible="1"/>-->
+                    <!--                    <field name="is_level_3_email_approval" invisible="1"/>-->
+                    <!--                    <field name="email_request_visibility" invisible="1"/>-->
+                    <field name="email_request" invisible="1"/>
+                    <field name="email_approve_one_two" invisible="1"/>
+                    <field name="email_approve_one" invisible="1"/>
+                    <field name="email_approve_two" invisible="1"/>
+                </field>
+
+                <xpath expr="//form/header/button[@name='action_confirm'][2]" position="attributes">
+                    <attribute name="attrs">{'invisible': [('state', 'not in',
+                        ['sent','draft','second_level_margin_approval','second_level_email_approval'])]}
+                    </attribute>
+                </xpath>
+
+                <xpath expr="//notebook/page/field[@name='order_line']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ['sale','done','cancel'])]}</attribute>
+                </xpath>
+
+
+                <xpath expr="//form/header/button[@name='action_quotation_send']" position="after">
+                    <!--                    <button name="action_approve_margin_level_4" string="Approve Margin"-->
+                    <!--                            type="object" class="oe_highlight" attrs="{'invisible': [('margin_visibility', '=', True),('is_level_4_margin_approval', '=', True),('is_level_3_margin_approval','!=',True)]}"/>-->
+                    <button name="action_approve_margin" string="Approve Margin"
+                            type="object" class="oe_highlight"
+                            attrs="{'invisible': ['|','|',('approved_margin', '=', True),('cubit_service','=',True),('state', 'not in', ['send_for_margin_approval','first_level_margin_approval','send_for_lpo_email_margin_approval'])]}"
+                            groups="vox_user_groups.margin_approval_user_one,vox_user_groups.margin_approval_user_two"/>
+
+                    <button name="email_approval_request" string="Email approval request"
+                            attrs="{'invisible': ['|',('state', 'not in', ['send_for_email_approval','first_level_email_approval','send_for_lpo_email_margin_approval']),('lpo_email', '=', False)]}"
+                            groups="vox_user_groups.email_approval_user_one,vox_user_groups.email_approval_user_two"
+                            type="object" class="oe_highlight"/>
+
+                </xpath>
+            </field>
+        </record>
+
+         <record id="sale.action_quotations_with_onboarding" model="ir.actions.act_window">
+            <field name="domain">[('state','in',('draft','sent','cancel','send_for_email_approval','first_level_email_approval','send_for_lpo_email_margin_approval','send_for_margin_approval','first_level_margin_approval','second_level_margin_approval','second_level_email_approval')), '|', '|', '|',('user_ids', '=',False), ('user_ids','=', uid) , ('user_ids.report_mgr_id.report_mgr_id', '=', uid), ('user_ids.report_mgr_id', '=', uid)]</field>
+        </record>
+
+
+        <record id="sale.action_orders" model="ir.actions.act_window">
+            <field name="domain">[('state', 'not in', ('draft', 'sent', 'cancel')), '|', '|', '|',('user_ids', '=',False), ('user_ids','=', uid) , ('user_ids.report_mgr_id.report_mgr_id', '=', uid), ('user_ids.report_mgr_id', '=', uid)]</field>
+        </record>
+    </data>
+</odoo>

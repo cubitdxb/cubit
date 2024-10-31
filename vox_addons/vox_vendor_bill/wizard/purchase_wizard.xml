@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="wizard_form_purchase_order_line_edit" model="ir.ui.view">
+            <field name="model">wiz.purchase_order_line_edit</field>
+            <field name="arch" type="xml">
+                <form string="Purchase order lines edit">
+                    <group>
+                        <field name="select_all"/>
+                    </group>
+                    <group>
+                        <field name="line_ids" nolabel="1">
+                            <tree editable="bottom" create="0" edit="1" delete="0">
+                                <field name="is_check"/>
+                                <field name="part_number" readonly="1"/>
+                                <field name="name" readonly="1"/>
+                                <field name="unit_price" readonly="1"/>
+                                <field name="product_uom_qty" readonly="0"/>
+                                <field name="tax_id" invisible="1"/>
+                                <field name="sale_layout_cat_id" invisible="1"/>
+                                <field name="product_uom" invisible="1"/>
+                                <field name="is_line_invoiced" invisible="1"/>
+                                <field name="product_uom" invisible="1"/>
+                                <field name="line_id" invisible="1"/>
+                                <field name="discount" invisible="1"/>
+                                <field name="discount_distribution" invisible="1"/>
+                                <field name="net_taxable" invisible="1"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <footer>
+                        <button name="create_invoices" class="oe_highlight" type="object" string="Create Bill"/>
+                        or
+                        <button class="oe_link" special="cancel" string="Cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</openerp>

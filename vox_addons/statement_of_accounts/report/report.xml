@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+     <record id="action_report_partner_ledger" model="ir.actions.report">
+            <field name="name">Partner Ledger</field>
+            <field name="model">account.report.partner.ledger</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">statement_of_accounts.report_partner_ledger</field>
+            <field name="report_file">statement_of_accounts.report_partner_ledger</field>
+        </record>
+    <record id="action_report_soa" model="ir.actions.report">
+            <field name="name">Statement of Accounts</field>
+            <field name="model">account.report.report_soa</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">statement_of_accounts.report_soa</field>
+            <field name="report_file">statement_of_accounts.report_soa</field>
+        </record>
+
+</odoo>

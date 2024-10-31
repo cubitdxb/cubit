@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_vox_task_invoice,vox_task_invoice.project_create_invoice,model_sale_task_payment_inv,,1,1,1,1
+access_check_tracker,vox_task_invoice.check_tracker,model_check_tracker,,1,1,1,1
+access_check_tracker_status,vox_task_invoice.check_trackere_stataus,model_cheque_tracker_selection,,1,1,1,1
+access_update_recipient_bank,vox_task_invoice.update_recipient_bank,model_update_recipient_bank,,1,1,1,1
+access_wiz_sale_order_line_edit,wiz_sale_order_line_edit,model_wiz_sale_order_line_edit,,1,1,1,1
+access_wiz_sale_order_line_edit_lines,access_wiz_sale_order_line_edit_lines,model_wiz_sale_order_line_edit_lines,,1,1,1,1

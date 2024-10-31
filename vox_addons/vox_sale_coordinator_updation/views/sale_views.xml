@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="update_partner_action" model="ir.actions.act_window">
+        <field name="name">Update Sales Coordinator</field>
+        <field name="res_model">update.partner.users</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+
+    <record id="update_partner_form" model="ir.ui.view">
+        <field name="name">Update Sales Coordinator</field>
+        <field name="model">update.partner.users</field>
+        <field name="arch" type="xml">
+            <form string="Sale Users">
+<!--                <group>-->
+<!--                    <field name="start_date"/>-->
+<!--                    <field name="end_date"/>-->
+<!--                </group>-->
+                <footer>
+
+                    <button name="update_partner_coordinator" string="Update Sales Coordinator" type="object" class="oe_highlight"/>
+                    or
+                    <button name="update_renewal_team" string="Update Renewal" type="object" class="oe_highlight"/>
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+     <menuitem action="update_partner_action" id="update_partner_menu" name="Update Sales Coordinator"
+               parent="sale.menu_sales_config" sequence="55"/>
+</odoo>

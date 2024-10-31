@@ -1,0 +1,69 @@
+<odoo>
+    <data>
+
+        <record id="purchase_order_required_fielld" model="ir.ui.view">
+            <field name="name">Purchase Order Inherited Cubit</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="vox_task_template.purchase_order_2_stock_picking2_cubit"/>
+            <field name="arch" type="xml">
+
+                <field name="awaiting_eta" position="after">
+                    <field name="disable_required_fields"/>
+                </field>
+                <field name="payment_term" position="attributes">
+                    <attribute name="required">0</attribute>
+                    <attribute name="attrs">{'required': [('disable_required_fields', '!=', True),
+                                                          ('state', 'in', ('draft', 'sent'))]}</attribute>
+                </field>
+                <field name="awaiting_eta" position="attributes">
+                    <attribute name="attrs">{'invisible': [('disable_required_fields', '=', True)]}</attribute>
+                </field>
+                <xpath expr="//field[@name='end_user_name']" position="attributes">
+                    <attribute name="required">0</attribute>
+                    <attribute name="attrs">{'required': [('disable_required_fields', '!=', True)]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='end_user_mail']" position="attributes">
+                    <attribute name="required">0</attribute>
+                    <attribute name="attrs">{'required': [('disable_required_fields', '!=', True)]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='end_user_address']" position="attributes">
+                    <attribute name="required">0</attribute>
+                    <attribute name="attrs">{'required': [('disable_required_fields', '!=', True)]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='end_user_mobile']" position="attributes">
+                    <attribute name="required">0</attribute>
+                    <attribute name="attrs">{'required': [('disable_required_fields', '!=', True)]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='end_user_fax']" position="attributes">
+                    <attribute name="required">0</attribute>
+                    <attribute name="attrs">{'required': [('disable_required_fields', '!=', True)]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='end_user_website']" position="attributes">
+                    <attribute name="required">0</attribute>
+                    <attribute name="attrs">{'required': [('disable_required_fields', '!=', True)]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='end_user_company_value']" position="attributes">
+                    <attribute name="required">0</attribute>
+                    <attribute name="attrs">{'required': [('disable_required_fields', '!=', True)]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='end_user_vat']" position="attributes">
+                    <attribute name="required">0</attribute>
+                    <attribute name="attrs">{'required': [('disable_required_fields', '!=', True)]}</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="purchase_order_disable_form_view_inherit" model="ir.ui.view">
+            <field name="name">Purchase order Cubit</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <field name="date_order" position="attributes">
+                    <attribute name="attrs">{'required': [('disable_required_fields', '!=', True)]}</attribute>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</odoo>
+

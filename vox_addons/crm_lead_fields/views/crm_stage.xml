@@ -1,0 +1,21 @@
+<odoo>
+    <data>
+        <record id="lead_crm_stage_form" model="ir.ui.view">
+            <field name="name">crm.stage.form</field>
+            <field name="model">crm.stage</field>
+             <field name="inherit_id" ref="crm.crm_stage_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group/group/field[@name='is_won']" position="after">
+                    <field name="is_lead"/>
+                    <field name="is_opportunity"/>
+                    <field name="is_import"/>
+                    <field name="is_sale_order"/>
+                    <field name="is_lost"/>
+<!--                    <field name="stages_readonly"/>-->
+                    <field name="cubit_crm_stage_id" invisible="1"/>
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>

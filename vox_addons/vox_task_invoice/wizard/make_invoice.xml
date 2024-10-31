@@ -1,0 +1,37 @@
+<odoo>
+    <data>
+        <record id="view_project_make_invoice" model="ir.ui.view">
+			<field name="name">make invoice</field>
+			<field name="model">project.make.invoice</field>
+			<field name="arch" type="xml">
+				<form string="Create Invoice">
+					<group>
+						<field name="partner_id" readonly="1" />
+						<field name="project_id" readonly="1" />
+						<field name="sale_id" readonly="1" />
+						<field name="date" />
+						<field name="stage_id"/>
+						<field name="percentage" />
+						<field name="amount" />
+					</group>
+					<footer>
+						<button name="make_invoice" string="Create Invoice" type="object"
+							class="oe_highlight" />
+						or
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+
+		   <record id="create_invoice_action" model="ir.actions.act_window">
+        <field name="name">Create Invoice</field>
+        <field name="res_model">project.make.invoice</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+
+    </data>
+</odoo>

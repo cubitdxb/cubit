@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_wizard_partner_ledger,access.wizard.partner.ledger,model_wizard_partner_ledger,account.group_account_user,1,1,1,1
+access_wizard_soa,access.wizard.soa,model_wizard_soa,account.group_account_user,1,1,1,1

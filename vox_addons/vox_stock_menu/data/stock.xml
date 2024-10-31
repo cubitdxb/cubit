@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+<!--        <record id="seq_cubit_stock" model="ir.sequence">-->
+<!--            <field name="name">Cubit stock</field>-->
+<!--            <field name="code">cubit.stock</field>-->
+<!--            <field name="prefix">CS</field>-->
+<!--            <field name="padding">5</field>-->
+<!--            <field name="company_id" eval="False"/>-->
+<!--        </record>-->
+
+<!--        <record id="seq_amc_cubit_stock" model="ir.sequence">-->
+<!--            <field name="name">AMC/MSP Cubit stock</field>-->
+<!--            <field name="code">amc.cubit.stock</field>-->
+<!--            <field name="prefix">AMC/CS</field>-->
+<!--            <field name="padding">5</field>-->
+<!--            <field name="company_id" eval="False"/>-->
+<!--        </record>-->
+    </data>
+</odoo>

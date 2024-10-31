@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_vox_user_groups_vox_user_groups,vox_user_groups.vox_user_groups,model_vox_user_groups_vox_user_groups,base.group_user,1,1,1,1

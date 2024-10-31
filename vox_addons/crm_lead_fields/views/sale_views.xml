@@ -1,0 +1,546 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="sale_move_product_form_inherited" model="ir.ui.view">
+        <field name="name">product.sale_order.form.inherited</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+
+
+            <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                <field name="amount_untaxed" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                <field name="amount_tax" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                <div class="oe_subtotal_footer_separator oe_inline">
+                    <label for="amount_total"/>
+
+                </div>
+                <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary'
+                       options="{'currency_field': 'currency_id'}"/>
+            </group>
+
+
+            <xpath expr="//button[@name='%(sale.action_view_sale_advance_payment_inv)d'][1]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='%(sale.action_view_sale_advance_payment_inv)d'][2]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <!--                        <xpath expr="//field[@name='amount_untaxed']" position="attributes">-->
+            <!--                <attribute name="string">Total (Without VAT)</attribute>-->
+            <!--&lt;!&ndash;            </xpath>&ndash;&gt;-->
+            <!--            <xpath expr="//field[@name='amount_tax']" position="attributes">-->
+            <!--                <attribute name="string">VAT</attribute>-->
+            <!--            </xpath>-->
+            <!--            <xpath expr="//field[@name='amount_total']" position="attributes">-->
+            <!--                <attribute name="string">Total Amount (Including VAT)</attribute>-->
+            <!--            </xpath>-->
+
+
+            <xpath expr="//field[@name='name']" position="before">
+                <label for="name" string="Quotation" attrs="{'invisible':[('state','not in',('draft'))]}"/>
+                <label for="name" string="Sale Order" attrs="{'invisible':[('state','not in',('sale','done'))]}"/>
+                <!--                <label for="name" attrs="{'invisible':[('state','in',('draft'))]}"/>-->
+                <!--                <attribute name="string">Quotation</attribute>-->
+            </xpath>
+
+            <xpath expr="//form/header/button[@name='action_confirm']"
+                   position="after">
+                <button name="action_create_revision" states="draft,sent" string="Create Revision" type="object"/>
+
+            </xpath>
+
+            <xpath expr="//button[@name='action_quotation_send'][2]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <!--            <xpath expr="//button[@name='action_confirm']" position="attributes">
+                            <attribute name="confirm">Make sure you have added TAXES before
+                                confirming Quotation!(If quotations before 01st January 2018,
+                                uncheck "ADD Tax" and check it again)
+                            </attribute>
+                        </xpath>
+
+                        <xpath expr="//form/header/button[@name='action_confirm'][2]" position="attributes">
+                            <attribute name="confirm">Make sure you have added TAXES before
+                                confirming Quotation!(If quotations before 01st January 2018,
+                                uncheck "ADD Tax" and check it again)
+                            </attribute>
+                        </xpath>-->
+
+
+            <xpath expr="//notebook/page[1]/field[@name='order_line']/tree"
+                   position="attributes">
+                <attribute name="colors">red:c_red == 1;orange: c_orange ==
+                    1;
+                </attribute>
+                <!--                <attribute name="colors">red:c_red == 1;orange: c_orange ==-->
+                <!--                    1;blue: c_blue == 1-->
+                <!--                </attribute>-->
+                <!--                <attribute name="fonts">bold:c_blue == 1</attribute>-->
+                <!--                <attribute name="fonts">bold:c_blue == 1</attribute>-->
+            </xpath>
+
+
+            <field name="date_order" position="after">
+                <field name="project_created" invisible="1"/>
+                <!--					<field name="partner_contact" domain="[('parent_id','=',partner_id)]" />-->
+            </field>
+
+
+            <xpath expr="//field[@name='order_line']//tree//field[@name='product_id']" position="attributes">
+                <attribute name="attrs">{'required':0}</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='client_order_ref']" position="attributes">
+                <attribute name="string">Reference/Description</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="options">{'no_quick_create': True,'no_create': True, 'no_create_edit': True, 'no_open':
+                    True}
+                </attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='partner_id']" position="after">
+
+
+                <field name="project_id" readonly="1" context="{'partner_id':partner_invoice_id, 'manager_id': user_id,
+                'default_pricelist_id':pricelist_id, 'default_name':name, 'default_type': 'contract'}" force_save="1"/>
+                <!--                       domain="[('type','in',['view','normal','contract'])]"/>-->
+
+                <field name="vat_certificate" invisible="1"/>
+                <field name="passport_copy" invisible="1"/>
+                <field name="trade_license" invisible="1"/>
+
+                <field name="quotation_validity"/>
+                <field name="delivery_terms"/>
+                <field name="add_tax"/>
+                <field name="tax_inclusive"/>
+                <field name="cubit_sale_id" invisible="1"/>
+
+            </xpath>
+
+
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="trn_number" readonly="1" force_save="1"/>
+                <field name="planned_hours_for_l1" required="1"/>
+                <field name="planned_hours_for_l2" required="1"/>
+                <field name="planned_hours" required="1"/>
+                <field name="sale_note"/>
+                <field name="partner_contact" domain="[('parent_id','=',partner_id)]" required="1"/>
+                <field name="client_order_ref" string="Project Reference" required="1"/>
+                <!--                <field name="sale_note"/>-->
+
+                <field name="lpo_number"/>
+                <field name="lpo_doc_required" invisible="1"/>
+                <field name="lpo_doc" attrs="{'required':[('lpo_doc_required','=',True)]}"/>
+                <field name="lpo_email"/>
+                <field name="lpo_email_attachment" attrs="{'required':[('lpo_email','=',True)]}"/>
+                <!--                style="white-space: normal;word-break: break-word;"-->
+            </xpath>
+            <xpath expr="//field[@name='payment_term_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+
+            <xpath expr="//group/group[@name='order_details']" position="after">
+
+                <group string="End User Details" name="end_user_details" col="4" colspan="4">
+                    <field name="end_user_name"  attrs="{'required': [('end_user_req_condition', '=', 'no')]}"/>
+                    <field name="end_user_mail" attrs="{'required': [('end_user_req_condition', '=', 'no')]}"/>
+                    <field name="end_user_address" attrs="{'required': [('end_user_req_condition', '=', 'no')]}"/>
+                    <field name="end_user_mobile" attrs="{'required': [('end_user_req_condition', '=', 'no')]}"/>
+                    <field name="end_user_fax" attrs="{'required': [('end_user_req_condition', '=', 'no')]}"/>
+                    <field name="end_user_website" attrs="{'required': [('end_user_req_condition', '=', 'no')]}"/>
+                    <field name="end_user_company_value" attrs="{'required': [('end_user_req_condition', '=', 'no')]}"/>
+                    <field name="end_user_vat" attrs="{'required': [('end_user_req_condition', '=', 'no')]}"/>
+                    <field name="end_user_req_condition" invisible="1"/>
+                </group>
+
+                <group string="Section Details" col="4" colspan="4">
+                    <group>
+                        <button name="update_session" string="(Update Section)" type="object" class="oe_link"/>
+                    </group>
+
+                    <field name="section_line" nolabel="1">
+                        <tree string="Section" editable="bottom" create="false">
+                            <field name="sale_layout_cat_id" invisible="1"/>
+                            <field name="name" readonly="1"/>
+                            <field name="unit_price"  invisible="1"/>
+                            <field name="total_cost"  sum="Total"
+                                   readonly="1"/>
+                            <field name="price_included" sum="Total"
+                                   readonly="1"/>
+                            <field name="gross_profit" readonly="1" force_save="1" sum="Total"/>
+                            <field name="gross_profit_perc" readonly="1" force_save="1"/>
+                            <field name="expected_time_of_arrival" required="1"/>
+                            <field name="expected_year_of_arrival"/>
+                            <field name="expected_month_of_arrival"/>
+                            <field name="expected_week_of_arrival"/>
+                        </tree>
+                    </field>
+                </group>
+
+            </xpath>
+
+
+            <xpath expr="//notebook/page[@name='customer_signature']" position="after">
+                <page string="Proposal Details">
+                    <group>
+                        <!--                        <field name="proposal_heading"/>-->
+                        <field name="introduction_letter_date"/>
+                        <!--                        <field name="introduction_letter_to"/>-->
+                        <!--                        <field name="introduction_letter_subject"/>-->
+                        <!--                        <field name="introduction_letter"/>-->
+                        <!--                        <field name="items_header"/>-->
+                        <field name="terms_and_condition_index"/>
+                    </group>
+                </page>
+                <page name="vendor_details" string="Vendor Details">
+                    <!--                      attrs="{'invisible': [('type', '=', 'opportunity')]}">-->
+                    <field name="vendor_detail_id" context="{'vendor_detail_id': 1}">
+                        <tree string="Vendor Information" editable="bottom" limit="500">
+                            <field name="sale_line_brand" options="{'no_quick_create': True,'no_create': True, 'no_create_edit': True, 'no_open':
+                    True}"/>
+                            <field name="distributor"/>
+                            <field name="account_manager"/>
+                            <field name="deal_id"/>
+                            <field name="dead_locking_status"/>
+
+
+                        </tree>
+                    </field>
+                </page>
+
+                <page name="presale_infomation" string="Presales Information">
+                    <!--                      attrs="{'invisible': [('type', '=', 'opportunity')]}">-->
+                    <field name="presale_id" context="{'presale_information': 1}">
+                        <tree string="Presales Information" editable="bottom" limit="500">
+                            <field name="presale_boolean" invisible="1"/>
+                            <field name="sales_boolean" invisible="1"/>
+                            <field name="presales_team" attrs="{'readonly': [('presale_boolean', '=', True)]}"/>
+                            <field name="presale_department_id" options="{'no_quick_create': True,'no_create': True, 'no_create_edit': True, 'no_open':
+                    True}" attrs="{'readonly': [('presale_boolean', '=', True)]}"/>
+                            <field name="presales_person" attrs="{'readonly': [('presale_boolean', '=', True)]}"
+                                   options="{'no_quick_create': True,'no_create': True,'no_create_edit':True}"/>
+                            <field name="next_action_date" attrs="{'readonly': [('presale_boolean', '=', True)]}"/>
+                            <field name="available_date" attrs="{'readonly': [('sales_boolean', '=', True)]}"/>
+                            <field name="action_description" attrs="{'readonly': [('presale_boolean', '=', True)]}"/>
+                            <field name="comments" attrs="{'readonly': [('sales_boolean', '=', True)]}"/>
+                            <field name="presale_status_id" options="{'no_create': True,'no_create_edit':True}"
+                                   attrs="{'readonly': [('sales_boolean', '=', True)]}"/>
+                            <field name="done" attrs="{'readonly': [('sales_boolean', '=', True)]}"/>
+
+
+                            <button string="Approval" name="action_salesperson_approval" type="object"
+                                    class="oe_highlight" attrs="{'readonly': [('presale_boolean', '=', True)]}"/>
+                        </tree>
+                    </field>
+                </page>
+
+
+                <page string="Revisions">
+                    <field name="revision_ids">
+                        <tree>
+                            <field name='name'/>
+                            <field name='create_date' string="Superseeded on"/>
+                            <field name='create_uid' string="Superseeded by"/>
+                            <field name='state' invisible='0'/>
+                        </tree>
+                    </field>
+                </page>
+
+                <page string="Payment Term – projects">
+                    <field name="project_payment_terms">
+                        <tree editable="bottom">
+                            <field name='name'
+                                   options="{'no_quick_create': True,'no_create': True, 'no_create_edit': True,}"/>
+                            <field name='percentage'/>
+                            <field name='amount'/>
+                            <field name='payment_term_id'/>
+                        </tree>
+                    </field>
+                </page>
+
+                <page string="Payment Term MSP/AMC">
+                    <field name="msp_amc_payment_terms">
+                        <tree editable="bottom">
+                            <field name='name'
+                                   options="{'no_quick_create': True,'no_create': True, 'no_create_edit': True,}"/>
+                            <field name='percentage'/>
+                            <field name='amount'/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+
+
+            <xpath expr="//notebook/page[@name='other_information']//group/field[@name='invoice_status']"
+                   position="after">
+                <field name="total_qty" readonly="1"/>
+                <field name="total_delivered_qty" readonly="1"/>
+                <field name="total_purchased_qty" readonly="1"/>
+                <field name="attachment_ids" widget="many2many_binary"/>
+            </xpath>
+
+
+            <xpath expr="//notebook/page/field[@name='order_line']/tree"
+                   position="replace">
+                <!--                <tree string="Sales Order Lines" editable="bottom" decoration-info="(partially_purchased==True)" decoration-bf="(is_purchase_confirmed==True)"-->
+                <!--                decoration-warning="(purchased_qty==0)">-->
+                <!--                <tree string="Sales Order Lines" editable="bottom" decoration-danger="c_red == 1" decoration-info="c_blue == 1" colors="red:c_red == 1;orange: c_orange == 1;green: c_blue == 1">-->
+                <tree string="Sales Order Lines" editable="bottom" decoration-info="c_blue == '1'"
+                      decoration-warning="c_orange == '1'" decoration-danger="c_red == '1'">
+                    <!--                <tree string="Sales Order Lines" editable="bottom" colors="red:c_red == 1;orange: c_orange == 1;green: c_blue == 1">-->
+                    <control>
+                        <create name="add_product_control" string="Add a product"/>
+                        <create name="add_section_control" string="Add a section"
+                                context="{'default_display_type': 'line_section'}"/>
+                        <create name="add_note_control" string="Add a note"
+                                context="{'default_display_type': 'line_note'}"/>
+                    </control>
+                    <field name="sequence" widget="handle"/>
+                    <field name="display_type" invisible="1"/>
+                    <field name="partially_purchased" invisible="1"/>
+                    <field name="is_purchase_confirmed" invisible="1"/>
+                    <!--                    <field name="not_purchased" invisible="1"/>-->
+                    <field name="product_uom_category_id" invisible="1"/>
+                    <field name="product_updatable" invisible="1"/>
+                    <field name="sl_no" optional="show"/>
+                    <field name="part_number" optional="show"/>
+                    <field name="name" optional="show"/>
+                    <field name="unit_price" optional="show"/>
+                    <field name="product_uom_qty" widget="integer" sum="Qty"
+                           decoration-info="(not display_type and invoice_status == 'to invoice')"
+                           decoration-bf="(not display_type and invoice_status == 'to invoice')"
+                           context="{
+                                                                'partner_id': parent.partner_id,
+                                                                'quantity': product_uom_qty,
+                                                                'pricelist': parent.pricelist_id,
+                                                                'uom': product_uom,
+                                                                'company_id': parent.company_id
+                                                            }" optional="show"/>
+                    <field name="product_id" invisible="1" force_save="1"
+                           context="{
+                                                                'partner_id': parent.partner_id,
+                                                                'quantity': product_uom_qty,
+                                                                'pricelist': parent.pricelist_id,
+                                                                'uom':product_uom,
+                                                                'company_id': parent.company_id,
+                                                                'default_lst_price': price_unit,
+                                                                'default_description_sale': name
+                                                            }"
+                           domain="[('sale_ok', '=', True), '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]"
+                           widget="product_configurator" />
+                    <field name="product_template_id"
+                           string="Product"
+                           invisible="1"
+                           context="{
+                                                              'partner_id': parent.partner_id,
+                                                              'quantity': product_uom_qty,
+                                                              'pricelist': parent.pricelist_id,
+                                                              'uom':product_uom,
+                                                              'company_id': parent.company_id,
+                                                              'default_list_price': price_unit,
+                                                              'default_description_sale': name
+                                                          }"
+                           domain="[('sale_ok', '=', True), '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]"
+                           widget="product_configurator"/>
+                    <field
+                            name="analytic_tag_ids"
+                            optional="show"
+                            groups="analytic.group_analytic_tags"
+                            widget="many2many_tags"
+                            options="{'color_field': 'color'}"
+                            domain="['|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]"
+                    />
+
+
+                    <field
+                            name="qty_delivered"
+                            decoration-info="(not display_type and invoice_status == 'to invoice')"
+                            decoration-bf="(not display_type and invoice_status == 'to invoice')"
+                            string="Delivered"
+
+                            optional="show"
+                    />
+                    <field name="qty_delivered_manual" invisible="1"/>
+                    <field name="qty_delivered_method" invisible="1"/>
+                    <field
+                            name="qty_invoiced"
+                            decoration-info="(not display_type and invoice_status == 'to invoice')"
+                            decoration-bf="(not display_type and invoice_status == 'to invoice')"
+                            string="Invoiced" optional="show"/>
+                    <!--                            attrs="{'column_invisible': [('parent.state', 'not in', ['sale', 'done'])]}"-->
+                    <!--                            optional="show"-->
+                    <!--                    />-->
+                    <field name="qty_to_invoice" invisible="1"/>
+                    <field name="product_uom_readonly" invisible="1"/>
+                    <field
+                            name="product_uom"
+                            force_save="1"
+                            string="UoM"
+                            invisible="1"
+                            context="{'company_id': parent.company_id}"
+                            groups="uom.group_uom"
+                            options='{"no_open": True}'
+                            optional="show"
+                    />
+                    <field name="round_discount" optional="show"/>
+                    <field name="price_included" string="Subtotal" sum="Subtotal" optional="show"/>
+                    <field name="tax_total" sum="Tax" optional="show"/>
+                    <field name="price_total_val" string="Total" sum="Total" optional="show"/>
+                    <field name="list_price" optional="show"/>
+                    <field name="currency_rate" optional="show"/>
+                    <field name="supplier_discount" optional="show"/>
+                    <field name="tax" string="Custom Tax(%)" optional="show"/>
+                    <field name="tax_id" invisible="0" widget="many2many_tags" optional="show"/>
+                    <!--                           domain="[('parent_id','=',False),('type_tax_use','&lt;&gt;','purchase')]"/>-->
+                    <field name="margin" optional="show"/>
+                    <field name="customer_discount" optional="show"/>
+                    <field name="cost_price" string="Unit Cost" optional="show"/>
+                    <field name="total_cost" sum="Total Cost (XLS)" optional="show"/>
+                    <field name="purchased_qty" sum="Total purchase qty" optional="show"/>
+                    <field name="purchase_price" sum="Total purchase price" optional="show"/>
+                    <field name="actual_cost_price" sum="Total actual cost price" optional="show"/>
+                    <field name="virtual_purchased_qty" readonly="1" sum="Qty" optional="show"/>
+                    <field name="virtual_delivered_qty" readonly="1" sum="Qty" optional="show"/>
+                    <field name="vendor_id" optional="show"/>
+                    <field name="sale_layout_cat_id" optional="show"/>
+                    <field name="line_category_id" optional="show"/>
+                    <field name="line_brand_id" optional="show"/>
+                    <field name="line_technology_id" optional="show"/>
+
+                    <field name="c_red" invisible="1"/>
+                    <field name="c_orange" invisible="1"/>
+                    <field name="c_blue" invisible="1"/>
+
+                    <field name="remarks" optional="show"/>
+                    <field name="is_cubit_service" optional="show"/>
+                    <!--                    <field name="section_ids"/>-->
+                    <field name="serial_num" optional="show"/>
+                    <field name="service_suk" optional="show"/>
+                    <field name="begin_date" optional="show"/>
+                    <field name="end_date" optional="show"/>
+                    <field name="exclude_purchase" optional="show"/>
+                    <!--                           groups="cubit_customization.group_cubit_sales_director_special"/>-->
+                    <field name="exclude_costprice" optional="show"/>
+                    <!--                           groups="cubit_customization.group_cubit_sales_director_special"/>-->
+
+                    <field name="state" invisible="1"/>
+                    <field name="th_weight" force_save="1" optional="show"/>
+                    <!--                    <field name="product_uos_qty"-->
+                    <!--                           invisible="1"/>-->
+                    <!--                    <field name="product_uos" string="UoS"-->
+                    <!--                           invisible="1"/>-->
+                    <field name="price_unit" invisible="1"/>
+                    <field name="discount"
+                           widget="product_discount"
+                           invisible="1"/>
+                    <field name="price_subtotal" invisible="1"/>
+                    <field name="invoice_status" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="price_tax" invisible="1"/>
+                    <field name="company_id" invisible="1"/>
+                    <field name="options" optional="show"/>
+                    <field name="renewal_category" optional="show"/>
+                    <field name="service_duration" optional="show"/>
+                    <field name="month" optional="show"/>
+                    <field name="distributor" optional="show"/>
+                    <field name="presales_person" optional="show"/>
+                    <field name="hs_code" optional="show"/>
+                    <field name="country_of_origin" optional="show"/>
+                    <field name="global_discount_line" invisible="1"/>
+
+                </tree>
+            </xpath>
+
+            <xpath expr="//group[hasclass('oe_subtotal_footer')]" position="replace">
+                <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                    <field name="tax_totals_json" widget="account-tax-totals-field" nolabel="1" colspan="2"
+                           invisible="1"/>
+                    <field name="amount_untaxed" widget='monetary' options="{'currency_field': 'currency_id'}"
+                           string="Total (Without VAT)"/>
+                    <field name="amount_tax" widget='monetary' options="{'currency_field': 'currency_id'}"
+                           string="VAT"/>
+                    <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                        <label for="amount_total" string="Total Amount (Including VAT)"/>
+                        <!--                                    <button name="button_dummy"-->
+                        <!--                                        states="draft,sent" string="(update)" type="object" class="oe_edit_only oe_link"/>-->
+                    </div>
+                    <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary'
+                           options="{'currency_field': 'currency_id'}"/>
+                </group>
+            </xpath>
+
+            <xpath expr="//field[@name='total_qty']" position="after">
+                <field name="active" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//div[@name='button_box']" position="after">
+                <widget
+                        name="web_ribbon"
+                        title="Archived"
+                        bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+            </xpath>
+
+            <xpath expr="//field[@name='payment_term_id']" position="before">
+                <field name="payment_term" required="1"/>
+            </xpath>
+
+        </field>
+    </record>
+
+
+    <record id="crm_case_form_view_oppor_inherited" model="ir.ui.view">
+        <field name="name">crm.quotation.oppor.inherited.crm</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="sale_crm.crm_case_form_view_oppor"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_sale_quotations_new']" position="attributes">
+                <!--                <attribute name="attrs">{'invisible':1}</attribute>-->
+                <attribute name="attrs">{'invisible': ['|','|',('type', '=',
+                    'lead'),('imported_stage','=',True),('stage_id', '=', 11)]}
+                </attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record model="ir.ui.menu" id="sale.sale_order_menu">
+        <field name="name">Sales</field>
+    </record>
+
+    <menuitem id="sale.menu_sale_order" active="False"/>
+
+    <menuitem id="menu_sale_orders"
+              name="Sale Orders"
+              parent="sale.sale_menu_root"
+              action="sale.action_orders"
+              sequence="2"/>
+
+
+<!--    <record id="action_orders" model="ir.actions.act_window">-->
+<!--        <field name="name">Sales Orders</field>-->
+<!--        <field name="type">ir.actions.act_window</field>-->
+<!--        <field name="res_model">sale.order</field>-->
+<!--        <field name="view_mode">tree,kanban,form,calendar,pivot,graph,activity</field>-->
+<!--        <field name="search_view_id" ref="sale_order_view_search_inherit_sale"/>-->
+<!--        <field name="context">{}</field>-->
+<!--        <field name="domain">[('state', 'not in', ('draft', 'sent', 'cancel'))]</field>-->
+<!--        <field name="help" type="html">-->
+<!--            <p class="o_view_nocontent_smiling_face">-->
+<!--                Create a new quotation, the first step of a new sale!-->
+<!--            </p>-->
+<!--            <p>-->
+<!--                Once the quotation is confirmed, it becomes a sales order.-->
+<!--                <br/>-->
+<!--                You will be able to create an invoice and collect the payment.-->
+<!--            </p>-->
+<!--        </field>-->
+<!--    </record>-->
+
+
+</odoo>

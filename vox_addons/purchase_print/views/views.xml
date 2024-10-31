@@ -1,0 +1,621 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="purchase_print_template_document_without_header_footer">
+            <div class="header">
+                <div class="text-center" style="border-bottom: 1px solid black;font-size: 13px;">
+                    <div class="row" style="font-family: Georgia,serif;padding-bottom:2px;">
+                        <div class="col-2">
+                            <!--                            style="padding-top:11px;max-height:128px; max-width:350px;"-->
+                            <img t-att-src="image_data_uri(company.logo)"
+                                 style="padding-top:20px;height: 81px;max-width:250px;"
+                                 alt="Image"/>
+                            <!--                            <img t-att-src="image_data_uri(company.logo)" style="padding-top:50px;max-height:90px; max-width:140px;"-->
+                            <!--                                 alt="Image"/>-->
+                        </div>
+                        <div class="col-6">
+                        </div>
+                        <div class="col-4" style="font-family:Calibri;">
+                            <div style="text-align:left;margin-left:36px;">
+                                <span>Cubit Technologies LLC</span>
+                                <br/>
+                                <span>#1306, T1,
+                                    Palace Towers,DSO
+                                </span>
+                                <br/>
+                                <!--                                <span>Dubai Silicon Oasis</span>-->
+                                <!--                                <br/>-->
+                                <span>PO Box: 120166,
+                                    Dubai, UAE
+                                </span>
+                                <br/>
+                                <span>Tel: +971
+                                    43057888
+                                </span>
+                                <!--                                ,-->
+                                <!--                                <span>Fax: +971 43548810</span>-->
+                                <br/>
+                                <span>Email: support@cubittechnologies.com</span>
+                                <br/>
+                                <span>TRN: 100009918200003</span>
+                                <!--                                <br/>-->
+                                <!--                                <span>Website: www.cubittechnologies.com</span>-->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--                    <br></br>-->
+                </div>
+            </div>
+
+            <div class="footer">
+                <!--                <div class="text-center" style="border-top: 1px solid black;">-->
+                <div style="border-top: 1px solid black;font-size:13px;">
+
+
+                    <t t-if="company.rml_footer">
+                        <p class="text-left"
+                           style="font-size:13px;border: none;background-color:white;padding-left:-2px;"
+                           t-raw="company.rml_footer"/>
+                    </t>
+
+                    <ul class="list-inline text-center">
+                        <li>Page:
+                            <span class="page"/>/
+                            <span class="topage"/>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </template>
+
+        <template id="purchase_print_template_external_layout_without_header">
+            <div class="article">
+                <t t-call="purchase_print.purchase_print_template_document_without_header_footer"/>
+                <t t-raw="0"/>
+            </div>
+        </template>
+        <template id="purchase_print_template_document">
+            <t t-call="purchase_print.purchase_print_template_external_layout_without_header">
+
+
+                <t t-if="o and 'company_id' in o">
+                    <t t-set="company" t-value="o.company_id"></t>
+                </t>
+                <t t-if="not o or not 'company_id' in o">
+                    <t t-set="company" t-value="res_company"></t>
+                </t>
+
+
+                <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
+                <div class="page">
+                    <div class="oe_structure"/>
+                    <div class="row">
+                        <div class="col-12 text-center" style="font-size: 16px;vertical-align:top;font-family:Calibri;">
+                            <!--                            <br/>-->
+                            <!--							<br />-->
+                            <strong style="font-size: 16px;font-family:Calibri;margin-right: 50px;">PURCHASE ORDER
+                            </strong>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-4" name="comapany_details" style="font-family:Calibri;">
+
+                            <!--						<h2>-->
+                            <strong style="font-size: 16px;font-family:Calibri;">PO No:</strong>
+                            <strong style="font-size: 16px;font-family:Calibri;" t-field="o.name"/>
+
+                            <br/>
+<!--                            <div style="line-height:1px;">-->
+                                <span style="font-size: 14px;">SO Ref#:</span>
+                                <span style="font-size: 14px;" t-field="o.sale_id"/>
+<!--                            </div>-->
+                            <div style="line-height:1px;"></div>
+
+
+                            <br/>
+<!--                            <br/>-->
+                            <!--							</h2>-->
+                            <!--						<br/>-->
+                            <!--							<div>-->
+                            <!--								<span style="font-size: 13px;font-family:Calibri;">SO Ref#: </span>-->
+                            <!--								<span style="font-size: 13px;font-family:Calibri;" t-field="o.sale_id" />-->
+                            <!--							</div>-->
+                            <!--						<br/>-->
+                            <strong style="font-size: 14px;font-weight:bold;font-family:Calibri;padding-top:3px;">
+                                Vendor:
+                            </strong>
+                            <div style="padding-top:7px;font-family:Calibri;font-size: 14px;">
+                                <b t-if="o.partner_id.name" t-field="o.partner_id.name"></b>
+                                <br t-if="o.partner_id.name"></br>
+                                <span t-if="o.partner_id.street" t-field="o.partner_id.street"></span>
+                                <br t-if="o.partner_id.street"></br>
+                                <span t-if="o.partner_id.city">
+                                    <span t-field="o.partner_id.city"></span>
+                                    ,
+                                    <span t-if="o.partner_id.country_id" t-field="o.partner_id.country_id.name"></span>
+                                    <br/>
+                                </span>
+                                <!--								<br t-if="o.partner_id.city"></br>-->
+                                <!--								<br />-->
+                                <span t-if="o.partner_id.phone">
+                                    Ph:
+                                    <span t-field="o.partner_id.phone"></span>
+                                </span>
+                                <span t-if="o.partner_id.fax">
+                                    ,Fax:
+                                    <span t-if="o.partner_id.fax" t-field="o.partner_id.fax"></span>
+                                </span>
+                                <br/>
+                                <span t-if="o.partner_id.vat">
+                                    TRN:
+                                    <span t-field="o.partner_id.vat"/>
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <div class="col-4">
+
+                        </div>
+
+                        <div name="company_details_right" class="col-4" style="font-family:Calibri;margin-left:100px;">
+                            <!--                            <h2>-->
+                            <!--								 time.strftime('%Y-%m-%d', time.strptime(sale_id.date_order, '%Y-%m-%d %H:%M:%S'))-->
+                            <strong style="font-size: 16px;font-family:Calibri;">Date:</strong>
+                            <strong style="font-size: 16px;font-family:Calibri;">
+                                <!--									 <t t-if="o.date_order">-->
+                                <!--                                            <t t-esc="datetime.datetime.strptime(str(o.date_order), '%Y-%m-%d %H:%M:%S').strftime('%d-%m-%Y')"/>-->
+                                <!--                                        </t>-->
+                                <t t-esc="o.date_order.strftime('%d/%m/%Y')"/>
+                            </strong>
+
+
+                            <!--									t-field="o.date_order" t-field-options='{"widget": "date"}' />-->
+                            <!--</h2>-->
+                            <br/>
+<!--                            <div style="line-height:1px;">-->
+                                <span style="font-size: 13px;display:none;">.</span>
+<!--                            </div>-->
+<!--                            <div style="line-height:3px;"></div>-->
+
+                            <br/>
+                            <br/>
+
+                            <strong style="font-size: 14px;font-family:Calibri;padding-top:3px;">Shipping Address:
+                            </strong>
+                            <div style="padding-top:7px;font-family:Calibri;font-size: 14px;">
+                                <b>Cubit Technologies LLC</b>
+                                <!--								, Heta-->
+                                <br/>
+                                #1306, T1, Palace Towers,DSO
+                                <!--								,Dubai-->
+                                <br/>
+                                Silicon Oasis
+                                <br/>
+                                Dubai , United Arab Emirates
+                                <br/>
+                                Ph: +97143057818
+                                <br/>
+                            </div>
+                            <!--							<div style="padding-top:7px;">-->
+                            <!--								<span t-if="o.dest_address_id.name" t-field="o.dest_address_id.name"></span>-->
+                            <!--								<br t-if="o.dest_address_id.name"></br>-->
+                            <!--								<span t-if="o.dest_address_id.parent_id.name" t-field="o.dest_address_id.parent_id.name"></span>-->
+                            <!--								<br t-if="o.dest_address_id.parent_id.name"></br>-->
+                            <!--								<span t-if="o.dest_address_id.street" t-field="o.dest_address_id.street"></span>-->
+                            <!--								<br t-if="o.dest_address_id.street"></br>-->
+                            <!--								<span t-if="o.dest_address_id.city">-->
+                            <!--									<span t-field="o.dest_address_id.city"></span>-->
+                            <!--									,-->
+                            <!--									<span t-if="o.dest_address_id.country_id" t-field="o.dest_address_id.country_id.name"></span>-->
+                            <!--								</span>-->
+                            <!--								<br />-->
+                            <!--								<span t-if="o.dest_address_id.phone">-->
+                            <!--									Ph:-->
+                            <!--									<span t-field="o.dest_address_id.phone"></span>-->
+                            <!--								</span>-->
+                            <!--								<span t-if="o.dest_address_id.fax">-->
+                            <!--									,Fax:-->
+                            <!--									<span t-if="o.dest_address_id.fax" t-field="o.dest_address_id.fax"></span>-->
+                            <!--								</span>-->
+
+
+                            <!--							</div>-->
+                        </div>
+                    </div>
+                    <!--                    <br/>-->
+
+                    <div class="row">
+                        <div t-if="o.partner_ref" class="col-12" style="font-family:Calibri;font-size: 14px;">
+                            <strong>Your Order Reference</strong>
+                            <p t-field="o.partner_ref"/>
+                        </div>
+                    </div>
+                    <br/>
+
+
+                    <!--style="table-layout:fixed;"-->
+                    <!--					<table class="table table-condensed" border="0" style="border-bottom: 0px solid white !important;width: 100%;">-->
+                    <!--					 <table class="table table-sm table-reports" border="0" style="table-layout:fixed;border-bottom: 0px solid white !important;width: 100%;">-->
+                    <!--                                        <table class="table table-sm table-bordered" border="0"-->
+<!--                    <table class="table table-sm table-condensed" border="0"-->
+                    <!--                     <table class="table table-sm mt48" -->
+                    <table class="table table-sm table-reports" border="0"
+                           style="table-layout:fixed;border-bottom: 0px solid white !important;width: 100%;padding:3px;">
+
+                        <!--					<table class="table table-sm" style="table-layout:fixed;">-->
+                        <thead style="font-size: 14px;">
+                            <tr style="font-weight: bold;border:1px solid black; background-color:#2E64FE;font-family:Calibri;font-family:Calibri;font-size: 14px;">
+                                <th style="font-weight: bold;font-size: 14px;border:1px solid black;color:white;"
+                                    width="5px" class="text-center">Sl #
+                                </th>
+                                <th style="font-weight: bold;font-size: 14px;border:1px solid black;color:white;"
+                                    width="14px" class="text-center">Part
+                                    Number
+                                </th>
+                                <th style="ffont-weight: bold;font-size: 14px;border:1px solid black;color:white;"
+                                    width="48px" class="text-center">
+                                    Description
+                                </th>
+                                <th style="font-weight: bold;font-size: 14px;border:1px solid black;color:white;"
+                                    width="9px" class="text-center">
+                                    Quantity
+                                </th>
+                                <th style="font-weight: bold;font-size: 14px;border:1px solid black;color:white;"
+                                    width="12px" class="text-center">Unit
+                                    Price
+                                </th>
+                                <th style="font-weight: bold;font-size: 14px;border:1px solid black;color:white;"
+                                    width="12px" class="text-center">Price
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="o.order_line" t-as="line" border="1"
+                                style="border:1px solid black;font-family:Calibri;font-size: 15px;">
+                                <!--                                style="border-right: 1px solid #A4A4A4;border-left: 1px solid #A4A4A4;"-->
+
+                                <td
+                                        style="border-right: 1px solid black;border-left: 1px solid black;font-family:Calibri;"
+                                        class="text-center">
+                                    <span t-esc="line_index + 1"/>
+                                </td>
+                                <td style="border-right: 1px solid black;font-family:Calibri;">
+                                    <span t-field="line.part_number"/>
+                                </td>
+                                <td style="border-right: 1px solid black;font-family:Calibri;">
+                                    <span t-field="line.name"/>
+                                </td>
+                                <td style="border-right: 1px solid black;font-family:Calibri;" class="text-center">
+                                    <!--                                    <span t-field="line.product_qty"/>-->
+                                    <t t-if="len('%.0f'% line.product_qty)==1">
+                                        0<span t-esc="'%.0f'% line.product_qty"/>
+                                    </t>
+                                    <t t-else="">
+                                        <span t-esc="'%.0f'% line.product_qty"/>
+                                    </t>
+                                    <!--                                    <span t-esc="'%.0f'% line.product_qty"/>-->
+                                </td>
+                                <td class="text-right" style="border-right: 1px solid black;font-family:Calibri;">
+                                    <span t-esc="'{0:,.2f}'.format(line.price_unit)"/>
+<!--                                    <span t-field="line.price_unit"/>-->
+                                </td>
+                                <td class="text-right" style="border-right: 1px solid black;font-family:Calibri;">
+                                    <span t-esc="'{0:,.2f}'.format(line.product_qty * line.price_unit)"/>
+                                    <!--                                    <span t-esc="line.price_subtotal"/>-->
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="row">
+                        <div class="col-6"></div>
+                        <div class="col-6 pull-right">
+                            <table class="table table-sm table-reports">
+                                <!--								<tr class="border-black" t-if="o.discount_amount or o.amount_tax">-->
+                                <tr class="border-black"
+                                    style=" font-weight:bold;font-family:Calibri;font-size: 14px;">
+                                    <td style="font-weight:bold;font-family:Calibri;">
+                                        <strong>Grand Total</strong>
+                                    </td>
+                                    <td class="text-right" style="font-weight:bold;font-family:Calibri;">
+                                        <span t-field="o.currency_id.symbol"/> <span t-esc="'{0:,.2f}'.format(float(o.amount_gross))"/>
+
+                                        <!--                                        <span t-field="o.amount_untaxed"-->
+                                        <!--                                              t-field-options='{"widget": "monetary", "display_currency": o.currency_id}'/>-->
+                                    </td>
+                                </tr>
+                                <tr class="border-black" t-if="o.discount_amount"
+                                    style="font-weight:bold;font-family:Calibri;font-size: 14px;">
+                                    <td style="font-family:Calibri;font-weight:bold;">
+                                        <strong>Discount</strong>
+                                    </td>
+                                    <td class="text-right" style="font-family:Calibri;font-weight:bold;">
+                                        <span t-field="o.currency_id.symbol"/>
+                                         <span t-esc="'{0:,.2f}'.format(float(o.discount_amount))"/>
+<!--                                        <span t-esc="o.discount_amount"/>-->
+                                        <!--                                        <span t-field="o.discount_amount"-->
+                                        <!--                                              t-field-options='{"widget": "monetary", "display_currency": o.currency_id}'/>-->
+                                    </td>
+                                </tr>
+                                <tr class="border-black" t-if="o.amount_tax"
+                                    style="font-weight:bold;font-family:Calibri;font-size: 14px;">
+                                    <td style="font-weight:bold;font-family:Calibri;">
+                                        <strong>VAT (5%)</strong>
+                                    </td>
+                                    <td class="text-right" style="font-weight:bold;font-family:Calibri;">
+                                        <span t-field="o.currency_id.symbol"/>
+                                         <span t-esc="'{0:,.2f}'.format(float(o.amount_tax))"/>
+<!--                                        <span t-esc="o.amount_tax"/>-->
+                                        <!--                                        <span t-field="o.amount_tax"-->
+                                        <!--                                              t-field-options='{"widget": "monetary", "display_currency": o.currency_id}'/>-->
+                                    </td>
+                                </tr>
+                                <tr class="border-black"
+                                    style="font-weight:bold;font-weight: bold; background-color:#2E64FE;font-family:Calibri;color:white;font-size: 14px;">
+                                    <!--                                    style="font-weight: bold; border: 1px solid black;background-color:#0174DF;color:white;font-family:Calibri;">-->
+                                    <td style="font-weight:bold;font-family:Calibri;color:white">
+                                        <strong>Total Amount</strong>
+                                    </td>
+                                    <td class="text-right" style="font-weight:bold;font-family:Calibri;color:white">
+                                        <span t-field="o.currency_id.symbol"/>
+                                        <span t-esc="'{0:,.2f}'.format(float(o.amount_total))"/>
+<!--                                        <span t-esc="o.amount_total"/>-->
+                                        <!--                                        <span t-field="o.amount_total"-->
+                                        <!--                                              t-field-options='{"widget": "monetary", "display_currency": o.currency_id}'/>-->
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+                    <p style="font-family:Calibri;font-size: 14px;" t-if="o.show_end_customer">
+                        <!--                        <div style="font-family:Calibri;font-size: 13px;">-->
+                        <strong style="font-family:Calibri;font-size: 14px;">End Customer:</strong>
+                        <br/>
+                        <span style="font-size: 14px;" t-if="o.end_user_name" t-field="o.end_user_name"></span>
+                        <br t-if="o.end_user_name"></br>
+                        <span style="font-size: 14px;" t-if="o.end_user_address" t-field="o.end_user_address"></span>
+                        <br t-if="o.end_user_address"></br>
+                        <span style="font-size: 14px;" t-if="o.end_user_mobile">
+                            Ph:
+                            <span t-field="o.end_user_mobile"></span>
+                        </span>
+                        <br t-if="o.end_partner_id.phone"></br>
+                        <span style="font-size: 14px;" t-if="o.end_user_fax">
+                            Fax:
+                            <span t-field="o.end_user_fax"></span>
+                        </span>
+                        <br t-if="o.end_user_fax"></br>
+                        <span style="font-size: 14px;" t-if="o.end_user_mail">
+                            Email:
+                            <span t-field="o.end_user_mail"></span>
+                        </span>
+                        <br t-if="o.end_user_mail"></br>
+
+                        <span style="font-size: 14px;" t-if="o.end_user_company_value">
+                            Company:
+                            <span t-field="o.end_user_company_value"></span>
+                        </span>
+                        <br t-if="o.end_user_company_value"></br>
+
+                        <span style="font-size: 14px;" t-if="o.end_user_vat">
+                            VAT:
+                            <span t-field="o.end_user_vat"></span>
+                        </span>
+                        <!--                        </div>-->
+                    </p>
+                    <!--                    <br/>-->
+
+                    <p style="font-family:Calibri;font-size: 14px;">
+                        <b style="font-family:Calibri;font-size: 14px;">Terms and Conditions</b>
+                        <br/>
+                        <span>1. Prices:</span>
+                        <span t-field="o.tax_inclusive"/>
+                        <br/>
+                        <span>2. Payment Term:</span>
+                        <span t-field="o.payment_term"/>
+                        <br/>
+                        <span>3. PO Validity:</span>
+                        <span t-field="o.quotation_validity.name"/>
+                        <!--                            <br/>-->
+                    </p>
+                    <!--                    <br/>-->
+                    <p t-if="o.terms_and_conditions" style="font-family:Calibri;font-size: 14px;">
+                        <b style="font-family:Calibri;font-size: 14px;">Additional Terms and Conditions</b>
+                        <br/>
+                        <span style="font-family:Calibri;font-size: 14px;" t-field="o.terms_and_conditions"/>
+                    </p>
+
+
+                    <!--                            <span t-field="o.name"/>-->
+                    <!--                    <div class="row">-->
+                    <!--                        <div class="col-6">-->
+                    <!--                        </div>-->
+                    <!--                        <div class="col-6">-->
+                    <!--                        </div>-->
+
+                    <!--                    </div>-->
+                    <!--                    <div class="row mt32 mb32">-->
+                    <!--                        <div class="col-6 ">-->
+                    <!--                            <strong style="color:gray !important;">Vendor address:</strong>-->
+                    <!--                            <br/>-->
+                    <!--                            <span style="color:#893b74 !important;" t-field="o.partner_id"/>-->
+                    <!--                            <br/>-->
+                    <!--                            <t t-if="o.partner_id.street">-->
+                    <!--                                <t t-esc="o.partner_id.street"/>-->
+                    <!--                            </t>-->
+                    <!--                            <br/>-->
+                    <!--                            <t t-if="o.partner_id.street2">-->
+                    <!--                                <t t-esc="o.partner_id.street2"/>-->
+                    <!--                            </t>-->
+                    <!--                            <br/>-->
+                    <!--                            <t t-if="o.partner_id.city">-->
+                    <!--                                <t t-esc="o.partner_id.city"/>-->
+                    <!--                            </t>-->
+                    <!--                            <br/>-->
+                    <!--                            <t t-if="o.partner_id.state_id.name">-->
+                    <!--                                <t t-esc="o.partner_id.state_id.name"/>-->
+                    <!--                            </t>-->
+                    <!--                            <br/>-->
+                    <!--                            <t t-if="o.partner_id.country_id.name">-->
+                    <!--                                <t t-esc="o.partner_id.country_id.name"/>-->
+                    <!--                            </t>-->
+                    <!--                            <br/>-->
+                    <!--                            <t t-if="o.partner_id.zip">-->
+                    <!--                                <t t-esc="o.partner_id.zip"/>-->
+                    <!--                            </t>-->
+                    <!--                            <br/>-->
+                    <!--                            <div t-field="o.partner_id.vat"/>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+
+
+                    <!--                    <table class="table table-sm">-->
+                    <!--                        <thead>-->
+                    <!--                            <tr>-->
+                    <!--                                <th>Sl #</th>-->
+                    <!--                                <th>Part Number</th>-->
+                    <!--                                <th>Description</th>-->
+                    <!--                                <th-->
+                    <!--                                        class="text-center">Quantity-->
+                    <!--                                </th>-->
+                    <!--                                <th-->
+                    <!--                                        class="text-center">Unit Price-->
+                    <!--                                </th>-->
+                    <!--                                <th-->
+                    <!--                                        class="text-right">Net Price-->
+                    <!--                                </th>-->
+                    <!--                            </tr>-->
+                    <!--                        </thead>-->
+                    <!--                        <tbody>-->
+                    <!--                            <tr t-foreach="o.order_line" t-as="line">-->
+                    <!--                                <td>-->
+                    <!--                                    <span t-esc="line_index+1"/>-->
+                    <!--                                    &lt;!&ndash;                                    <span t-field="line.name"/>&ndash;&gt;-->
+                    <!--                                </td>-->
+                    <!--                                <td>-->
+                    <!--                                    <span t-field="line.part_number"/>-->
+                    <!--                                </td>-->
+                    <!--                                <td>-->
+                    <!--                                    <span t-field="line.name"/>-->
+                    <!--                                </td>-->
+
+                    <!--                                <td class="text-right">-->
+                    <!--                                    <span t-field="line.product_qty"/>-->
+                    <!--                                    <span t-field="line.product_uom.name" groups="product.group_uom"/>-->
+                    <!--                                </td>-->
+                    <!--                                <td class="text-right">-->
+                    <!--                                    <span t-field="line.price_unit"/>-->
+                    <!--                                </td>-->
+                    <!--                                <td class="text-right">-->
+                    <!--                                    <span t-field="line.price_subtotal"-->
+                    <!--                                          t-field-options='{"widget": "monetary", "display_currency": o.currency_id}'/>-->
+                    <!--                                </td>-->
+                    <!--                            </tr>-->
+                    <!--                        </tbody>-->
+                    <!--                    </table>-->
+                    <!--                    <div>-->
+                    <!--                        <div class="col-4 pull-right">-->
+                    <!--                            <table class="table table-condensed">-->
+                    <!--                                <tr class="border-black">-->
+                    <!--                                    <td>-->
+                    <!--                                        <strong>Total</strong>-->
+                    <!--                                    </td>-->
+                    <!--                                    <td class="text-right">-->
+                    <!--                                        <span t-field="o.amount_untaxed"-->
+                    <!--                                              t-field-options='{"widget": "monetary", "display_currency": o.currency_id}'/>-->
+                    <!--                                    </td>-->
+                    <!--                                </tr>-->
+                    <!--                                <tr>-->
+                    <!--                                    <td>VAT (5%)</td>-->
+                    <!--                                    <td class="text-right">-->
+                    <!--                                        <span t-field="o.amount_tax"-->
+                    <!--                                              t-field-options='{"widget": "monetary", "display_currency": o.currency_id}'/>-->
+                    <!--                                    </td>-->
+                    <!--                                </tr>-->
+                    <!--                                <tr>-->
+                    <!--                                    <td style="background-color:#0174df !important;color:#FFF !important;">-->
+                    <!--                                        <strong>Total Amount</strong>-->
+                    <!--                                    </td>-->
+                    <!--                                    <td style="background-color:#0174df !important;color:#FFF !important;"-->
+                    <!--                                        class="text-right">-->
+                    <!--                                        <span t-field="o.amount_total"-->
+                    <!--                                              t-field-options='{"widget": "monetary", "display_currency": o.currency_id}'/>-->
+                    <!--                                    </td>-->
+                    <!--                                </tr>-->
+                    <!--                            </table>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                    <br/>-->
+                    <!--                    <br/>-->
+                    <!--                    <br/>-->
+                    <!--                    <br/>-->
+                    <!--                    <br/>-->
+                    <!--                    <br/>-->
+                    <!--                    <br/>-->
+                    <!--                    <br/>-->
+
+                    <!--                    <div class="row">-->
+                    <!--                        <div class="col-12">-->
+                    <!--                            <strong>End Customer:</strong>>-->
+                    <!--                            <br/>-->
+                    <!--                            <span t-field="o.end_user_details"></span>-->
+                    <!--                            <br/>-->
+                    <!--                            <span t-field="o.end_user_address"></span>-->
+                    <!--                            <br/>-->
+                    <!--                            <span t-field="o.end_user_mail"></span>-->
+                    <!--                            <br/>-->
+                    <!--                            <span t-field="o.end_user_mobile"></span>-->
+                    <!--                            <br/>-->
+                    <!--                            <span t-field="o.end_user_mobile"></span>-->
+                    <!--                            <br/>-->
+
+                    <!--                            <br/>-->
+                    <!--                            <br/>-->
+
+                    <!--                            <strong>Terms and Conditions</strong>-->
+                    <!--                            <br/>-->
+                    <!--                            <p>-->
+                    <!--                                <span>1. Prices:</span>-->
+                    <!--                                <span t-field="o.tax_inclusive"/>-->
+                    <!--                                <br/>-->
+                    <!--                                <span>2. Payment Term:</span>-->
+                    <!--                                <span t-field="o.payment_term_id.name"/>-->
+                    <!--                                <br/>-->
+                    <!--                                <span>3. PO Validity:</span>-->
+                    <!--                                <span t-field="o.quotation_validity.name"/>-->
+                    <!--                                <br/>-->
+                    <!--                            </p>-->
+                    <!--                            <br/>-->
+                    <!--                            <p t-if="o.comment">-->
+                    <!--                                <strong>Additional Terms and Conditions:</strong>-->
+                    <!--                                <p t-field="o.comment"/>-->
+                    <!--                            </p>-->
+
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+
+                    <div class="oe_structure"/>
+                </div>
+                <!--				</div>-->
+            </t>
+        </template>
+
+        <template id="purchase_print_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="purchase_print.purchase_print_template_document" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+
+
+    </data>
+</odoo>
+

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="statement_template_document_without_header_footer">
+                    <div class="header">
+                <div class="text-center" style="border-bottom: 1px solid black;font-size: 13px;">
+                    <div class="row" style="font-family: Georgia,serif;padding-bottom:2px;">
+                        <div class="col-2">
+                            <!--                            style="padding-top:11px;max-height:128px; max-width:350px;"-->
+                            <img t-att-src="image_data_uri(company.logo)"
+                                 style="padding-top:20px;height: 81px;max-width:250px;"
+                                 alt="Image"/>
+                            <!--                            <img t-att-src="image_data_uri(company.logo)" style="padding-top:50px;max-height:90px; max-width:140px;"-->
+                            <!--                                 alt="Image"/>-->
+                        </div>
+                        <div class="col-7">
+                        </div>
+                        <div class="col-3" style="font-family:Calibri;">
+                            <div style="text-align:left;margin-left:36px;width:100%;">
+                                <span>Cubit Technologies LLC</span>
+                                <br/>
+                                <span>#1306, T1,
+                                    Palace Towers,DSO
+                                </span>
+                                <br/>
+                                <!--                                <span>Dubai Silicon Oasis</span>-->
+                                <!--                                <br/>-->
+                                <span>PO Box: 120166,
+                                    Dubai, UAE
+                                </span>
+                                <br/>
+                                <span>Tel: +971
+                                    43057888
+                                </span>
+                                <!--                                ,-->
+                                <!--                                <span>Fax: +971 43548810</span>-->
+                                <br/>
+                                <span>Email: support@cubittechnologies.com</span>
+                                <br/>
+                                <span>TRN: 100009918200003</span>
+                                <!--                                <br/>-->
+                                <!--                                <span>Website: www.cubittechnologies.com</span>-->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--                    <br></br>-->
+                </div>
+            </div>
+
+            <div class="footer">
+                <!--                <div class="text-center" style="border-top: 1px solid black;">-->
+               <div style="border-top: 1px solid black;font-size:13px;">
+                <t t-if="company.rml_footer">
+                    <p class="text-left"
+                       style="font-size:13px;border: none;background-color:white;padding-left:-2px;"
+                       t-raw="company.rml_ls_footer"/>
+                </t>
+
+                    <ul class="list-inline text-center">
+                        <li>Page:
+                            <span class="page"/>/
+                            <span class="topage"/>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+    </template>
+
+    <template id="statement_template_external_layout_without_header">
+        <div class="article">
+            <t t-call="vox_statement_report.statement_template_document_without_header_footer"/>
+            <t t-raw="0"/>
+        </div>
+    </template>
+
+    <template id="followup_layout_info_template" inherit_id="account_followup.report_followup_print_all">
+        <xpath expr="//t[@t-call]" position="replace">
+
+            <t t-call="web.html_container">
+                <t t-call-assets="web.assets_common" t-js="false"/>
+                <t t-set="company" t-value="docs.env.company"/>
+                <t t-foreach="docs" t-as="partner">
+                    <t t-call="vox_statement_report.statement_template_external_layout_without_header">
+                        <t t-set="fallback_address"
+                           t-value="partner.browse(partner.address_get(['invoice'])['invoice']) or partner"/>
+                        <t t-call-assets="account_followup.assets_followup_report"/>
+                        <div class="page">
+                            <span t-out="partner.get_followup_html()"></span>
+                        </div>
+                    </t>
+                    <t t-if="partner.followup_level.join_invoices" t-foreach="partner.unpaid_invoices" t-as="o">
+                        <t t-set="lang"
+                           t-value="o.user_id.lang if o.move_type in ('in_invoice', 'in_refund') else o.partner_id.lang"/>
+                        <t t-call="account.report_invoice_document" t-lang="lang"/>
+                    </t>
+                </t>
+            </t>
+
+        </xpath>
+    </template>
+
+
+    <template id="followup_filter_info_template" inherit_id="account_followup.followup_filter_info_template">
+        <xpath expr="//div" position="replace">
+            <div t-if='context.get("mail") != True' class="print_only">
+                <t t-if="invoice_address_id" t-set="partner_addr" t-value="invoice_address_id"></t>
+                <t t-else="" t-set="partner_addr" t-value="partner"></t>
+                <t t-if="context.get('snailmail_layout')" t-set="contact_widget_fields" t-value="['address', 'name']"/>
+                <t t-else="" t-set="contact_widget_fields" t-value="['address', 'name', 'phone']"/>
+                <div class="oe_structure"/>
+                <div class="row">
+                    <div class="col-12" style="font-size: 23px;font-family:Calibri;text-align:center;width:100%">
+                        <strong style="font-size: 23px;font-family:Calibri;text-align:center;width:100%">Statement of Account
+                        </strong>
+                    </div>
+                </div>
+                <div class="row">
+                    <div name="company_details_right" class="col-4" style="font-family:Calibri;font-size: 12px;width:100%;">
+                        <p style="margin-top: 35px;">
+                            Date:<span t-esc="today"
+                                      t-options='{"widget": "date","format": "dd/MM/yyyy"}'/>
+                            <br/>
+                            <t t-if='partner_addr.ref'>Customer ref:
+                                <span t-field="partner_addr.ref"/>
+                                <br/>
+                            </t>
+                            <t t-if='partner_addr.date_start'>
+                                Period:
+                                <span t-field="partner_addr.date_start"
+                                      t-options='{"widget": "date","format": "dd/MM/yyyy"}'/> -
+                                <span t-field="partner_addr.date_end"
+                                      t-options='{"widget": "date","format": "dd/MM/yyyy"}'/>
+                            </t>
+                        </p>
+                    </div>
+                    <div class="col-5"/>
+
+                    <div class="col-3" name="partner_details"  style="font-family:Calibri;font-size: 12px;width:100%;">
+                        <div style="text-align:left;margin-left:36px;font-size: 12px;width:100%;">
+                            <div t-field="partner_addr.self"
+                                 t-options='{"widget": "contact", "fields": contact_widget_fields, "no_marker": True}'/>
+                            <span t-field="partner_addr.vat"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="template_followup_report_inherit" inherit_id="account_followup.template_followup_report">
+<!--        <xpath expr="//div[hasclass('o_account_reports_summary')]/i[hasclass('o_account_reports_edit_summary_pencil')]"-->
+<!--               position="replace">-->
+<!--        </xpath>-->
+        <xpath expr="//div[hasclass('o_account_reports_summary')]" position="replace"/>
+
+
+        <xpath expr="//table[hasclass('o_account_reports_table')]" position="after">
+
+            <div  class="row">
+                 <div name="company_details_right" class="col-9" style="font-family:Calibri;font-size: 12px;width:100%;font-style: italic;">
+                    *** This is a computer-generated document. No signature is required. ***
+                </div>
+                 <div class="col-3"/>
+            </div>
+        </xpath>
+
+
+    </template>
+
+<!--    <template id="main_template_report_inhrit" inherit_id="account_reports.main_template" primary="True">-->
+<!--        <xpath expr="//div[hasclass('o_account_reports_header')]" position="attributes">-->
+<!--            <attribute name="style">padding-top: 0px;</attribute>-->
+<!--            <div t-if="context.get('print_mode') == True">-->
+<!--                <attribute name="style" add="border:1px solid black;" separator=";"/>-->
+<!--            </div>-->
+<!--        </xpath>-->
+<!--    </template>-->
+
+
+<!--    <template id="main_table_header_report" inherit_id="account_reports.main_table_header">-->
+<!--        <xpath expr="//thead[hasclass('o_account_reports_header_hierarchy')]" position="attributes">-->
+<!--            <div t-if="context.get('print_mode') == True">-->
+<!--                <attribute name="style">border:1px solid black;</attribute>-->
+<!--                &lt;!&ndash;                <attribute name="style" add="border:1px solid black;" separator=";"/>&ndash;&gt;-->
+<!--            </div>-->
+<!--        </xpath>-->
+<!--    </template>-->
+</odoo>

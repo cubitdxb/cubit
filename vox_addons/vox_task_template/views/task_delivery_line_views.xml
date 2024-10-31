@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="view_task_delivery_line_tree" model="ir.ui.view">
+            <field name="name">Delivery Orders</field>
+            <field name="model">task.delivery.line</field>
+            <field name="arch" type="xml">
+                <tree string="Delivery Orders" create="0" edit="0" delete="0">
+                    <field name="sale_id"/>
+                    <field name="partner_id"/>
+                    <field name="lpo_number"/>
+                    <field name="project_reference"/>
+                    <field name="part_number"/>
+                    <field name="product_id"/>
+                    <field name="name"/>
+                    <field name="qty"/>
+                    <field name="sl_number"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="task_delivery_line_action" model="ir.actions.act_window">
+            <field name="name">Delivery Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">task.delivery.line</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <menuitem
+                action="task_delivery_line_action"
+                id="task_delivery_line_menu"
+                parent="stock.menu_stock_root" sequence="1"
+                name="Delivery Orders"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,30 @@
+<odoo>
+    <data>
+
+        <record id="view_account_period_tree" model="ir.ui.view">
+            <field name="name">account.period.tree</field>
+            <field name="model">account.period</field>
+            <field name="arch" type="xml">
+                <tree create="false" delete="false" edit="false" string="Period">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="date_start"/>
+                    <field name="date_stop"/>
+                    <field name="special"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_account_period" model="ir.actions.act_window">
+            <field name="name">Account Period</field>
+            <field name="res_model">account.period</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <menuitem id="menu_account_period" action="action_account_period"
+                  parent="menu_account_periods_main"
+                  sequence="20"/>
+    </data>
+</odoo>

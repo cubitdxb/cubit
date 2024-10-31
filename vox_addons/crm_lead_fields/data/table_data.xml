@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="msp.amc.terms" id="quaterley_advance_data">
+        <field name="name">Quaterly in Advance</field>
+    </record>
+    <record model="msp.amc.terms" id="quaterley_end_data">
+        <field name="name">Quaterly by end of quater</field>
+    </record>
+    <record model="msp.amc.terms" id="six_month_advance_data">
+        <field name="name">6 Months in Advance &amp; 6 months by end of the year</field>
+    </record>
+    <record model="msp.amc.terms" id="monthly_advance_data">
+        <field name="name">Monthly in Advance</field>
+    </record>
+    <record model="msp.amc.terms" id="others_data">
+        <field name="name">Others</field>
+    </record>
+
+    <record model="project.terms" id="advance_project_data">
+        <field name="name">Advance</field>
+    </record>
+    <record model="project.terms" id="delivery_project_data">
+        <field name="name">On Delivery</field>
+    </record>
+    <record model="project.terms" id="installation_project_data">
+        <field name="name">On Installation/ Completion</field>
+    </record>
+    <record model="project.terms" id="others_project_data">
+        <field name="name">Others</field>
+    </record>
+
+</odoo>

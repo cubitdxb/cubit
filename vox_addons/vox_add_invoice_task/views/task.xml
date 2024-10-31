@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="add_invoice_task_action" model="ir.actions.act_window">
+        <field name="name">Add Task</field>
+        <field name="res_model">task.invoice.addition</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+
+    <record id="create_project_form" model="ir.ui.view">
+        <field name="name">Add Invoice task</field>
+        <field name="model">task.invoice.addition</field>
+        <field name="arch" type="xml">
+            <form string="Create Project">
+                <group>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </group>
+                <footer>
+                    <button name="create_task" string="Create Task" type="object" class="oe_highlight"/>
+                    or
+                    <button name="update_customer_invoice_task" string="Update Invoice" type="object" class="oe_highlight"/>
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+     <menuitem action="add_invoice_task_action" id="add_invoice_task_menu" name="Add Invoice Task"
+               parent="sale.menu_sales_config" sequence="55"/>
+</odoo>

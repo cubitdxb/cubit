@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="user_groups_view_partners" model="ir.ui.view">
+        <field name="name">res.users.groups</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//page[@name='access_rights']/group[1]" position="after">
+<!--                <group>-->
+                    <group col="4">
+                        <label for="report_mgr_id"/>
+                        <div class="o_row">
+                            <field name="report_mgr_id" readonly="1"/>
+                            <button name="%(vox_sales_team_access.res_users_report_lead_assign_action)d" type="action"
+                                    string="Add Reporting Lead" class="oe_highlight"/>
+                        </div>
+                    </group>
+                    <field name="is_level_4" invisible="1"/>
+                    <field name="is_level_3" invisible="1"/>
+                    <field name="is_level_5" invisible="1"/>
+                <group>
+                    <field name="sales_team_users" widget="many2many_tags"
+                           options="{'no_quick_create': True,'no_create': True, 'no_create_edit': True}"/>
+
+                </group>
+<!--                </group>-->
+
+            </xpath>
+
+        </field>
+    </record>
+
+
+
+</odoo>
