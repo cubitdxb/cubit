@@ -13,7 +13,6 @@ class CubitCompany(models.Model):
     expired_template_id = fields.Many2one('mail.template', string='Expired Email Template')
     rml_footer = fields.Html('Report Footer')
     rml_ls_footer = fields.Html('Report LS Footer')
-    # rml_ls_footer = fields.Html('Report LS Footer')
     cubit_id = fields.Integer('Cubit Id')
     proposal_header = fields.Binary(string='Proposal Banner')
 
