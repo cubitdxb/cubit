@@ -59,8 +59,7 @@ class PurchaseOrder(models.Model):
                     raise ValidationError(_('Enter proper discount'))
                 for line in order.order_line:
                     tax_on_net_taxable = tax = 0.0
-                    val1 += line.total_price
-                    # val1 += line.price_subtotal
+                    val1 += line.price_subtotal
                     qty = line_obj._calc_line_quantity(line)
                     if line.taxes_id:
                         for c in line.taxes_id.compute_all(line.price_unit, order.currency_id, qty, False,
@@ -89,8 +88,7 @@ class PurchaseOrder(models.Model):
                         line.price_tax = tax_on_net_taxable
                     line.price_total = line.price_subtotal + line.price_tax
                     total_vat_on_net_taxable += line.price_tax
-                    total_net_taxable += line.net_taxable
-                    # total_net_taxable += line.price_subtotal
+                    total_net_taxable += line.price_subtotal
                 # order_line = line_obj.search([
                 #     ('order_id', '=', order.id),
                 #     ('global_discount_line', '=', True),

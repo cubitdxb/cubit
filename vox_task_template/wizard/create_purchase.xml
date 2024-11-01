@@ -15,7 +15,7 @@
                     <script>
         <!-- wizard width adjusting -->
         $(document).ready(function(){
-        $('.modal-dialog').css({'max-width': '1100px', 'height': '100%'});
+        $('.modal-dialog').css({'max-width': '1350px', 'height': '100%'});
         });
 
     </script>
@@ -33,25 +33,24 @@
                         <field name="select_all"/>
 
                     </group>
-                    <group string="Items" width="100%">
-                        <field name="line_ids" nolabel="1" style="width: 1000px !important;">
-                           <tree editable="bottom">
-                                <field name="sl_no" widget="section_and_note_text"  optional="show"/>
-                                <field name="purchase" optional="show" />
-                                <field name="order_id" optional="show"   readonly="1" force_save="1"/>
-                                <field name="part_number"   optional="show"/>
-                                <field name="sale_layout_cat_id"  readonly="1" optional="show"/>
-                                <field name="vendor_id" readonly="1" optional="hide"/>
+                    <group string="Items">
+                        <field name="line_ids" nolabel="1">
+                            <tree editable="bottom">
+                                <field name="sl_no" widget="section_and_note_text" optional="show"/>
+                                <field name="purchase" optional="show"/>
+                                <field name="order_id" optional="show" readonly="1" force_save="1"/>
+                                <field name="part_number" optional="show"/>
+                                    <field name="sale_layout_cat_id" readonly="1" optional="show"/>
+                                <field name="vendor_id" readonly="1" optional="show"/>
                                 <field name="sale_line_id" invisible="1"/>
-                                <field name="name" widget="text"    required="1" optional="show"/>
-                                <field name="product_qty" required="1"   optional="show"/>
-                                <field name="price_unit" required="1"   optional="show"/>
+                                <field name="name" widget="section_and_note_text" required="1" optional="show"/>
+                                <field name="product_qty" required="1" optional="show"/>
+                                <field name="price_unit" required="1" optional="show"/>
                                 <field name="taxes_id" required="1" optional="show"/>
                                   <field name="import_purchase" invisible="1"/>
                             </tree>
-
                         </field>
-                    </group>s
+                    </group>
                     <footer>
                         <button name="make_purchase_requset" string="Create Purchase"
                                 type="object" class="oe_highlight"/>

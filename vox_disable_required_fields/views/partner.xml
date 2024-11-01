@@ -10,30 +10,30 @@
             </xpath>
 
 
-<!--            <xpath expr="//field[@name='fax']" position="attributes">-->
-<!--                <attribute name="required">0</attribute>-->
-<!--                <attribute name="attrs">{ 'required':[('disable_required_fields','!=',True)]}</attribute>-->
-<!--            </xpath>-->
+            <xpath expr="//field[@name='fax']" position="attributes">
+                <attribute name="required">0</attribute>
+                <attribute name="attrs">{ 'required':[('disable_required_fields','!=',True)]}</attribute>
+            </xpath>
 
-<!--            <xpath expr="//field[@name='passport_copy']" position="attributes">-->
-<!--                <attribute name="required">0</attribute>-->
-<!--                <attribute name="attrs">{ 'required':[('disable_required_fields','!=',True)]}</attribute>-->
-<!--            </xpath>-->
+            <xpath expr="//field[@name='passport_copy']" position="attributes">
+                <attribute name="required">0</attribute>
+                <attribute name="attrs">{ 'required':[('disable_required_fields','!=',True)]}</attribute>
+            </xpath>
 
-<!--            <xpath expr="//field[@name='trade_license']" position="attributes">-->
-<!--                <attribute name="required">0</attribute>-->
-<!--                <attribute name="attrs">{ 'required':[('disable_required_fields','!=',True)]}</attribute>-->
-<!--            </xpath>-->
+            <xpath expr="//field[@name='trade_license']" position="attributes">
+                <attribute name="required">0</attribute>
+                <attribute name="attrs">{ 'required':[('disable_required_fields','!=',True)]}</attribute>
+            </xpath>
 
-<!--            <xpath expr="//field[@name='vat_certificate']" position="attributes">-->
-<!--                <attribute name="required">0</attribute>-->
-<!--                <attribute name="attrs">{ 'required':[('disable_required_fields','!=',True)]}</attribute>-->
-<!--            </xpath>-->
+            <xpath expr="//field[@name='vat_certificate']" position="attributes">
+                <attribute name="required">0</attribute>
+                <attribute name="attrs">{ 'required':[('disable_required_fields','!=',True)]}</attribute>
+            </xpath>
 
-<!--            <xpath expr="//field[@name='is_financial_contact']" position="attributes">-->
-<!--                <attribute name="required">0</attribute>-->
-<!--                <attribute name="attrs">{ 'required':[('disable_required_fields','!=',True)]}</attribute>-->
-<!--            </xpath>-->
+            <xpath expr="//field[@name='is_financial_contact']" position="attributes">
+                <attribute name="required">0</attribute>
+                <attribute name="attrs">{ 'required':[('disable_required_fields','!=',True)]}</attribute>
+            </xpath>
 
         </field>
     </record>
@@ -58,31 +58,31 @@
                 <!--                    </attribute>-->
             </xpath>
 
-<!--            <xpath expr="//field[@name='vat']" position="attributes">-->
-<!--                <attribute name="required">0</attribute>-->
-<!--                <attribute name="attrs">{ 'required':[('disable_required_fields','!=',True),('company_type', '=', 'company')]}</attribute>-->
-<!--                &lt;!&ndash;                    <attribute name='attrs'>{'readonly': [('parent_id','!=',False)],'required': [('company_type', '=',&ndash;&gt;-->
-<!--                &lt;!&ndash;                        'company')]}&ndash;&gt;-->
-<!--                &lt;!&ndash;                    </attribute>&ndash;&gt;-->
-<!--            </xpath>-->
-<!--            <xpath expr="//field[@name='website']" position="attributes">-->
-<!--                <attribute name="required">0</attribute>-->
-<!--                <attribute name="attrs">{ 'required':[('disable_required_fields','!=',True),('company_type', '=', 'company')]}</attribute>-->
-<!--                &lt;!&ndash;                    <attribute name='attrs'>{'required': [('company_type', '=', 'company')]}</attribute>&ndash;&gt;-->
-<!--            </xpath>-->
-<!--            <xpath expr="//field[@name='phone']" position="attributes">-->
-<!--                <attribute name="required">0</attribute>-->
-<!--                <attribute name="attrs">{ 'required':[('disable_required_fields','!=',True),('company_type', '=', 'company')]}</attribute>-->
-<!--                &lt;!&ndash;                    <attribute name='attrs'>{'required': [('company_type', '=', 'company')]}</attribute>&ndash;&gt;-->
-<!--            </xpath>-->
+            <xpath expr="//field[@name='vat']" position="attributes">
+                <attribute name="required">0</attribute>
+                <attribute name="attrs">{ 'required':[('disable_required_fields','!=',True),('company_type', '=', 'company')]}</attribute>
+                <!--                    <attribute name='attrs'>{'readonly': [('parent_id','!=',False)],'required': [('company_type', '=',-->
+                <!--                        'company')]}-->
+                <!--                    </attribute>-->
+            </xpath>
+            <xpath expr="//field[@name='website']" position="attributes">
+                <attribute name="required">0</attribute>
+                <attribute name="attrs">{ 'required':[('disable_required_fields','!=',True),('company_type', '=', 'company')]}</attribute>
+                <!--                    <attribute name='attrs'>{'required': [('company_type', '=', 'company')]}</attribute>-->
+            </xpath>
+            <xpath expr="//field[@name='phone']" position="attributes">
+                <attribute name="required">0</attribute>
+                <attribute name="attrs">{ 'required':[('disable_required_fields','!=',True),('company_type', '=', 'company')]}</attribute>
+                <!--                    <attribute name='attrs'>{'required': [('company_type', '=', 'company')]}</attribute>-->
+            </xpath>
 
-<!--            <xpath expr="//field[@name='email']" position="attributes">-->
-<!--                <attribute name="required">0</attribute>-->
-<!--                <attribute name="attrs">{ 'required':[('disable_required_fields','!=',True),('company_type', '=', 'company')]}</attribute>-->
-<!--                &lt;!&ndash;                    <attribute name='attrs'>{'required': ['|',('user_ids','!=', []),('company_type', '!=',&ndash;&gt;-->
-<!--                &lt;!&ndash;                        'company')],'invisible':[('is_company', '=', True),('company_type','=','company')]}&ndash;&gt;-->
-<!--                &lt;!&ndash;                    </attribute>&ndash;&gt;-->
-<!--            </xpath>-->
+            <xpath expr="//field[@name='email']" position="attributes">
+                <attribute name="required">0</attribute>
+                <attribute name="attrs">{ 'required':[('disable_required_fields','!=',True),('company_type', '=', 'company')]}</attribute>
+                <!--                    <attribute name='attrs'>{'required': ['|',('user_ids','!=', []),('company_type', '!=',-->
+                <!--                        'company')],'invisible':[('is_company', '=', True),('company_type','=','company')]}-->
+                <!--                    </attribute>-->
+            </xpath>
 
         </field>
     </record>

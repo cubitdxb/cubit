@@ -70,33 +70,28 @@
                     </attribute>
                 </xpath>
 
-<!--                <xpath expr="//field[@name='vat']" position="attributes">-->
-<!--                    <attribute name='attrs'>{'readonly': [('parent_id','!=',False)],'required': [('company_type', '=',-->
-<!--                        'company')]}-->
-<!--                    </attribute>-->
-<!--                </xpath> -->
-
                 <xpath expr="//field[@name='vat']" position="attributes">
-                    <attribute name='attrs'>{'readonly': [('parent_id','!=',False)]}
+                    <attribute name='attrs'>{'readonly': [('parent_id','!=',False)],'required': [('company_type', '=',
+                        'company')]}
                     </attribute>
                 </xpath>
-<!--                <xpath expr="//field[@name='website']" position="attributes">-->
-<!--                    <attribute name='attrs'>{'required': [('company_type', '=', 'company')]}</attribute>-->
-<!--                </xpath>-->
-<!--                <xpath expr="//field[@name='phone']" position="attributes">-->
-<!--                    <attribute name='attrs'>{'required': [('company_type', '=', 'company')]}</attribute>-->
-<!--                </xpath>-->
+                <xpath expr="//field[@name='website']" position="attributes">
+                    <attribute name='attrs'>{'required': [('company_type', '=', 'company')]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='phone']" position="attributes">
+                    <attribute name='attrs'>{'required': [('company_type', '=', 'company')]}</attribute>
+                </xpath>
 
 <!--                <xpath expr="//field[@name='email']" position="attributes">-->
 <!--                    <attribute name='attrs'>{'required': ['|',('user_ids','!=', []),('company_type', '!=',-->
 <!--                        'company')],'invisible':[('is_company', '=', True),('company_type','=','company')]}-->
 <!--                    </attribute>-->
 <!--                </xpath>-->
-<!--                <xpath expr="//field[@name='email']" position="attributes">-->
-<!--                    <attribute name='attrs'>{'required': ['|',('user_ids','!=', []),('company_type', '!=',-->
-<!--                        'company')]}-->
-<!--                    </attribute>-->
-<!--                </xpath>-->
+                <xpath expr="//field[@name='email']" position="attributes">
+                    <attribute name='attrs'>{'required': ['|',('user_ids','!=', []),('company_type', '!=',
+                        'company')]}
+                    </attribute>
+                </xpath>
 <!--                <xpath expr="//label[@for='email']" position="attributes">-->
 <!--                    <attribute name="attrs">{'invisible':[('company_type','=','company')]}</attribute>-->
 <!--                </xpath>-->
@@ -118,10 +113,10 @@
                         'default_supplier': supplier, 'default_customer': customer,
                         'default_supplier_contact': supplier, 'default_customer_contact': customer}
                     </attribute>
-<!--                    <attribute name="attrs">-->
-<!--                        {'invisible':[('company_type','!=','company')]}-->
-<!--                    </attribute>-->
-<!--'required':[('company_type','=','company')],-->
+                    <attribute name="attrs">
+                        {'required':[('company_type','=','company')],'invisible':[('company_type','!=','company')]}
+                    </attribute>
+
                     <!--                     <attribute name="attrs">{'required': ['|',('supplier', '=', True),('customer', '=', True)]}</attribute>-->
                 </xpath>
 

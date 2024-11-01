@@ -396,10 +396,10 @@
 
         <menuitem action="vox_task_template.purchase_sale_order_action" id="menu_all_sale_order_in_project" name="Sale Order"
                   parent="project.menu_main_pm" sequence="3"/>
-<!--        <menuitem id="menu_all_sale_order" name="Sale Orders"-->
-<!--            parent="purchase.menu_purchase_root" action="vox_task_template.purchase_sale_order_action" sequence="2" />-->
-<!--        <menuitem id="menu_all_sale_quotation" name="Quotations"-->
-<!--            parent="purchase.menu_purchase_root" action="vox_task_template.purchase_sale_quotation_action" sequence="3" />-->
+        <menuitem id="menu_all_sale_order" name="Sale Orders"
+            parent="purchase.menu_purchase_root" action="vox_task_template.purchase_sale_order_action" sequence="2" />
+        <menuitem id="menu_all_sale_quotation" name="Quotations"
+            parent="purchase.menu_purchase_root" action="vox_task_template.purchase_sale_quotation_action" sequence="3" />
 
 
     </data>

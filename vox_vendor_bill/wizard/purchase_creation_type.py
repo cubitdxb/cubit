@@ -112,9 +112,9 @@ class PurchaseAdvancePaymentInv(models.TransientModel):
                 'sale_layout_cat_id': so_line.sale_layout_cat_id.id,
                 'part_number': so_line.part_number,
                 'purchase_line_id': so_line.id,
-                'discount_distribution': so_line.discount_distribution,
-                'discount': so_line.discount,
-                'net_taxable': so_line.net_taxable,
+                'discount_distribution': self.discount_distribution,
+                'discount': self.discount,
+                'net_taxable': self.net_taxable,
             })],
         }
 
@@ -153,7 +153,7 @@ class PurchaseAdvancePaymentInv(models.TransientModel):
             #2
         amount = round(amount, 2)
         total_inv += amount
-        if total_inv > (order.amount_total + 1):
+        if total_inv > (order.amount_total+1):
             raise UserError(_('You are trying to invoice more than total price'))
         if (self.advance_payment_method == 'percentage' and self.amount <= 0.00) or (self.advance_payment_method == 'fixed' and self.fixed_amount <= 0.00):
             raise UserError(_('The value of the down payment amount must be positive.'))
@@ -340,7 +340,7 @@ class PurchaseAdvancePaymentInv(models.TransientModel):
                         total_inv += invoices.amount_total
                     amount = round(amount, 2)
                     total_inv += amount
-                    if total_inv > (order.amount_total + 1):
+                    if total_inv > order.amount_total:
                         create_moves.unlink()
                         raise UserError(_('You are trying to invoice more than total price'))
         return

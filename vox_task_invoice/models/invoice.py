@@ -59,7 +59,6 @@ class AccountMove(models.Model):
 
 
     include_tax_val = fields.Many2one('account.tax',string="Tax",default=_default_tax_value)
-    custom_invoice_date_due=fields.Date(related='invoice_date_due', string='Due Date')
 
     cubit_id = fields.Integer(string="Cubit ID")
 
@@ -96,7 +95,6 @@ class AccountMove(models.Model):
 
     def move_confirm_wizard_button(self):
         for move in self:
-            self.onchange_exclude_tax()
             if move.move_type in ('out_invoice', 'out_refund'):
                 action = self.env["ir.actions.actions"]._for_xml_id('vox_task_invoice.update_recipient_bank_action')
                 action['context'] = {'default_move_id': self.id}

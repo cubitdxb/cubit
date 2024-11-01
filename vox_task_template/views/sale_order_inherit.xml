@@ -21,21 +21,21 @@
                     <field name="service_global_discount_line" invisible="1"/>
                 </xpath>
 
-                <!--                <field name="amount_tax" position="before">-->
-                <!--                    <field name="discount_type" invisible="1"/>-->
-                <!--                    <field name="discount_distribution_type" required="1"/>-->
-                <!--                    <field name="line_taxes_ids" widget="many2many_tags" invisible="1"/>-->
-                <!--                    <field name="distribution_tax_ids" string="Tax Codes"-->
-                <!--                           attrs="{'invisible': [('discount_distribution_type', '!=' , 'against_tax')],'required': [('discount_distribution_type', '=' , 'against_tax')]}"-->
-                <!--                           widget="many2many_tags" domain="[('id', 'in', line_taxes_ids)]"-->
-                <!--                           options="{'no_create': True, 'no_open': True}"/>-->
+<!--                <field name="amount_tax" position="before">-->
+<!--                    <field name="discount_type" invisible="1"/>-->
+<!--                    <field name="discount_distribution_type" required="1"/>-->
+<!--                    <field name="line_taxes_ids" widget="many2many_tags" invisible="1"/>-->
+<!--                    <field name="distribution_tax_ids" string="Tax Codes"-->
+<!--                           attrs="{'invisible': [('discount_distribution_type', '!=' , 'against_tax')],'required': [('discount_distribution_type', '=' , 'against_tax')]}"-->
+<!--                           widget="many2many_tags" domain="[('id', 'in', line_taxes_ids)]"-->
+<!--                           options="{'no_create': True, 'no_open': True}"/>-->
 
-                <!--                    <field name="discount_amount" widget="monetary"-->
-                <!--                           options="{'currency_field': 'currency_id'}"/>-->
-                <!--                    <field name="service_discount_amount" widget="monetary"-->
-                <!--                           options="{'currency_field': 'currency_id'}"/>-->
-                <!--                    <field name="amount_gross" string="Total Taxable Amount" invisible="1"/>-->
-                <!--                </field>-->
+<!--                    <field name="discount_amount" widget="monetary"-->
+<!--                           options="{'currency_field': 'currency_id'}"/>-->
+<!--                    <field name="service_discount_amount" widget="monetary"-->
+<!--                           options="{'currency_field': 'currency_id'}"/>-->
+<!--                    <field name="amount_gross" string="Total Taxable Amount" invisible="1"/>-->
+<!--                </field>-->
 
 
                 <field name="amount_total" position="after">
@@ -64,7 +64,6 @@
                            options="{'currency_field': 'currency_id'}"/>
                     <field name="service_discount_amount" widget="monetary"
                            options="{'currency_field': 'currency_id'}"/>
-                    <field name="option_discount_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                     <field name="amount_gross" string="Total Taxable Amount" invisible="1"/>
                 </field>
 
@@ -81,17 +80,8 @@
                        position="before">
                     <field name="total_price" sum="Total" optional="show"/>
                     <field name="discount_distribution" sum="Total" optional="show"/>
-                    <field name="option_discount" optional="show" sum="Total"/>
                     <field name="net_taxable" sum="Total" optional="show" invisible="1"/>
                 </xpath>
-
-                <xpath expr="//button[@name='action_confirm']" position="after">
-                    <button name="update_option_discount_action" type="object"
-                            string="Update Option Discount" class="oe_highlight"
-                            context="{'default_sale_id': active_id}"
-                            attrs="{'invisible': [('state', 'in', ['sale','done','second_level_margin_approval','second_level_email_approval','send_for_lpo_email_margin_approval'])]}"/>
-                </xpath>
-
 
             </field>
         </record>

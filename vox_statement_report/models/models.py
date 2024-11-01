@@ -101,34 +101,32 @@ class AccountFollowupReport(models.AbstractModel):
         Override
         Return the name of the columns of the follow-ups report
         """
-
         headers = [
-            {'name': _('Invoice Number'), 'style': 'width: 102px;text-align:center;font-weight: bold;border:1px solid black; background-color:#2E64FE;font-family:Calibri;font-size: 14px;color:white;padding:15px;'},
-            {'name': _('Date'), 'class': 'date', 'style': 'width: 100px;text-align:center;font-weight: bold;border:1px solid black; background-color:#2E64FE;font-family:Calibri;font-size: 14px;color:white;padding:5px;'},
-            {'name': _('Due Date'), 'class': 'date', 'style': 'width: 100px;text-align:center;font-weight: bold;border:1px solid black; background-color:#2E64FE;font-family:Calibri;font-size: 14px;color:white;padding:5px;'},
-            {'name': _('Due Days'), 'class': 'date', 'style': 'width: 100px;text-align:center;font-weight: bold;border:1px solid black; background-color:#2E64FE;font-family:Calibri;font-size: 14px;color:white;padding:5px;'},
-            {'name': _('SO Number'), 'style': 'text-align:center;font-weight: bold;border:1px solid black; background-color:#2E64FE;font-family:Calibri;font-size: 14px;color:white;padding:5px;'},
-            {'name': _('Project Reference'), 'style': 'text-align:center;font-weight: bold;border:1px solid black; background-color:#2E64FE;font-family:Calibri;font-size: 14px;color:white;padding:5px;'},
-            {'name': _('Customer\nLPO Number'), 'style': 'text-align:center;font-weight: bold;border:1px solid black; background-color:#2E64FE;font-family:Calibri;font-size: 14px;color:white;padding:5px;'},
-            {'name': _('Communication'), 'style': 'text-align:center;font-weight: bold;border:1px solid black; background-color:#2E64FE;font-family:Calibri;font-size: 14px;color:white;padding:5px;'},
-            {'name': _('Expected Date'), 'class': 'date', 'style': 'width: 100px;text-align:center;font-weight: bold;border:1px solid black; background-color:#2E64FE;font-family:Calibri;font-size: 14px;color:white;padding:5px;'},
-            {'name': _('Excluded'), 'class': 'date', 'style': 'text-align:center;font-weight: bold;border:1px solid black; background-color:#2E64FE;font-family:Calibri;font-size: 14px;color:white;padding:5px;'},
-            {'name': _('Invoice Amount'), 'class': 'date', 'style': 'text-align:center;font-weight: bold;border:1px solid black; background-color:#2E64FE;font-family:Calibri;font-size: 14px;color:white;padding:5px;'},
-            {'name': _('Received Amount'), 'class': 'date', 'style': 'text-align:center;font-weight: bold;border:1px solid black; background-color:#2E64FE;font-family:Calibri;font-size: 14px;color:white;padding:5px;'},
-            {'name': _('Total Due'), 'class': 'number o_price_total', 'style': 'width: 100px;text-align:center;font-weight: bold;border:1px solid black; background-color:#2E64FE;font-family:Calibri;font-size: 14px;color:white;padding:5px;'},
+            {'name': _('Invoice Number'), 'class': 'date', 'style': 'text-align:center; white-space:nowrap;'},
+            {'name': _('Date'), 'class': 'date', 'style': 'text-align:center; white-space:nowrap;'},
+            {'name': _('Due Date'), 'class': 'date', 'style': 'text-align:center; white-space:nowrap;'},
+            {'name': _('Source Document'), 'style': 'text-align:center; white-space:nowrap;'},
+            {'name': _('Project Reference'), 'style': 'text-align:center; white-space:nowrap;'},
+            {'name': _('LPO Number'), 'style': 'text-align:center; white-space:nowrap;'},
+            {'name': _('Communication'), 'style': 'text-align:right; white-space:nowrap;'},
+            {'name': _('Expected Date'), 'class': 'date', 'style': 'white-space:nowrap;'},
+            {'name': _('Excluded'), 'class': 'date', 'style': 'white-space:nowrap;'},
+            {'name': _('Invoice Amount'), 'class': 'date', 'style': 'white-space:nowrap;'},
+            {'name': _('Received Amount'), 'class': 'date', 'style': 'white-space:nowrap;'},
+            {'name': _('Total Due'), 'class': 'number o_price_total', 'style': 'text-align:right; white-space:nowrap;'},
             {'name': _('Payment Terms'), 'class': 'number o_price_total',
-             'style': 'text-align:center;font-weight: bold;border:1px solid black; background-color:#2E64FE;font-family:Calibri;font-size: 14px;color:white;padding:5px;'},
+             'style': 'text-align:right; white-space:nowrap;'}
         ]
         if self.env.context.get('print_mode'):
             # headers_style = "border:1px solid black;"
-            # for d in headers:
-            #
-            #     d.update((k, "SO Number") for k, v in d.items() if v == "Source Document")
+            for d in headers:
+
+                d.update((k, "SO Number") for k, v in d.items() if v == "Source Document")
             #     d.update((k, "text-align:right; white-space:nowrap;border:1px solid black;") for k, v in d.items() if v == "text-align:right; white-space:nowrap;")
             #     d.update((k, "text-align:center; white-space:nowrap;border:1px solid black;") for k, v in d.items() if v == "text-align:center; white-space:nowrap;")
             #     d.update((k, "white-space:nowrap;border:1px solid black;") for k, v in d.items() if v == "white-space:nowrap;")
 
-            headers = headers[:7] + headers[10:]
+            headers = headers[:6] + headers[9:]
             headers = [x for x in headers if not ('Project Reference' == x.get('name'))]
 
             # headers[0]['n'].append('dbms')
@@ -211,10 +209,6 @@ class AccountFollowupReport(models.AbstractModel):
             #                  aml_recs)
                 # aml_recs = aml_recs.filtered(lambda x: x.move_id.invoice_date >= date_start and x.move_id.invoice_date >= date_end)
                 # aml_recs = [item for item in aml_recs if item.move_id.invoice_date >= date_start and item.move_id.invoice_date <= date_end]
-
-            #
-            # optional = "show"
-            # attrs = "{'invisible': [['payment_state', 'in', ('paid', 'in_payment', 'reversed')]]}" / >
             columns =[]
             for aml in aml_recs:
                 if partner.date_start and partner.date_end:
@@ -223,7 +217,6 @@ class AccountFollowupReport(models.AbstractModel):
                             amount = aml.amount_residual_currency if aml.currency_id else aml.amount_residual
                             amount_total = aml.move_id.amount_total
                             amount_paid = aml.move_id.amount_paid
-                            invoice_date_due=aml.move_id.invoice_date_due
                             payment_reference = " "
                             if aml.move_id.invoice_payment_term_id:
                                 payment_reference = aml.move_id.invoice_payment_term_id.name
@@ -233,16 +226,16 @@ class AccountFollowupReport(models.AbstractModel):
                             is_overdue = today > aml.date_maturity if aml.date_maturity else today > aml.date
                             is_payment = aml.payment_id
                             if is_overdue or is_payment:
-                                total_issued += not aml.blocked and amount or 0.00
+                                total_issued += not aml.blocked and amount or 0
                             if is_overdue:
                                 date_due = {'name': date_due, 'class': 'color-red date',
-                                            'style': 'text-align:center;color: red;font-family:Calibri;'}
+                                            'style': 'white-space:nowrap;text-align:center;color: red;'}
                             if is_payment:
                                 date_due = ''
                             move_line_name = self._format_aml_name(aml.name, aml.move_id.ref)
                             if self.env.context.get('print_mode'):
-                                move_line_name = {'name': move_line_name, 'style': 'text-align:center; font-family:Calibri;'}
-                            # amount = round(amount,2)#formatLang(self.env, amount, currency_obj=currency)
+                                move_line_name = {'name': move_line_name, 'style': 'text-align:right; white-space:normal;'}
+                            amount = formatLang(self.env, amount, currency_obj=currency)
                             line_num += 1
                             expected_pay_date = format_date(self.env, aml.expected_pay_date,
                                                             lang_code=lang_code) if aml.expected_pay_date else ''
@@ -251,29 +244,9 @@ class AccountFollowupReport(models.AbstractModel):
                             lpo_number = aml.move_id.project_id.sudo().sale_id.sudo().lpo_number or ''
                             if len(invoice_origin) > 43:
                                 invoice_origin = invoice_origin[:40] + '...'
-
-                            invoice_origin={'name': invoice_origin,
-                                                 'style': 'text-align:left;border:1px solid black;padding:5px;font-family:Calibri;'}
-                            amount_total = {'name': '{:0.2f}'.format(amount_total if amount_total else 0.00), 'style': 'text-align:right;border:1px solid black;padding:5px;font-family:Calibri;'}
-                            amount_paid = {'name': '{:0.2f}'.format(amount_paid if amount_paid else 0.00), 'style': 'text-align:right;border:1px solid black;padding:5px;font-family:Calibri;'}
-                            amount = {'name': '{:0.2f}'.format(amount if amount else 0.00),
-                                           'style': 'text-align:right;white-space:nowrap;border:1px solid black;padding:5px;font-family:Calibri;'}
-                            lpo_number = {'name': lpo_number,
-                                          'style': 'text-align:left;white-space:nowrap;border:1px solid black;padding:5px;font-family:Calibri;'}
-                            # move_line_name = {'name': move_line_name,
-                            #                   'style': 'text-align:center;border:1px solid black;padding:5px;width:150px;'}
-                            payment_reference = {'name': payment_reference,
-                                                 'style': 'text-align:left;border:1px solid black;padding:5px;font-family:Calibri;'}
-                            Date = format_date(self.env, aml.move_id.invoice_date or aml.date, lang_code=lang_code)
-                            Date = {'name': Date,
-                                    'style': 'text-align:center;border:1px solid black;padding:5px;font-family:Calibri;'}
-                            invoice_days_due = {'name': str((today-invoice_date_due).days) + ' Days',
-                                                'style': 'text-align:center;border:1px solid black;padding:5px;font-family:Calibri;'}
                             columns = [
-                                Date,#format_date(self.env, aml.move_id.invoice_date or aml.date, lang_code=lang_code),
+                                format_date(self.env, aml.move_id.invoice_date or aml.date, lang_code=lang_code),
                                 date_due,
-                                invoice_days_due,
-                                # date_due,
                                 invoice_origin,
                                 project_reference,
                                 lpo_number,
@@ -281,18 +254,15 @@ class AccountFollowupReport(models.AbstractModel):
                                 (expected_pay_date and expected_pay_date + ' ') + (aml.internal_note or ''),
                                 {'name': '', 'blocked': aml.blocked},
                                 amount_total,
-                                amount_paid,
+                                round(amount_paid, 2),
                                 amount,
                                 payment_reference
 
                             ]
-
                             if self.env.context.get('print_mode'):
-                                columns = columns[:6] + columns[9:]
-                                a = columns.pop(4)
+                                columns = columns[:5] + columns[8:]
+                                a = columns.pop(3)
                                 columns = columns
-
-
                             lines.append({
                                 'id': aml.id,
                                 'account_move': aml.move_id,
@@ -308,11 +278,8 @@ class AccountFollowupReport(models.AbstractModel):
                 else:
                     amount = aml.amount_residual_currency if aml.currency_id else aml.amount_residual
                     amount_total = aml.move_id.amount_total
-                    amount_total = amount_total if amount_total else 0.00
                     amount_paid = aml.move_id.amount_paid
-                    amount_paid=amount_paid if amount_paid else 0.00
                     payment_reference = " "
-                    invoice_date_due = aml.move_id.invoice_date_due
                     if aml.move_id.invoice_payment_term_id:
                         payment_reference = aml.move_id.invoice_payment_term_id.name
                     date_due = format_date(self.env, aml.date_maturity or aml.move_id.invoice_date or aml.date,
@@ -329,11 +296,8 @@ class AccountFollowupReport(models.AbstractModel):
                         date_due = ''
                     move_line_name = self._format_aml_name(aml.name, aml.move_id.ref)
                     if self.env.context.get('print_mode'):
-                        move_line_name = {'name': move_line_name, 'style': 'text-align:center; font-family:Calibri;'}
-                    amount = amount#formatLang(self.env, amount, currency_obj=currency)
-                    amount=amount if amount else 0.00
-
-
+                        move_line_name = {'name': move_line_name, 'style': 'text-align:right; white-space:normal;'}
+                    amount = formatLang(self.env, amount, currency_obj=currency)
                     line_num += 1
                     expected_pay_date = format_date(self.env, aml.expected_pay_date,
                                                     lang_code=lang_code) if aml.expected_pay_date else ''
@@ -342,33 +306,9 @@ class AccountFollowupReport(models.AbstractModel):
                     lpo_number = aml.move_id.project_id.sudo().sale_id.sudo().lpo_number or ''
                     if len(invoice_origin) > 43:
                         invoice_origin = invoice_origin[:40] + '...'
-
-                    invoice_origin = {'name': invoice_origin,
-                                      'style': 'text-align:left;border:1px solid black;padding:5px;font-family:Calibri;'}
-                    amount_total = {'name': '{:0.2f}'.format(amount_total),
-                                    'style': 'text-align:right;border:1px solid black;padding:5px;font-family:Calibri;'}
-                    amount_paid = {'name': '{:0.2f}'.format(amount_paid),
-                                   'style': 'text-align:right;border:1px solid black;padding:5px;font-family:Calibri;'}
-                    amount = {'name': '{:0.2f}'.format(amount),
-                              'style': 'text-align:center;border:1px solid black;padding:5px;font-family:Calibri;'}
-
-                    lpo_number = {'name': lpo_number,
-                              'style': 'text-align:left;border:1px solid black;padding:5px;font-family:Calibri;'}
-                    # move_line_name = {'name': move_line_name,
-                    #               'style': 'text-align:center;border:1px solid black;padding:5px;'}
-
-                    payment_reference = {'name': payment_reference,
-                                  'style': 'text-align:left;border:1px solid black;padding:5px;font-family:Calibri;'}
-                    Date=format_date(self.env, aml.move_id.invoice_date or aml.date, lang_code=lang_code)
-                    Date = {'name': Date,
-                                         'style': 'text-align:center;border:1px solid black;padding:5px;font-family:Calibri;'}
-
-                    invoice_days_due = {'name': str((today-invoice_date_due).days) + ' Days',
-                                        'style': 'text-align:center;border:1px solid black;padding:5px;font-family:Calibri;'}
                     columns = [
-                        Date,#format_date(self.env, aml.move_id.invoice_date or aml.date, lang_code=lang_code),
+                        format_date(self.env, aml.move_id.invoice_date or aml.date, lang_code=lang_code),
                         date_due,
-                        invoice_days_due,
                         invoice_origin,
                         project_reference,
                         lpo_number,
@@ -376,16 +316,15 @@ class AccountFollowupReport(models.AbstractModel):
                         (expected_pay_date and expected_pay_date + ' ') + (aml.internal_note or ''),
                         {'name': '', 'blocked': aml.blocked},
                         amount_total,
-                        amount_paid,
+                        round(amount_paid, 2),
                         amount,
                         payment_reference
 
                     ]
                     if self.env.context.get('print_mode'):
-                        columns = columns[:6] + columns[9:]
-                        a = columns.pop(4)
+                        columns = columns[:5] + columns[8:]
+                        a = columns.pop(3)
                         columns = columns
-                    invoice_number = {'name': aml.move_id.name,  'style': 'text-align:center;border:1px solid black;padding:5px;font-family:Calibri;'}
                     lines.append({
                         'id': aml.id,
                         'account_move': aml.move_id,
@@ -398,115 +337,79 @@ class AccountFollowupReport(models.AbstractModel):
                         'unfoldable': False,
                         'columns': [type(v) == dict and v or {'name': v} for v in columns],
                     })
-            total_due = '{:0.2f}'.format(total)
-
-            # total_due = formatLang(self.env, total, currency_obj=currency)
-
-
-
+            total_due = formatLang(self.env, total, currency_obj=currency)
             line_num += 1
-            # columns = [
-            #     Date,  # format_date(self.env, aml.move_id.invoice_date or aml.date, lang_code=lang_code),
-            #     date_due,
-            #     invoice_days_due,
-            #     invoice_origin,
-            #     project_reference,
-            #     lpo_number,
-            #     move_line_name,
-            #     (expected_pay_date and expected_pay_date + ' ') + (aml.internal_note or ''),
-            #     {'name': '', 'blocked': aml.blocked},
-            #     amount_total,
-            #     amount_paid,
-            #     amount,
-            #     payment_reference
-            #
-            # ]
-
             lines.append({
                 'id': line_num,
-                'account_move':'',
-                'name': '  ',
+                'name': '',
                 'class': 'total',
-                'style': 'text-align:right;padding:6px;font-weight: bold;font-size:18px;background-color:#2E64FE;border:1px solid black;padding:5px;font-family:Calibri;',
                 # 'style': 'border: 1px solid black' if self.env.context.get(
                 #     'print_mode') else 'border-top-style: double',
                 # 'style': 'border-top-style: double',
                 'unfoldable': False,
                 'level': 3,
                 'columns': [{'name': v} for v in [''] * (6 if self.env.context.get('print_mode') else 9) + [
-                    total >= 0 and _('Total Due') or '', total_due,'']],
+                    total >= 0 and _('Total Due') or '', total_due]],
             })
-            # if total_issued > 0:
-            #     total_issued = formatLang(self.env, total_issued, currency_obj=currency)
-            #     line_num += 1
-            #     lines.append({
-            #         'id': line_num,
-            #         'name': '',
-            #         'class': 'total',
-            #         'style': 'text-align:left;padding:6px;font-weight: bold;font-size:18px;border:1px',
-            #         # 'style': 'border: 1px solid black' if self.env.context.get(
-            #         #     'print_mode') else " ",
-            #         'unfoldable': False,
-            #         'level': 3,
-            #         'columns': [{'name': v} for v in
-            #                     [''] * (5 if self.env.context.get('print_mode') else 9) + [_('Total Overdue'),
-            #                                                                                total_issued]],
-            #     })
+            if total_issued > 0:
+                total_issued = formatLang(self.env, total_issued, currency_obj=currency)
+                line_num += 1
+                lines.append({
+                    'id': line_num,
+                    'name': '',
+                    'class': 'total',
+                    # 'style': 'border: 1px solid black' if self.env.context.get(
+                    #     'print_mode') else " ",
+                    'unfoldable': False,
+                    'level': 3,
+                    'columns': [{'name': v} for v in
+                                [''] * (6 if self.env.context.get('print_mode') else 9) + [_('Total Overdue'),
+                                                                                           total_issued]],
+                })
 
-            # if self.env.context.get('print_mode'):
-            #     line_num += 1
-            #     lines.append({
-            #         'id': line_num,
-            #         'name': '',
-            #         'style': 'text-align:left;padding:6px;font-weight: bold;font-size:18px;border:1px',
-            #         'class': '',
-            #         'unfoldable': False,
-            #         'level': 3,
-            #         'columns': [],
-            #     })
-            #     line_num += 1
-            #     lines.append({
-            #         'id': line_num,
-            #         'name': '',
-            #         'style': 'text-align:left;padding:6px;font-weight: bold;font-size:18px;border:1px;',
-            #         'class': '',
-            #         'unfoldable': False,
-            #         'level': 3,
-            #         'columns': [],
-            #     })
-            #     line_num += 1
-            #     lines.append({
-            #             'id': line_num,
-            #             'name': '',
-            #             'style': 'text-align:left;padding:6px;font-weight: bold;font-size:18px;border:1px;',
-            #             'class': 'text-left',
-            #             # 'unfoldable': False,
-            #             # 'level': 6,
-            #             'columns': [{'name': v} for v in [''] * (7 if self.env.context.get('print_mode') else 9) + [
-            #         ('Signature') or '']],
-            #         })
-            # line_num += 1
-            # if columns:
-            #     lines.append({
-            #         'id': line_num,
-            #         'name': '',
-            #         'class': '',
-            #         'style': 'border-bottom-style: none',
-            #         'unfoldable': False,
-            #         'level': 0,
-            #         'columns': [{} for col in columns],
-            #     })
-            #
-            # line_num += 1
-            # lines.append({
-            #     'id': line_num,
-            #     'name': '',
-            #     'style': 'text-align:left;padding:6px;font-size:13px;background-color:#ffffff;border-bottom:0px;border-top:0px;border-left:0px;border-right:0px;',
-            #     # 'class': 'total',
-            #     # 'unfoldable': False,
-            #     # 'level': 3,
-            #     'columns': [{'name': 'For Cubit Technologies LLC' } + v for v in [''] * (5 if self.env.context.get('print_mode') else 9) ],
-            # })
+            if self.env.context.get('print_mode'):
+                line_num += 1
+                lines.append({
+                    'id': line_num,
+                    'name': '',
+                    'style': 'text-align:left;padding:6px;font-weight: bold;font-size:18px;border:0px',
+                    'class': '',
+                    'unfoldable': False,
+                    'level': 3,
+                    'columns': [],
+                })
+                line_num += 1
+                lines.append({
+                    'id': line_num,
+                    'name': '',
+                    'style': 'text-align:left;padding:6px;font-weight: bold;font-size:18px;border:0px;',
+                    'class': '',
+                    'unfoldable': False,
+                    'level': 3,
+                    'columns': [],
+                })
+                line_num += 1
+                lines.append({
+                        'id': line_num,
+                        'name': '',
+                        'style': 'text-align:left;padding:6px;font-weight: bold;font-size:18px;border:0px;',
+                        'class': 'text-left',
+                        # 'unfoldable': False,
+                        # 'level': 6,
+                        'columns': [{'name': v} for v in [''] * (7 if self.env.context.get('print_mode') else 9) + [
+                    ('Signature') or '']],
+                    })
+                line_num += 1
+                lines.append({
+                    'id': line_num,
+                    'name': '',
+                    'style': 'text-align:left;padding:6px;font-weight: bold;font-size:18px;border-bottom:0px;border-top:0px;border-left:0px;border-right:0px;',
+                    # 'class': 'total',
+                    # 'unfoldable': False,
+                    # 'level': 3,
+                    'columns': [{'name': v} for v in [''] * (7 if self.env.context.get('print_mode') else 9) + [
+                        ('For Cubit Technologies LLC')]],
+                })
 
             # Add an empty line after the total to make a space between two currencies
             line_num += 1
@@ -514,11 +417,10 @@ class AccountFollowupReport(models.AbstractModel):
                 lines.append({
                     'id': line_num,
                     'name': '',
-                    # 'class': '',
-                    #'style': 'border-bottom-style: none',
-                    'style': 'text-align:left;padding:6px;font-weight: bold;font-size:18px;border-style: none;',
+                    'class': '',
+                    'style': 'border-bottom-style: none',
                     'unfoldable': False,
-                    'level': 3,
+                    'level': 0,
                     'columns': [{} for col in columns],
                 })
 
@@ -528,12 +430,6 @@ class AccountFollowupReport(models.AbstractModel):
             lines.pop()
         return lines
 
-    def _get_report_name(self):
-        """
-        Override
-        Return the name of the report
-        """
-        return _('')
     # @api.model
     # def statement_report(self, options):
     #     return {
