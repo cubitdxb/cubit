@@ -48,7 +48,7 @@
             <xpath expr="//form/header/button[@name='action_confirm']"
                    position="after">
                 <button name="action_create_revision" states="draft,sent" string="Create Revision" type="object"/>
-
+                <button name="rest_draft" string="Force Tax Update" type="object"/>
             </xpath>
 
             <xpath expr="//button[@name='action_quotation_send'][2]" position="attributes">
@@ -292,7 +292,7 @@
                 <!--                decoration-warning="(purchased_qty==0)">-->
                 <!--                <tree string="Sales Order Lines" editable="bottom" decoration-danger="c_red == 1" decoration-info="c_blue == 1" colors="red:c_red == 1;orange: c_orange == 1;green: c_blue == 1">-->
                 <tree string="Sales Order Lines" editable="bottom" decoration-info="c_blue == '1'"
-                      decoration-warning="c_orange == '1'">
+                      decoration-warning="c_orange == '1'" decoration-danger="c_red == '1'">
                     <!--                <tree string="Sales Order Lines" editable="bottom" colors="red:c_red == 1;orange: c_orange == 1;green: c_blue == 1">-->
                     <control>
                         <create name="add_product_control" string="Add a product"/>

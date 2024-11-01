@@ -75,13 +75,20 @@
             </field>
         </record>
 
-         <record id="sale.action_quotations_with_onboarding" model="ir.actions.act_window">
-            <field name="domain">[('state','in',('draft','sent','cancel','send_for_email_approval','first_level_email_approval','send_for_lpo_email_margin_approval','send_for_margin_approval','first_level_margin_approval','second_level_margin_approval','second_level_email_approval')), '|', '|', '|',('user_ids', '=',False), ('user_ids','=', uid) , ('user_ids.report_mgr_id.report_mgr_id', '=', uid), ('user_ids.report_mgr_id', '=', uid)]</field>
+        <record id="sale.action_quotations_with_onboarding" model="ir.actions.act_window">
+            <field name="domain">
+                [('state','in',('draft','sent','cancel','send_for_email_approval','first_level_email_approval','send_for_lpo_email_margin_approval','send_for_margin_approval','first_level_margin_approval','second_level_margin_approval','second_level_email_approval')),
+                '|', '|', '|',('user_ids', '=',False), ('user_ids','=', uid) , ('user_ids.report_mgr_id.report_mgr_id',
+                '=', uid), ('user_ids.report_mgr_id', '=', uid)]
+            </field>
         </record>
 
 
         <record id="sale.action_orders" model="ir.actions.act_window">
-            <field name="domain">[('state', 'not in', ('draft', 'sent', 'cancel')), '|', '|', '|',('user_ids', '=',False), ('user_ids','=', uid) , ('user_ids.report_mgr_id.report_mgr_id', '=', uid), ('user_ids.report_mgr_id', '=', uid)]</field>
+            <field name="domain">[('state', 'not in', ('draft', 'sent', 'cancel')), '|', '|', '|', '|',
+                ('search_ids','=',1), ('user_ids', '=',False), ('user_ids','=', uid) ,
+                ('user_ids.report_mgr_id.report_mgr_id', '=', uid), ('user_ids.report_mgr_id', '=', uid)]
+            </field>
         </record>
     </data>
 </odoo>

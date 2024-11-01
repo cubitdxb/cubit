@@ -8,11 +8,34 @@ class SaleOrder(models.Model):
 
     disable_required_fields = fields.Boolean(string="Disable Required Field")
 
+    trn_number = fields.Char(related='partner_id.vat')
+
     def action_confirm(self):
         res = super(SaleOrder, self).action_confirm()
         # if any(order.margin < 5 for order in self.order_line):
         #     raise ValidationError(_('It is not allowed to confirm an order when the margin is less than 5%'))
         if self.disable_required_fields != True:
+            # if self.partner_id.company_type == 'company':
+            if not self.partner_id.vat_certificate:
+                raise ValidationError(_("Please attach Vat Certificate for Customer!"))
+            if not self.partner_id.passport_copy:
+                raise ValidationError(_("Please attach Passport copy for Customer!"))
+            if not self.partner_id.trade_license:
+                raise ValidationError(_("Please attach Trade License for Customer!"))
+            if not self.partner_id.child_ids:
+                raise ValidationError(_("Please add at least one contact for Customer!"))
+
+            if not self.partner_id.email:
+                raise ValidationError(_("Please Add E-mail for Customer"))
+            if not self.partner_id.phone:
+                raise ValidationError(_("Please Add Phone for Customer!"))
+            if not self.partner_id.vat:
+                raise ValidationError(_("Please Add VAT for Customer!"))
+            if not self.partner_id.fax:
+                raise ValidationError(_("Please add fax for Customer!"))
+            if not self.partner_id.website:
+                raise ValidationError(_("Please add Website for Customer!"))
+
             if len(self.vendor_detail_id) < 1:
                 raise ValidationError(_('Fill the Vendor Details Before Confirming the Sale order'))
             if any((not order.sale_line_brand.name or not order.distributor or not order.account_manager
@@ -74,14 +97,14 @@ class ResPartner(models.Model):
             if not (vals.get('customer') == True or vals.get('supplier') == True or self.env.context.get(
                     'flag_partner') == 1 or vals.get('type') == 'existing_contact'):
                 raise ValidationError(_("You have to choose a CheckBox Either Customer/Supplier"))
-            if vals.get('company_type') == 'company' and not vals.get('vat_certificate'):
-                raise ValidationError(_("Please attach Vat Certificate!"))
-            # if not vals.get('passport_copy'):
-            #     raise ValidationError(_("Please attach Passport copy!"))
-            if vals.get('company_type') == 'company' and not vals.get('trade_license'):
-                raise ValidationError(_("Please attach Trade License!"))
-            if vals.get('company_type') == 'company' and not vals.get('child_ids'):
-                raise ValidationError(_("Please add at least one contact!"))
+            # if vals.get('company_type') == 'company' and not vals.get('vat_certificate'):
+            #     raise ValidationError(_("Please attach Vat Certificate!"))
+            # # if not vals.get('passport_copy'):
+            # #     raise ValidationError(_("Please attach Passport copy!"))
+            # if vals.get('company_type') == 'company' and not vals.get('trade_license'):
+            #     raise ValidationError(_("Please attach Trade License!"))
+            # if vals.get('company_type') == 'company' and not vals.get('child_ids'):
+            #     raise ValidationError(_("Please add at least one contact!"))
         return super(ResPartner, self).create(vals)
 
 

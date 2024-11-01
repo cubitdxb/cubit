@@ -1,0 +1,37 @@
+<odoo>
+    <data>
+        <record id="view_option_discount_update_wizard" model="ir.ui.view">
+            <field name="name">update.option.discount.form</field>
+            <field name="model">update.option.discount</field>
+            <field name="arch" type="xml">
+                <form string="Update Option Discount">
+                    <group>
+                        <field name="sale_id" readonly="1"/>
+                        <field name="option_wise_discount_ids">
+                            <tree create="false" delete="false" editable="bottom">
+                                <field name="name" readonly="1" force_save="1"/>
+                                <field name="discount"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <footer>
+                        <button name="make_option_discount_update" string="Update" type="object"
+                                class="oe_highlight"/>
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_option_discount_update_wizard" model="ir.actions.act_window">
+            <field name="name">Update Option Discount</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">update.option.discount</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_option_discount_update_wizard"/>
+            <field name="target">new</field>
+        </record>
+
+
+    </data>
+</odoo>

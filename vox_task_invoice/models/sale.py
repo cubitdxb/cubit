@@ -23,4 +23,10 @@ class SaleOrderLine(models.Model):
     is_line_invoiced = fields.Boolean(string="Line Invoiced")
     done_qty_wizard = fields.Float(string="Done Qty Wizard")
     is_cancel_down_payment = fields.Boolean(string="Cancel Down Payment?")
+    sale_task_invoiced = fields.Float(string="Invoiced", compute='_compute_sale_task_invoiced')
+
+    @api.depends('done_qty_wizard')
+    def _compute_sale_task_invoiced(self):
+        for rec in self:
+            rec.sale_task_invoiced = rec.done_qty_wizard
 

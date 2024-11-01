@@ -12,6 +12,24 @@ class PurchaseOrder(models.Model):
     amount_gross = fields.Float(store=True, readonly=True, string='Gross Amount',
                                 help="The amount after discount without tax.", track_visibility='always')
 
+    @api.depends('order_line.invoice_lines.move_id')
+    def _compute_invoice(self):
+        # for order in self:
+        #     invoices = order.mapped('order_line.invoice_lines.move_id')
+        #     order.invoice_ids = invoices
+        #     order.invoice_count = len(invoices)
+
+        for order in self:
+            purchase_moves = self.env['account.move'].sudo().search(
+                [('purchase_bill_id', '=', order.id)])
+            default_invoices = order.mapped('order_line.invoice_lines.move_id')
+            lt_purchase_invoice = [(4, lt_move_line.id) for lt_move_line in default_invoices]
+            purchase_invoice = [(4, move_line.id) for move_line in purchase_moves]
+            exist_moves = [(4, existing_orders.id) for existing_orders in order.invoice_ids]
+            all_invoices = list(set(exist_moves + purchase_invoice + lt_purchase_invoice))
+            order.invoice_ids = all_invoices
+            order.invoice_count = len(order.invoice_ids)
+
 
 
 class PurchaseOrderLine(models.Model):

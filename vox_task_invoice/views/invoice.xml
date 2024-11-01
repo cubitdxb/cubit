@@ -35,11 +35,11 @@
                     <attribute name="attrs">{'required': [('type', '=', 'contact')]}</attribute>
                 </xpath>
 
-                <xpath expr="//notebook/page['contact_addresses']/field[@name='child_ids']" position="attributes">
-                    <attribute name="attrs">{'required': [('company_type', '=', 'company')], 'invisible':
-                        [('company_type', '!=', 'company')]}
-                    </attribute>
-                </xpath>
+<!--                <xpath expr="//notebook/page['contact_addresses']/field[@name='child_ids']" position="attributes">-->
+<!--                    <attribute name="attrs">{'required': [('company_type', '=', 'company')], 'invisible':-->
+<!--                        [('company_type', '!=', 'company')]}-->
+<!--                    </attribute>-->
+<!--                </xpath>-->
 
             </field>
         </record>
@@ -50,6 +50,13 @@
             <field name="model">account.move</field>
             <field name="inherit_id" ref="account.view_invoice_tree"/>
             <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoice_date_due']" position="replace">
+                    <field name="invoice_date_due" string="Due Days" widget="remaining_days" optional="show" attrs="{'invisible': [['payment_state', 'in', ('paid', 'in_payment', 'reversed')]]}"/>
+                    <field name="custom_invoice_date_due" optional="show" attrs="{'invisible': [['payment_state', 'in', ('paid', 'in_payment', 'reversed')]]}"/>
+                </xpath>
+                 <xpath expr="//field[@name='activity_ids']" position="replace">
+                     <field name="activity_ids" widget="list_activity" optional="hide"/>
+                 </xpath>
                 <field name="amount_residual_signed" position="after">
                     <field name="amount_paid"/>
                 </field>
@@ -116,6 +123,16 @@
                     <field name="price_subtotal_gross" sum="Total"/>
                 </xpath>
 
+                <xpath expr="//label[@for='invoice_payment_term_id']" position="replace"/>
+                <xpath expr="//div[@class='d-flex']" position="replace">
+                <field name="invoice_payment_term_id" string="invoice Payment Term" laceholder="Terms"/>
+                <field name="invoice_date_due" force_save="1" placeholder="Date"/>
+                </xpath>
+
+
+
+
+
                 <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='quantity']" position="attributes">
                     <attribute name="sum">Total</attribute>
                 </xpath>
@@ -162,6 +179,10 @@
                                nolabel="1"/>
                     </group>
                 </xpath>
+
+<!--                <xpath expr="//field[@name='invoice_date_due']" position="attributes">-->
+<!--                    <attribute name="attrs">{}</attribute>-->
+<!--                </xpath>-->
 
             </field>
         </record>

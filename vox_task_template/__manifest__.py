@@ -39,6 +39,7 @@
         'wizard/create_delivery.xml',
         'wizard/purchase_import_excel.xml',
         'wizard/create_purchase.xml',
+        'wizard/update_option_discount_wiz_views.xml',
         'report/sign_off_document.xml',
         'report/repair_and_form_template.xml',
         'report/sale_project_task.xml',
