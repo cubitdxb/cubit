@@ -25,7 +25,6 @@
                     <group>
                         <field name="proposal_header"/>
                         <field name="rml_footer"/>
-                        <field name="rml_ls_footer"/>
                     </group>
                 </page>
                 <page string="Configuration">
