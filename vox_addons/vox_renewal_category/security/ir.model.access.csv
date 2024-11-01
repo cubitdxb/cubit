@@ -1,2 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_vox_renewal_category_vox_renewal_category,vox_renewal_category.vox_renewal_category,model_vox_renewal_category_vox_renewal_category,base.group_user,1,1,1,1

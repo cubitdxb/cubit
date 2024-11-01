@@ -1,7 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_sales_consolidated_wizard,sales.consolidated.wizard,model_sales_consolidated_wizard,base.group_user,1,1,1,1
-access_lead_presales_wizard,lead.presales.wizard,model_lead_presales_wizard,base.group_user,1,1,1,1
-access_business_operation_wizard,business.operation.wizard,model_business_operation_wizard,base.group_user,1,1,1,1
-access_cisco_report_wizard,cisco.report.wizard,model_cisco_report_wizard,base.group_user,1,1,1,1
-access_project_consolidated_wizard,project.consolidated.wizard,model_project_consolidated_wizard,base.group_user,1,1,1,1
-access_project_tracker_wizard,project.tracker.wizard,model_project_tracker_wizard,base.group_user,1,1,1,1

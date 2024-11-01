@@ -1,2 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-update_partner_users,update_partner_users.update_partner_users,model_update_partner_users,,1,1,1,1

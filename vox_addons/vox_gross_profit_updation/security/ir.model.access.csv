@@ -1,2 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-update_gross_profit_updation,update_gross_profit.update_gross_profit,model_update_gross_profit,,1,1,1,1

@@ -1,8 +1,0 @@
-<odoo>
-    <data>
-        <record id="group_for_payment_approval" model="res.groups">
-			<field name="name">Writeoff Payment Approval</field>
-		</record>
-
-    </data>
-</odoo>

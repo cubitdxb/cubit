@@ -1,9 +1,0 @@
-<odoo>
-    <data>
-        <record id="group_cubit_sales_director_special" model="res.groups">
-			<field name="name">Sales Director Special</field>
-<!--			<field name="category_id" ref="module_category_cubit_customization" />-->
-		</record>
-
-    </data>
-</odoo>

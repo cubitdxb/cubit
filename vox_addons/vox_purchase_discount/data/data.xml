@@ -1,7 +1,0 @@
-<odoo>
-
-           <record id="purchse_tax_5" model="account.tax">
-            <field name="name">Input VAT 5%</field>
-            <field name="type_tax_use">purchase</field>
-        </record>
-</odoo>

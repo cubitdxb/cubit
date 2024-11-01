@@ -1,2 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_vox_expense_moves_vox_expense_moves,vox_expense_moves.vox_expense_moves,model_vox_expense_moves_vox_expense_moves,base.group_user,1,1,1,1

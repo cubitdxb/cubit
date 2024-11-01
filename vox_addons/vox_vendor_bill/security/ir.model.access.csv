@@ -1,4 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_purchase_advance_payment_inv,vox_vendor_bill.purchase_advance_payment_inv,model_purchase_advance_payment_inv,,1,1,1,1
-access_wiz_purchase_order_line_edit_lines,vox_vendor_bill.wiz_purchase_order_line_edit_lines,model_wiz_purchase_order_line_edit_lines,,1,1,1,1
-access_wiz_purchase_order_line_edit,vox_vendor_bill.wiz_purchase_order_line_edit,model_wiz_purchase_order_line_edit,,1,1,1,1

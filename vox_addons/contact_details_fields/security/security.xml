@@ -1,8 +1,0 @@
-<odoo>
-
-
-    <record id="allow_customer_duplication" model="res.groups">
-        <field name="name">Allow Customer Duplication</field>
-    </record>
-
-</odoo>
