@@ -115,7 +115,9 @@ class SaleAdvancePaymentInv(models.TransientModel):
         if self.advance_payment_method == 'percentage':
             if all(self.product_id.taxes_id.mapped('price_include')):
                 # for down payment percentage option select Total taxable amount instead of Total amount (Including VAT)
-                amount = order.amount_gross * self.amount / 100
+                # amount = order.amount_total * self.amount / 100
+                # amount = order.amount_gross * self.amount / 100
+                amount = order.amount_untaxed * self.amount / 100
 
             else:
                 amount = order.amount_untaxed * self.amount / 100
@@ -131,9 +133,11 @@ class SaleAdvancePaymentInv(models.TransientModel):
     def _create_invoice(self, order, so_line, amount):
         total_inv = 0
         for invoices in self.env['account.move'].search([('task_id.sale_id', '=', order.id),('state','!=','cancel'),('move_type', 'in', ('out_invoice','out_refund'))]):
-            invoices.amount_total = round(invoices.amount_total, 2)
+            invoices.amount_total = round(invoices.amount_total, 1)
+            # invoices.amount_total = round(invoices.amount_total, 2)
             total_inv += invoices.amount_total
-        amount = round(amount, 2)
+        amount = round(amount, 1)
+        # amount = round(amount, 2)
         total_inv += amount
         if total_inv > (order.amount_total + 1):
             raise UserError(_('You are trying to invoice more than total price'))
@@ -183,20 +187,39 @@ class SaleAdvancePaymentInv(models.TransientModel):
         return so_values
 
     def _create_invoices_vals(self):
+        print('_create_invoices_vals---------------------------------------------------##')
         task = self.env['project.task'].browse(self._context.get('active_ids', []))
         vat = task.sale_id.amount_tax
         product_discount = task.sale_id.discount_amount
         service_discount = task.sale_id.service_discount_amount
         invoice_lines = []
         total_price = 0.0
+        total_new_price = 0.0
         for line in task.sale_id.order_line.filtered(lambda x: not x.is_line_invoiced and not x.is_cancel_down_payment):
             if line.is_downpayment:
                 total_price = total_price + line.unit_price * -1
+                # total_new_price = total_price + line.unit_price * -1
             else:
                 total_price = total_price + line.unit_price * line.product_uom_qty
+        total_new_price = total_price
 
         total_price = total_price - product_discount - service_discount + vat
+        total_new_price = total_price
+
+        # valsss = {
+        #     'name': 'Regular Payment',
+        #     'price_unit': (round(total_new_price, 2)),
+        #     'quantity': 1,
+        #     # 'product_id': 4,
+        #     'product_uom_id': False,
+        #     # 'tax_ids': [(6, 0, 0)],
+        #     # 'tax_ids': [(6, 0, invoice_tax.ids)],
+        #     # 'sale_layout_cat_id': line.sale_layout_cat_id.id,
+        #     # 'part_number': line.part_number,
+        # }
+        print('total_price-----------------------------###-->', total_price)
         if total_price < 0:
+            print('total_price < 0--------------------')
             for line in task.sale_id.order_line.filtered(lambda x: not x.is_line_invoiced and not x.is_cancel_down_payment):
                 if line.is_downpayment:
                     vals = {
@@ -233,6 +256,7 @@ class SaleAdvancePaymentInv(models.TransientModel):
                     }
                     line.update({'qty_invoiced': -(line.product_uom_qty-line.done_qty_wizard),'done_qty_wizard': -(line.done_qty_wizard + (line.product_uom_qty - line.done_qty_wizard))})
                 invoice_lines.append((0, 0, vals))
+                print('invoice_lines-----<0--->', invoice_lines)
 
 
 
@@ -268,8 +292,27 @@ class SaleAdvancePaymentInv(models.TransientModel):
 
 
         else:
-
+            vals = {}
+            print('filter-->', task.sale_id.order_line.filtered(lambda x: not x.is_line_invoiced and not x.is_cancel_down_payment))
+            print('filter-len->', len(task.sale_id.order_line.filtered(lambda x: not x.is_line_invoiced and not x.is_cancel_down_payment)))
+            print('no filter-->', task.sale_id.order_line.filtered(lambda x: not x.is_line_invoiced))
+            print('no filter---len->', len(task.sale_id.order_line.filtered(lambda x: not x.is_line_invoiced)))
+            print('all-->', task.sale_id.order_line)
+            print('all--len-->', len(task.sale_id.order_line))
+            x = task.sale_id.order_line
+            y = task.sale_id.order_line.filtered(lambda x: not x.is_line_invoiced and not x.is_cancel_down_payment)
+            z = x - y
+            print('y--->', y)
+            print('y--->', len(y))
+            print('z--->', z)
+            tot = 0.0
+            for line in z:
+                tot += line.unit_price *  line.product_uom_qty
+            # for line in y:
+            # for line in task.sale_id.order_line.filtered(lambda x: not x.is_cancel_down_payment):
+            # for line in task.sale_id.order_line.filtered(lambda x: not x.is_line_invoiced):
             for line in task.sale_id.order_line.filtered(lambda x: not x.is_line_invoiced and not x.is_cancel_down_payment):
+            # for line in task.sale_id.order_line:
                 invoice_tax = self.env['account.tax'].sudo().search([('invoice_tax', '=', True), ('type_tax_use', '=', 'sale')],
                                                       limit=1)
 
@@ -280,17 +323,25 @@ class SaleAdvancePaymentInv(models.TransientModel):
                         'quantity': -1,
                         'product_id': line.product_id.id,
                         'product_uom_id': line.product_uom.id,
-                        'tax_ids': [(6, 0, line.tax_id.ids)],
-                        # 'tax_ids': [(6, 0, invoice_tax.ids)],
+                        # 'tax_ids': [(6, 0, line.tax_id.ids)],
+                        'tax_ids': [(6, 0, invoice_tax.ids)],
                         'sale_layout_cat_id': line.sale_layout_cat_id.id,
                         'part_number': line.part_number,
                     }
                     line.update({'qty_invoiced': -1})
                 else:
-
+                    new_discount = 0.0
+                    if line.product_uom_qty > 0:
+                        new_discount = (line.discount_distribution / (line.product_uom_qty)) * (
+                                    line.product_uom_qty - line.sale_task_invoiced)
+                        # new_discount = (line.discount_distribution / (line.product_uom_qty)) * line.product_uom_qty
+                        # new_discount = (line.discount_distribution / (line.product_uom_qty - line.done_qty_wizard)) * line.product_uom_qty
                     vals = {
                         'name': line.name,
                         'price_unit': line.unit_price,
+                        # 'quantity': line.product_uom_qty if line.sale_task_invoiced == 0 else (line.product_uom_qty - line.sale_task_invoiced),
+                        # 'quantity': line.product_uom_qty,
+                        # 'quantity': line.product_uom_qty - line.sale_task_invoiced,
                         'quantity': line.product_uom_qty - line.done_qty_wizard,
                         'product_id': line.product_id.id,
                         'product_uom_id': line.product_uom.id,
@@ -302,14 +353,49 @@ class SaleAdvancePaymentInv(models.TransientModel):
                         'serial_num': line.serial_num,
                         'begin_date': line.begin_date,
                         'end_date': line.end_date,
-                        'discount_distribution': line.discount_distribution,
+                        'discount_distribution': round(new_discount, 2),
+                        # 'discount_distribution': line.discount_distribution,
                         'net_taxable': line.net_taxable,
-                        'discount':line.discount
+                        # 'discount': (round(new_discount, 2) * 100) / (line.unit_price * (line.product_uom_qty- line.sale_task_invoiced))
+                        'discount': 0 if (line.unit_price * (line.product_uom_qty - line.sale_task_invoiced)) == 0
+                        else (round(new_discount, 2) * 100) / (
+                                    line.unit_price * (line.product_uom_qty - line.sale_task_invoiced))
+
+                        # 'discount': (round(new_discount, 2) * 100) / (line.unit_price * line.product_uom_qty)
+                        # 'discount':line.discount
                     }
-                    line.update({'qty_invoiced': line.product_uom_qty - line.done_qty_wizard, 'done_qty_wizard': line.done_qty_wizard + (line.product_uom_qty - line.done_qty_wizard)})
+                    # line.update({'qty_invoiced': line.product_uom_qty - line.done_qty_wizard, 'done_qty_wizard': line.done_qty_wizard + (line.product_uom_qty - line.done_qty_wizard)})
 
+
+                # line.update({'qty_invoiced': -1})
                 invoice_lines.append((0, 0, vals))
-
+            # invoice_lines.append((0, 0, vals))
+            # invoice_lines.append((0, 0, valsss))
+            print('invoice_lines--->', invoice_lines)
+            # if z:
+            #     for li in z:
+            #         vals = {
+            #             'name': li.name,
+            #             'price_unit': li.unit_price,
+            #             'quantity':  - (li.product_uom_qty),
+            #             # 'quantity': li.product_uom_qty - li.done_qty_wizard,
+            #             'product_id': li.product_id.id,
+            #             'product_uom_id': li.product_uom.id,
+            #             'tax_ids': [(6, 0, li.tax_id.ids)],
+            #             # 'tax_ids': [(6, 0, invoice_tax.ids)],
+            #             'sale_layout_cat_id': li.sale_layout_cat_id.id,
+            #             'part_number': li.part_number,
+            #             'service_suk': li.service_suk,
+            #             'serial_num': li.serial_num,
+            #             'begin_date': li.begin_date,
+            #             'end_date': li.end_date,
+            #             'discount_distribution': li.discount_distribution,
+            #             'net_taxable': li.net_taxable,
+            #             'discount': li.discount
+            #         }
+            #     invoice_lines.append((0, 0, vals))
+            print('invoice_lines--->', invoice_lines)
+            total_discount = sum(item[2].get("discount_distribution", 0) for item in invoice_lines if "discount_distribution" in item[2])
             for order in task.sale_id:
                 create_moves = self.env['account.move'].create({
                     'project_id': task.project_id.id,
@@ -325,7 +411,8 @@ class SaleAdvancePaymentInv(models.TransientModel):
                     'add_information': order.add_information,
                     'narration':order.note,
                     'lpo_number':order.lpo_number,
-                    'dis_amount': order.discount_amount + order.service_discount_amount,
+                    'dis_amount': total_discount,
+                    # 'dis_amount': order.discount_amount + order.service_discount_amount,
                     'discount_distribution_type': order.discount_distribution_type,
                     'line_taxes_ids': order.line_taxes_ids.ids,
                     'distribution_tax_ids':order.distribution_tax_ids.ids,
@@ -334,12 +421,26 @@ class SaleAdvancePaymentInv(models.TransientModel):
                 if create_moves:
                     amount = create_moves.amount_total
                     total_inv = 0
+                    total_untaxed = 0
                     for invoices in self.env['account.move'].search(
                             [('task_id.sale_id', '=', order.id), ('state', '!=', 'cancel'),('move_type', 'in', ('out_invoice','out_refund')),('id','!=',create_moves.id)]):
                         invoices.amount_total = round(invoices.amount_total, 2)
+                        invoices.amount_untaxed = round(invoices.amount_untaxed, 2)
                         total_inv += invoices.amount_total
+                        total_untaxed += invoices.amount_untaxed
                     amount = round(amount, 2)
+                    print('amount-->', amount)
+                    print('total_inv----bef>', total_inv)
+                    de_tax = total_inv
+                    print('total_untaxed----bef>', total_untaxed)
                     total_inv += amount
+                    print('total_inv-->', total_inv)
+                    print('order.amount_total-->', order.amount_total)
+                    print('tot-->', tot)
+                    print('total_inv - tot-->', total_inv - tot)
+                    print('amount_total - total_inv-->', order.amount_total - total_inv)
+                    # if total_inv - tot > (order.amount_total + 1):
+                    # if (total_inv - (total_inv - total_untaxed)) > (order.amount_total + 1):
                     if total_inv > (order.amount_total + 1):
                         create_moves.unlink()
                         raise UserError(_('You are trying to invoice more than total price'))
@@ -347,6 +448,28 @@ class SaleAdvancePaymentInv(models.TransientModel):
         return
 
     def create_invoices(self):
+        task_id = self.env[self._context.get('active_model')].browse(self._context.get('active_id'))
+        domain = [('project_id', '=', task_id.project_id.id), ('state', '=', 'posted')]
+        result = self.env['account.move'].read_group(
+            domain,
+            ['amount_residual_signed'],
+            []
+        )
+        total_amount_residual_signed = result[0]['amount_residual_signed'] if result else 0.0
+        print('total_amount_residual_signed--->', total_amount_residual_signed)
+        domain = [('id', '=', task_id.sale_id.id)]
+        result = self.env['sale.order'].read_group(
+            domain,
+            ['amount_total'],
+            # ['amount_gross'],
+            []
+        )
+        total_amount_total = result[0]['amount_total'] if result else 0.0
+        # total_amount_total = result[0]['amount_gross'] if result else 0.0
+        if total_amount_total and total_amount_residual_signed:
+            if round(total_amount_total, 1) == round(total_amount_residual_signed, 1):
+            # if round(total_amount_total, 2) == round(total_amount_residual_signed, 2):
+                raise ValidationError(_('You are not able to create Invoice, invoiced!'))
         finance_team_users = self.env['crm.team'].search([('team_code', '=', 'finance')]).mapped('member_ids').ids
         current_user = self.env.uid
         if not (self.env.uid == self.env.ref('base.user_admin').id or self.env.uid == self.env.ref('base.user_root').id):
@@ -354,6 +477,9 @@ class SaleAdvancePaymentInv(models.TransientModel):
                 raise ValidationError(_('You are not able to create Invoice'))
         task = self.env['project.task'].browse(self._context.get('active_ids', []))
         if self.advance_payment_method == 'delivered':
+            # sale_orders._create_invoices(final=self.deduct_down_payments)
+            # sale_orders._create_invoices(final=self.deduct_down_payments)
+            # self._create_invoice(task_id.sale_id, task.sale_id.order_line, total_amount_total)
             self._create_invoices_vals()
             task.is_regular_invoice = True
             task.sale_id.sudo().task_invoice_ids = task.invoice_ids
@@ -400,6 +526,16 @@ class SaleAdvancePaymentInv(models.TransientModel):
         }
 
     def show_so_lines(self):
+        task = self.env['project.task'].browse(self._context.get('active_ids', []))
+        for order in task.sale_id:
+            total_inv = 0
+            for invoices in self.env['account.move'].search(
+                    [('task_id.sale_id', '=', order.id), ('state', '!=', 'cancel'),
+                     ('move_type', 'in', ('out_invoice', 'out_refund'))]):
+                invoices.amount_total = round(invoices.amount_total, 2)
+                total_inv += invoices.amount_total
+            if round(total_inv, 0) == round((order.amount_total), 0):
+                raise UserError(_('Fully Invoiced'))
         finance_team_users = self.env['crm.team'].search([('team_code', '=', 'finance')]).mapped('member_ids').ids
         current_user = self.env.uid
         if not (self.env.uid == self.env.ref('base.user_admin').id or self.env.uid == self.env.ref('base.user_root').id):
@@ -408,7 +544,8 @@ class SaleAdvancePaymentInv(models.TransientModel):
         task = self.env['project.task'].browse(self._context.get('active_ids', []))
         sale_order = task.sale_id
         wiz = self.env['wiz.sale_order_line_edit'].create({'name':'Select Sale Order Lines', 'task_id':task.id})
-        for line in sale_order.order_line.filtered(lambda x: not x.is_downpayment and not x.is_line_invoiced):
+        for line in sale_order.order_line.filtered(lambda x: not x.is_downpayment):
+        # for line in sale_order.order_line.filtered(lambda x: not x.is_downpayment and not x.is_line_invoiced):
             invoice_tax = self.env['account.tax'].sudo().search(
                 [('invoice_tax', '=', True), ('type_tax_use', '=', 'sale')],
                 limit=1)

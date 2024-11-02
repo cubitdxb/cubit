@@ -48,7 +48,7 @@
             <xpath expr="//form/header/button[@name='action_confirm']"
                    position="after">
                 <button name="action_create_revision" states="draft,sent" string="Create Revision" type="object"/>
-
+                <button name="rest_draft" string="Force Tax Update" type="object"/>
             </xpath>
 
             <xpath expr="//button[@name='action_quotation_send'][2]" position="attributes">

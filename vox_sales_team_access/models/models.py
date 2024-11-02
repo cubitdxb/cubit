@@ -177,6 +177,17 @@ class Lead(models.Model):
 class saleOrder(models.Model):
     _inherit = "sale.order"
 
+    can_view_all_orders = fields.Boolean(compute='_compute_can_view_all_orders')
+
+    @api.depends('team_id')
+    def _compute_can_view_all_orders(self):
+        user = self.env.user
+        for order in self:
+            if user in self.env['crm.team'].search([('team_code', '=', 'procurement')]).mapped('member_ids'):
+                order.can_view_all_orders = True
+            else:
+                order.can_view_all_orders = False
+
     @api.onchange('partner_id')
     def change_partner_tax(self):
         res = super(saleOrder,self).change_partner_tax()
@@ -430,7 +441,9 @@ class CreateSaleProject(models.TransientModel):
                 })
                 line = []
                 presale_lines = []
-                for lines in sale_order_rec.order_line:
+                sale_line = self.env['sale.order.line'].search([('order_id', '=', sale_order_rec.id)])
+                for lines in sale_line:
+                # for lines in sale_order_rec.order_line:
                     data = {
                         'sl_no': lines.sl_no,
                         'part_number': lines.part_number,

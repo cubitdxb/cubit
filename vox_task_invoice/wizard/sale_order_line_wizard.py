@@ -30,8 +30,17 @@ class SaleOrderLineEdit(models.TransientModel):
     def _create_invoices_vals(self):
         invoice_lines = []
         sum_dis_distrubution = 0.0
+        tot_dis_distrubution = 0.0
+        new_discount = 0.0
         for line in self.line_ids.filtered(lambda x: x.is_check):
             sum_dis_distrubution += line.discount_distribution
+            if line.line_id.product_uom_qty > 0:
+                new_discount = (line.discount_distribution / line.line_id.product_uom_qty) * line.product_uom_qty
+                tot_dis_distrubution += new_discount
+            # else:
+            #     new_discount = 0.0
+            # new_discount = (line.discount_distribution / line.line_id.product_uom_qty) * line.product_uom_qty
+            
             vals = {
                 'name': line.name,
                 'price_unit': line.unit_price,
@@ -44,7 +53,8 @@ class SaleOrderLineEdit(models.TransientModel):
                 'serial_num': line.serial_num,
                 'begin_date': line.begin_date,
                 'end_date': line.end_date,
-                'discount_distribution': line.discount_distribution,
+                'discount_distribution': round(new_discount, 2),
+                # 'discount_distribution': line.discount_distribution,
                 'net_taxable': line.net_taxable,
                 'discount':line.discount,
             }
@@ -75,7 +85,8 @@ class SaleOrderLineEdit(models.TransientModel):
                     'narration': order.note,
                     'lpo_number': order.lpo_number,
                     'payment_term': order.payment_term,
-                    'dis_amount': sum_dis_distrubution,
+                    'dis_amount': tot_dis_distrubution,
+                    # 'dis_amount': sum_dis_distrubution,
                 })
                 if create_moves:
                     amount = create_moves.amount_total

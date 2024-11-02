@@ -83,6 +83,12 @@ class SaleOrder(models.Model):
 
     attachment_ids = fields.Many2many('ir.attachment', string="Attachments", compute="_compute_attachment_ids")
 
+    def rest_draft(self):
+        old_state = self.state
+        self.state = 'draft'
+        self.onchange_add_tax()
+        self.state = old_state
+
     def _compute_attachment_ids(self):
         for order in self:
             order.attachment_ids = self.env['ir.attachment'].search(
@@ -120,6 +126,7 @@ class SaleOrder(models.Model):
                 rec.lpo_doc_required = False
 
     @api.onchange('add_tax')
+    @api.depends('add_tax')
     def onchange_add_tax(self):
         tax = self.env['account.tax'].sudo().search([('sale_add_tax', '=', True), ('type_tax_use', '=', 'sale')])
         for order in self:
