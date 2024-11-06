@@ -1,3 +1,5 @@
+from datetime import date
+
 from odoo import models, fields, api, _
 from odoo.osv.query import Query
 from odoo.exceptions import ValidationError, AccessError
@@ -356,9 +358,11 @@ class SaleOrder(models.Model):
                 # print('order.service_discount_amount------>', order.service_discount_amount)
                 # print('order.discount_amount + order.service_discount_amount------>', order.discount_amount + order.service_discount_amount)
                 # print('qty_price_total------>', qty_price_total)
-
-                if not 0.0 <= (order.discount_amount + order.service_discount_amount) <= qty_price_total:
-                    raise ValidationError(_('Enter proper discount'))
+                comparison_date = date(2024, 11, 1)
+                if order.date_order.date() >= comparison_date:
+                # if order.create_date and order.create_date.date() > comparison_date:
+                    if not 0.0 <= (order.discount_amount + order.service_discount_amount) <= qty_price_total:
+                        raise ValidationError(_('Enter proper discount'))
                 for line in order.order_line:
                     tax_on_net_taxable = tax = 0.0
                     val1 += line.price_included
