@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id="model_sale_order_action_update_sale_team" model="ir.actions.server">
+            <field name="name">Update Sale Team</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="binding_model_id" ref="sale.model_sale_order"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="code">action = records.update_sale_team()</field>
+        </record>
+
+
+        <record id="model_project_task_action_update_team" model="ir.actions.server">
+            <field name="name">Update Po to supplier/purchase order Team</field>
+            <field name="model_id" ref="project.model_project_task"/>
+            <field name="binding_model_id" ref="project.model_project_task"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="code">action = records.update_purchase_team()</field>
+        </record>
+    </data>
+</odoo>

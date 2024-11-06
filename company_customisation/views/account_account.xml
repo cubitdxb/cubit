@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="view_account_tree_inherit" model="ir.ui.view">
+        <field name="name">account.account.tree</field>
+        <field name="model">account.account</field>
+        <field name="inherit_id" ref="account.view_account_list" />
+        <field name="arch" type="xml">
+            <xpath expr="//tree/field[@name='reconcile']" position="after">
+               <field name="cubit_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

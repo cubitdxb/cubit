@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="view_task_delivery_rate" model="ir.ui.view">
+			<field name="name">Task Delivery</field>
+			<field name="model">task.delivery</field>
+			<field name="arch" type="xml">
+				<form string="Task Delivery" create="0">
+					<sheet>
+						<group>
+							<field name="name" />
+							<field name="partner_id" readonly="1" />
+							<field name="date" />
+							<field name="task_id" />
+<!--							<field name="customer_ref" />-->
+<!--							<field name="sale_number" />-->
+							<field name="deliv_sale_id" />
+						</group>
+						<notebook>
+							<page string="Delivery Lines">
+								<field name="line_ids">
+									<tree editable="bottom">
+										<field name="part_number" widget="section_and_note_text"/>
+										<field name="product_id" widget="section_and_note_text"/>
+										<field name="name" widget="section_and_note_text"/>
+										<field name="hs_code" widget="section_and_note_text"/>
+										<field name="country_of_origin" widget="section_and_note_text"/>
+										<field name="th_weight" widget="section_and_note_text" force_save="1"/>
+										<field name="qty" widget="section_and_note_text"/>
+										<field name="sl_number" widget="section_and_note_text"/>
+									</tree>
+								</field>
+								<field name="notes" nolabel="1" placeholder='notes...' />
+							</page>
+						</notebook>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="view_task_delivery_tree" model="ir.ui.view">
+			<field name="name">Task Delivery</field>
+			<field name="model">task.delivery</field>
+			<field name="arch" type="xml">
+				<tree string="Task Delivery" create="0">
+					<field name="name" />
+					<field name="date" />
+					<field name="partner_id" />
+					<field name="task_id" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="task_delivery_action" model="ir.actions.act_window">
+			<field name="name">Task Delivery</field>
+<!--			<field name="type">ir.actions.act_window</field>-->
+			<field name="res_model">task.delivery</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{}</field>
+            <field name="domain">[]</field>
+		</record>
+
+<!--		<menuitem action="task_delivery_action" id="menu_task_delivery_action"
+			parent="project.menu_main_pm" sequence="6" />-->
+
+    </data>
+</odoo>

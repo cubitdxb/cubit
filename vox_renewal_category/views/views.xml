@@ -1,0 +1,79 @@
+<odoo>
+    <data>
+
+        <record id="sale_brand_form_inherited" model="ir.ui.view">
+            <field name="name">sale.line.brand.form.inherited</field>
+            <field name="model">sale.line.brand</field>
+            <field name="inherit_id" ref="crm_lead_fields.sale_line_brand_form"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="cisco_brand"/>
+                </field>
+            </field>
+        </record>
+
+
+         <record id="sale_line_category_form_inherited" model="ir.ui.view">
+            <field name="name">sale.line.category.form.inherited</field>
+            <field name="model">sale.line.category</field>
+            <field name="inherit_id" ref="crm_lead_fields.sale_line_category_form"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="category_selection"/>
+                </field>
+            </field>
+        </record>
+
+
+
+          <record id="action_custom_msp_view" model="ir.actions.act_window">
+            <field name="name">MSP</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('order_line.line_category_id.category_selection','=','msp')]</field>
+        </record>
+
+        <menuitem id="menu_sale_msp_form" parent="sale.sale_menu_root" action="action_custom_msp_view"
+                  sequence="80" name="MSP"/>
+
+
+         <record id="action_custom_amc_view" model="ir.actions.act_window">
+            <field name="name">AMC</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('order_line.line_category_id.category_selection','=','amc')]</field>
+        </record>
+
+        <menuitem id="menu_sale_amc_form" parent="sale.sale_menu_root" action="action_custom_amc_view"
+                  sequence="80" name="AMC"/>
+
+
+        <record id="action_custom_renewal_view" model="ir.actions.act_window">
+            <field name="name">Renewal</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('order_line.renewal_category','=','renewal')]</field>
+<!--            <field name="groups_id" eval="[(4, ref('account.group_account_invoice'))]"/>-->
+<!--             <field name="groups_id" eval="[(6, 0, [ref('base.group_no_one')])]"/>-->
+            <!--            <field name="search_view_id" ref="view_project_filter"/>-->
+<!--            <field name="context">{}</field>-->
+        </record>
+
+        <menuitem id="menu_sale_renewal_form" parent="sale.sale_menu_root" action="action_custom_renewal_view"
+                  sequence="80" name="Renewal"/>
+
+
+        <record id="action_custom_cisco_view" model="ir.actions.act_window">
+            <field name="name">Cisco</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('order_line.line_brand_id.cisco_brand','=',True)]</field>
+            <!--            <field name="search_view_id" ref="view_project_filter"/>-->
+<!--            <field name="context">{}</field>-->
+        </record>
+
+        <menuitem id="menu_sale_cisco_form" parent="sale.sale_menu_root" action="action_custom_cisco_view"
+                  sequence="100" name="Cisco"/>
+
+    </data>
+</odoo>

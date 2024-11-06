@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+		<record id="lead_presales_wizard_view_form_wiz" model="ir.ui.view">
+			<field name="name">lead.presales.wizard.form</field>
+			<field name="model">lead.presales.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Leads and Presales Report">
+				<group>
+					<group>
+						<field name="date_from" required="1"/>
+						<field name="stage_id" />
+
+					</group>
+					<group >
+						<field name="date_to" required="1"/>
+					</group>
+					</group>
+					<footer>
+						<button string="Download XLSX" name="action_print_xls" 
+							type="object" class="btn-primary" />
+						<button string="Close" class="btn-default" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+		
+		<record id="action_lead_presales_report" model="ir.actions.act_window">
+			<field name="name">Leads and Presales Report</field>
+			<field name="res_model">lead.presales.wizard</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="lead_presales_wizard_view_form_wiz"/>
+			<field name="target">new</field>
+		</record>
+		
+		<menuitem id="menu_lead_presales_report" name="Leads and Presales Report"
+			action="cubit_crm_reports.action_lead_presales_report" parent="crm.crm_menu_report" sequence="12" />
+		
+		<record id="action_lead_presales_report_xls" model="ir.actions.report">
+			<field name="name">Leads and Presales Report</field>
+			<field name="model">lead.presales.wizard</field>
+			<field name="report_type">xlsx</field>
+            <field name="report_name">cubit_crm_reports.report_presales_xls</field>
+            <field name="report_file">cubit_crm_reports.report_presales_xls</field>
+            <field name="binding_type">report</field>
+		</record>
+</odoo>

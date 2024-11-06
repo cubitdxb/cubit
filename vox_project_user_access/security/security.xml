@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--    project project-->
+
+    <!-- task 1 Lead rules -->
+    <record id="project_project_rule_level_1" model="ir.rule">
+        <field name="name">Level 1 Rules</field>
+        <field ref="project.model_project_project" name="model_id"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups"
+               eval="[Command.link(ref('vox_user_groups.group_sale_salesman_level_1_user'))]"/>
+    </record>
+
+    <!-- task 5 Lead Rule -->
+
+    <record id="project_project_rule_level_5" model="ir.rule">
+        <field name="name">Level 5,4,3,2 Rules</field>
+        <field ref="project.model_project_project" name="model_id"/>
+        <field name="domain_force">['|','|',('user_id','=',False),('user_id', '=', user.id),('state','=','template')]
+        </field>
+        <field name="groups"
+               eval="[Command.link(ref('vox_user_groups.group_sale_salesman_level_5_user')),
+                Command.link(ref('vox_user_groups.group_sale_salesman_level_4_user')),
+                 Command.link(ref('vox_user_groups.group_sale_salesman_level_3_user')),
+                 Command.link(ref('vox_user_groups.group_sale_salesman_level_2_user')),]"/>
+    </record>
+
+
+</odoo>

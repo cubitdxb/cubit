@@ -1,0 +1,42 @@
+<odoo>
+    <data>
+
+
+          <record id="vendor_bill_invoice_inherited" model="ir.ui.view">
+            <field name="name">vendor.bill.invoice.form.inherit</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//label[@for='ref']" position="attributes">
+                    <attribute name="string">Supplier Invoice Number</attribute>
+                </xpath>
+                <xpath expr="//field[@name='ref']" position="after">
+                    <field name="purchase_bill_id"/>
+                </xpath>
+            </field>
+          </record>
+        <record id="purchase_order_form_inherit_vox_vendor_bill" model="ir.ui.view">
+            <field name="name">purchase.order.form.inherit.vox.vendor.bill</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_create_invoice'][1]" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_create_invoice'][2]" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_create_invoice']" position="after">
+                    <button name="%(vox_vendor_bill.action_view_purchase_advance_payment_inv)d" string="Create Bill"
+                            type="action" data-hotkey="q" context="{'create_bill':True}"/>
+<!--                            attrs="{'invisible': [('state', 'not in', ('purchase', 'done'))]}"/>-->
+
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree//field[@name='price_unit']" position="after">
+                    <field name="is_line_invoiced" invisible="1"/>
+                    <field name="done_qty_wizard" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

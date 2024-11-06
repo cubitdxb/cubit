@@ -1,0 +1,95 @@
+<odoo>
+    <data>
+
+
+         <record id="id_wizard_email_margin_message_form" model="ir.ui.view">
+            <field name="name">Message</field>
+            <field name="model">approval.message</field>
+            <field name="arch" type="xml">
+                <form string="Message">
+                    <group>
+
+                        <field name="email_margin_text" readonly="1" nolabel="1"/>
+                        <field name="sale_order_id" invisible="1"/>
+
+                    </group>
+
+                    <footer>
+                        <button name="email_margin_approve" type="object" string="Ok" class="oe_highlight"/>
+                        <button special="cancel" string="Cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+          <record id="wizard_margin_email_message_action" model="ir.actions.act_window">
+            <field name="name">Message</field>
+            <field name="res_model">approval.message</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="id_wizard_email_margin_message_form"/>
+
+            <field name="target">new</field>
+        </record>
+
+
+        <record id="id_wizard_margin_message_form" model="ir.ui.view">
+            <field name="name">Message</field>
+            <field name="model">approval.message</field>
+            <field name="arch" type="xml">
+                <form string="Message">
+                    <group>
+
+                        <!--                        <label for="text" string="It is not allowed to confirm an order when the margin is less than 5%"/>-->
+                        <field name="margin_text" readonly="1" nolabel="1"/>
+                        <field name="sale_order_id" invisible="1"/>
+
+                    </group>
+
+                    <footer>
+                        <button name="margin_approve" type="object" string="Ok" class="oe_highlight"/>
+                        <button special="cancel" string="Cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="wizard_message_action" model="ir.actions.act_window">
+            <field name="name">Message</field>
+            <field name="res_model">approval.message</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="id_wizard_margin_message_form"/>
+
+            <field name="target">new</field>
+        </record>
+
+
+        <record id="id_wizard_email_message_form" model="ir.ui.view">
+            <field name="name">Message</field>
+            <field name="model">approval.message</field>
+            <field name="arch" type="xml">
+                <form string="Message">
+                    <group>
+                        <!--                        <label for="text" string="You cannot confirm SO without E-mail Approval"/>-->
+                        <field name="email_text" readonly="1" nolabel="1"/>
+                        <field name="sale_order_id" invisible="1"/>
+                    </group>
+
+                    <footer>
+                        <button name="email_approve" type="object" string="Ok" class="oe_highlight"/>
+                        <button special="cancel" string="Cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="wizard_email_message_action" model="ir.actions.act_window">
+            <field name="name">Message</field>
+            <field name="res_model">approval.message</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="id_wizard_email_message_form"/>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

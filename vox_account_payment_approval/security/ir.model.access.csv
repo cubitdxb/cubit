@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+cancel_sale_remarks,cancel_sale_remarks.sale_remarks,model_sale_cancel_remark,,1,1,1,1

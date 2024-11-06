@@ -1,0 +1,12 @@
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+
+<templates>
+      <t t-extend="CustomerStatements.buttons" t-name="CustomerStatements.buttons">
+        <t t-jquery="button.o_account_followup_send_mail_button" t-operation="after">
+            <button type="button" class="btn btn-primary o_account_statement_report_button">
+                Statement Report
+            </button>
+        </t>
+    </t>
+
+<!--</templates>-->

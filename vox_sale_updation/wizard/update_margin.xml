@@ -1,0 +1,35 @@
+<odoo>
+    <data>
+        <record id="view_margin_update_wizard" model="ir.ui.view">
+            <field name="name">margin.update.wizard.form</field>
+            <field name="model">margin.update.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Update Sale Margin">
+                    <group>
+                        <field name="sale_id" readonly="1"/>
+                        <field name="sale_layout_cat_id"/>
+                        <field name="type" required="1"/>
+                        <field name="margin_change"/>
+                    </group>
+                    <footer>
+                        <button name="make_margin_change" string="Update" type="object"
+                                class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_margin_update_wizard" model="ir.actions.act_window">
+            <field name="name">Update Sale Margin</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">margin.update.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_margin_update_wizard"/>
+            <field name="target">new</field>
+        </record>
+
+
+    </data>
+</odoo>

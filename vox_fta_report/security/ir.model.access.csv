@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_fta_report_xls,vox_fta_report.fta_report_xls,model_fta_report_xls,,1,1,1,1

@@ -1,0 +1,116 @@
+<odoo>
+    <data>
+    
+    <record id="sale_order_search_view_inherited" model="ir.ui.view">
+            <field name="name">sale.order.search.view.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='salesperson']" position="after">
+                    <filter string="Invoice Status" name="sale_to_invoice_status" domain="[]" context="{'group_by': 'sale_to_invoice_status'}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="sale_invoice_form_inherited" model="ir.ui.view">
+            <field name="name">sale_order.invoice.form.inherited</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+
+                <!--                <field name="invoice_ids" position="replace">-->
+                <!--                    <field name="invoice_ids" invisible="1"/>-->
+                <!--                </field>-->
+                <field name="date_order" position="after">
+                    <field name="amount_invoice" invisible="1"/>
+                    <field name="amount_paid_invoice" invisible="1"/>
+                    <field name="amount_balance_due" invisible="1"/>
+                    <field name="po_number" invisible="1"/>
+                    <field name="not_invoiced" invisible="1"/>
+                </field>
+            </field>
+        </record>
+
+
+        <record id="view_quotation_tree_inh_id" model="ir.ui.view">
+            <field name="name">sale.order.tree</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_quotation_tree"/>
+            <field name="arch" type="xml">
+                <field name="user_id" position="after">
+                    <field name="client_order_ref"/>
+                    <field name="lpo_number" string="Customer PO"/>
+                    <field name="po_number"/>
+                    <field name="amount_tax" invisible="1"/>
+                    <field name="untaxed_po_amount"/>
+                    <field name="invoice_number"/>
+                    <field name="amount_invoice"/>
+                    <field name="amount_paid_invoice"/>
+                    <field name="not_invoiced"/>
+                    <field name="amount_balance_due"/>
+                    <field name="amount_untaxed" string="Total sale amount(Untaxed)"/>
+                </field>
+                <field name="activity_ids" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="amount_total" position="after">
+                    <field name="cubit_service_cost_price_total"/>
+                    <field name="profit"/>
+                </field>
+                <field name="amount_total" position="attributes">
+                    <attribute name="string">Total sale amount(with tax)</attribute>
+                </field>
+
+                <xpath expr="//field[@name='invoice_status']" position="before">
+                    <field name="sale_to_invoice_status"/>
+                </xpath>
+
+                <xpath expr="//field[@name='invoice_status']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+
+        <record id="sale_invoice_form_inherited" model="ir.ui.view">
+            <field name="name">sale_order.invoice.form.inherited</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml">
+
+                <field name="user_id" position="after">
+                    <field name="client_order_ref"/>
+                    <field name="lpo_number" string="Customer PO"/>
+                    <field name="po_number"/>
+                    <field name="amount_tax" invisible="1"/>
+                    <field name="untaxed_po_amount"/>
+                    <field name="invoice_number"/>
+                    <field name="amount_invoice"/>
+                    <field name="amount_paid_invoice"/>
+                    <field name="amount_balance_due"/>
+                    <field name="amount_untaxed" string="Total sale amount(Untaxed)"/>
+                </field>
+                <field name="activity_ids" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="amount_total" position="after">
+                    <field name="cubit_service_cost_price_total"/>
+                    <field name="profit"/>
+                </field>
+                <field name="amount_total" position="attributes">
+                    <attribute name="string">Total sale amount(with tax)</attribute>
+                </field>
+
+                <xpath expr="//field[@name='invoice_status']" position="before">
+                    <field name="sale_to_invoice_status"/>
+                </xpath>
+
+                <xpath expr="//field[@name='invoice_status']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+
+        </record>
+    </data>
+</odoo>

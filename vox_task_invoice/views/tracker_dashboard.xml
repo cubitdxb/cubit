@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="onboarding_check_tracker_step">
+        <t t-call="base.onboarding_step">
+            <t t-set="title">Check Tracker</t>
+            <t t-set="description">Tracker list view.</t>
+            <t t-set="btn_text">view</t>
+            <!--                    <t t-set="done_text">Taxes set.</t>-->
+            <t t-set="method" t-value="'action_open_check_tracker_onboarding'"/>
+            <t t-set="model" t-value="'res.company'"/>
+            <!--                    <t t-set="state" t-value="state.get('account_setup_taxes_state')" />-->
+        </t>
+    </template>
+
+    <template id="account_dashboard_onboarding_panel_inherit" inherit_id="account.account_dashboard_onboarding_panel"
+              name="account.dashboard.onboarding.panel">
+        <xpath expr="//t[@t-call='base.onboarding_container']" position="inside">
+            <t t-call="vox_task_invoice.onboarding_check_tracker_step" name="check_tracker_step"/>
+        </xpath>
+    </template>
+
+    <!--     <template id="account_dashboard_onboarding_panel" name="account.dashboard.onboarding.panel">-->
+    <!--        <t t-call="base.onboarding_container">-->
+    <!--            <t t-set="classes" t-value="'o_onboarding_orange'"/>-->
+    <!--            <t t-set="bg_image" t-value="'/account/static/src/img/account_dashboard_onboarding_bg.jpg'"/>-->
+    <!--            <t t-set="close_method" t-value="'action_close_account_dashboard_onboarding'"/>-->
+    <!--            <t t-set="close_model" t-value="'res.company'"/>-->
+
+    <!--            <t t-call="account.onboarding_fiscal_year_step" name="fiscal_year_step" />-->
+    <!--            <t t-call="account.onboarding_chart_of_account_step" name="chart_of_account_step" />-->
+    <!--            <t t-call="account.onboarding_taxes_step" name="taxes_step" />-->
+    <!--            <t t-call="account.onboarding_bank_account_step" name="bank_account_step" />-->
+    <!--        </t>-->
+    <!--    </template>-->
+
+
+<!--        <record id="account_check_tracker_dashboard_kanban_view_js" model="ir.ui.view">-->
+<!--            <field name="name">account.check.tracker.dashboard.kanban</field>-->
+<!--            <field name="model">account.journal</field>-->
+<!--            <field name="inherit_id" ref="account.account_journal_dashboard_kanban_view"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--&lt;!&ndash;                  <xpath expr="//t[@t-name='kanban-box']" position="inside">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <t t-call="vox_task_invoice.onboarding_check_tracker_step"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                </xpath>&ndash;&gt;-->
+<!--                <xpath expr="//t[@t-name='kanban-box']/div" position="after">-->
+<!--                    <strong>ansklan</strong>-->
+<!--&lt;!&ndash;                    <t t-call="vox_task_invoice.onboarding_check_tracker_step"/>&ndash;&gt;-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+</odoo>

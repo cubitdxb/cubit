@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_vox_stock_menu,vox_stock_menu.cubit_stock,model_cubit_stock,,1,1,1,1
+access_vox_amc_stock_line_menu,vox_stock_menu.amc_cubit_stock_line,model_amc_cubit_stock,,1,1,1,1

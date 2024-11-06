@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="crm.team" id="sales_coordinator_access">
+            <field name="name">Sales Coordinator</field>
+              <field name="company_id" eval="False"/>
+        </record>
+        <record model="crm.team" id="pre_sales_access">
+            <field name="name">Pre sales</field>
+              <field name="company_id" eval="False"/>
+        </record>
+        <record model="crm.team" id="post_sales_access">
+            <field name="name">Post sales</field>
+              <field name="company_id" eval="False"/>
+        </record>
+        <record model="crm.team" id="finance_access">
+            <field name="name">Finance</field>
+              <field name="company_id" eval="False"/>
+        </record>
+        <record model="crm.team" id="procurement_access">
+            <field name="name">Procurement</field>
+              <field name="company_id" eval="False"/>
+        </record>
+        <record model="crm.team" id="msp_access">
+            <field name="name">MSP</field>
+              <field name="company_id" eval="False"/>
+        </record>
+        <record model="crm.team" id="hr_access">
+            <field name="name">HR</field>
+              <field name="company_id" eval="False"/>
+        </record>
+        <record model="crm.team" id="marketing_access">
+            <field name="name">Marketing</field>
+              <field name="company_id" eval="False"/>
+        </record>
+        <record model="crm.team" id="project_access">
+            <field name="name">Project</field>
+              <field name="company_id" eval="False"/>
+        </record>
+
+
+    </data>
+</odoo>
+

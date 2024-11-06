@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_vox_invoice_global_discount_vox_invoice_global_discount,vox_invoice_global_discount.vox_invoice_global_discount,model_vox_invoice_global_discount_vox_invoice_global_discount,base.group_user,1,1,1,1

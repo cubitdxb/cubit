@@ -1,0 +1,92 @@
+<odoo>
+    <data>
+<!--          <record model="ir.ui.view" id="res_partner_view_form">-->
+<!--            <field name="name">res.partner.view.form</field>-->
+<!--            <field name="model">res.partner</field>-->
+<!--            <field name="inherit_id" ref="base.view_partner_form"/>-->
+<!--            <field name="priority" eval="10"/>-->
+<!--            <field name="groups_id" eval="[(4, ref('account.group_account_invoice'))]"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <div name="button_box" position="inside">-->
+<!--                    <button type="object" class="oe_stat_button" name="open_action_followup" icon="fa-list" attrs="{'invisible': [('total_due', '=', 0)]}">-->
+<!--                        <div class="o_field_widget o_stat_info">-->
+<!--                            <span class="o_stat_value"><field name="total_due" widget='monetary' options="{'currency_field': 'currency_id'}"/></span>-->
+<!--                            <span class="o_stat_text">Due</span>-->
+<!--                        </div>-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <record id="res_partner_statment_report_form_view_inherit" model="ir.ui.view">
+            <field name="name">statement.report.followup.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account_followup.res_partner_view_form"/>
+            <field name="arch" type="xml">
+<!--                <xpath expr="//header/button[@name='action_confirm']" type="object" states="draft"-->
+<!--                       position="attributes">-->
+<!--                    <attribute name="name">sale_confirm_wizard_button</attribute>-->
+<!--                </xpath>-->
+                <xpath expr="//button[@name='open_action_followup']" type="object" position="attributes">
+                    <attribute name="name">res_partner_statement_wizard_button</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="customer_statements_form_view_inherit" model="ir.ui.view">
+            <field name="name">customer.statements.followup.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account_followup.customer_statements_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="inside">
+                    <header>
+                        <button name="%(vox_statement_report.action_statement_of_account_report)d" type="action" string="Report"/>
+                        <button name="refresh" string="Refresh" type="object"/>
+                    </header>
+
+                    <group>
+                        <group>
+                            <field name="date_start" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="date_end" invisible="1"/>
+                        </group>
+                    </group>
+                </xpath>
+
+            </field>
+        </record>
+
+        <!--        <record id="action_report_followup" model="ir.actions.report">-->
+        <!--            <field name="name">Print Follow-up Letter</field>-->
+        <!--            <field name="model">res.partner</field>-->
+        <!--            <field name="report_type">qweb-pdf</field>-->
+        <!--            <field name="report_name">account_followup.report_followup_print_all</field>-->
+        <!--            <field name="report_file">account_followup.report_followup_print_all</field>-->
+        <!--            <field name="print_report_name">'Followups'</field>-->
+        <!--        </record>-->
+
+
+        <record id="paperformat_report_followup_order" model="report.paperformat">
+            <field name="name">Print Follow-up Letter</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <!--            <field name="format">A4</field>-->
+            <field name="page_height">297</field>
+            <field name="page_width">210</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">36</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">3</field>
+            <field name="margin_right">3</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">30</field>
+            <field name="dpi">90</field>
+        </record>
+        <record id="account_followup.action_report_followup" model="ir.actions.report">
+            <field name="paperformat_id" ref="vox_statement_report.paperformat_report_followup_order"/>
+        </record>
+
+
+    </data>
+</odoo>

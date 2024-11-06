@@ -1,0 +1,66 @@
+<odoo>
+    <data>
+        <record id="create_purchase_action" model="ir.actions.act_window">
+        <field name="name">Create Purchase</field>
+        <field name="res_model">task.make.purchase</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+        <record id="view_task_make_purchase" model="ir.ui.view">
+            <field name="name">Create Purchase</field>
+            <field name="model">task.make.purchase</field>
+            <field name="arch" type="xml">
+                <form string="Create Purchase Request">
+                    <script>
+        <!-- wizard width adjusting -->
+        $(document).ready(function(){
+        $('.modal-dialog').css({'max-width': '1100px', 'height': '100%'});
+        });
+
+    </script>
+                    <group>
+                          <button name="action_line_import" string="Import Line" class="oe_highlight" type="object"/>
+                    </group>
+                    <group>
+                        <field name="partner_id" required="1" domain="[('supplier','=',True)]"/>
+                        <field name="task_id" readonly="1"/>
+                        <field name="dup_section_ids" invisible="1"/>
+                        <field name="dup_vendors" invisible="1"/>
+                        <field name="section_ids" widget="many2many_tags"/>
+                        <field name="is_professional_service"/>
+                        <field name="professional_service_sell_price" attrs="{'required':[('is_professional_service','=',True)]}"/>
+                        <field name="select_all"/>
+
+                    </group>
+                    <group string="Items" width="100%">
+                        <field name="line_ids" nolabel="1" style="width: 1000px !important;">
+                           <tree editable="bottom">
+                                <field name="sl_no" widget="section_and_note_text"  optional="show"/>
+                                <field name="purchase" optional="show" />
+                                <field name="order_id" optional="show"   readonly="1" force_save="1"/>
+                                <field name="part_number"   optional="show"/>
+                                <field name="sale_layout_cat_id"  readonly="1" optional="show"/>
+                                <field name="vendor_id" readonly="1" optional="hide"/>
+                                <field name="sale_line_id" invisible="1"/>
+                                <field name="name" widget="text"    required="1" optional="show"/>
+                                <field name="product_qty" required="1"   optional="show"/>
+                                <field name="price_unit" required="1"   optional="show"/>
+                                <field name="taxes_id" required="1" optional="show"/>
+                                  <field name="import_purchase" invisible="1"/>
+                            </tree>
+
+                        </field>
+                    </group>s
+                    <footer>
+                        <button name="make_purchase_requset" string="Create Purchase"
+                                type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

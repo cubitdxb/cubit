@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <record id="end_user_required_details_from_view" model="ir.ui.view">
+        <field name="name">end.user.required.details.from</field>
+        <field name="model">end.user.req.conditions</field>
+        <field name="arch" type="xml">
+            <form string="End User Required Conditions">
+                <sheet>
+                    <div class="oe_title">
+                        <h2>
+                            <field name="required_msg" nolabel="1" readonly="1"/>
+                        </h2>
+                    </div>
+                    <div class="row" style="position: absolute;">
+                        <h3 class="col-12">
+                            <field name="warning_msg" nolabel="1" readonly="1"/>
+                        </h3>
+                    </div>
+                </sheet>
+
+                <footer>
+                    <button name="confirm" string="Yes" type="object" class="btn-primary"/>
+                    <button name="not_confirm" string="No" type="object"/>
+                    <button string="Cancel" class="btn-default" special="cancel" data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <data>
+        <record id="crm_lead_fields_action_end_user_required_conditions" model="ir.actions.act_window">
+            <field name="name">End User Required Conditions</field>
+            <field name="res_model">end.user.req.conditions</field>
+            <field name="view_mode">form</field>
+        </record>
+    </data>
+
+</odoo>
