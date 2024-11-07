@@ -46,6 +46,16 @@ class SaleOrder(models.Model):
         return [('id', 'in', sale_obj)]
         # return [('id', 'in', self.env['sale.order'].search([]).ids)]
 
+    def update_purchase_orders_amount(self):
+        print('update_purchase_orders_amount------------------')
+        """For each sale order, get all related purchase orders and call `_amount_all_wrapper`."""
+        for sale_order in self:
+            # Fetch all related purchase orders
+            purchase_orders = sale_order._get_purchase_orders()
+            for purchase_order in purchase_orders:
+                # Call `_amount_all_wrapper` for each purchase order
+                purchase_order._amount_all_wrapper()
+
     # is_procurement = fields.Boolean(compute="_compute_is_procurement")
     #
     # @api.depends_context('uid')
@@ -180,11 +190,20 @@ class SaleOrder(models.Model):
         cubit_service_cost_total = 0.0
         for line in self.order_line:
             if line.is_cubit_service == False:
+                print('check addi cost------------------->')
+                print('line.exclude_purchase------------------->', line.exclude_purchase)
+                print('line.product_uom_qty------------------->', line.product_uom_qty)
+                print('line.purchase_qty------------------->', line.purchase_qty)
                 if line.product_uom_qty > line.purchase_qty and line.exclude_purchase == False:
+                    print('line.name------------------->', line.name)
+                    # print('line.sl_no------------------->', line.sl_no)
+                    print('calc addi cost------------------->')
                     addi_cost += (line.cost_price * (line.product_uom_qty - line.purchase_qty))
+                    print('addi_cost------------------->', addi_cost)
                     # addi_cost += line.total_cost
             else:
                 cubit_service_cost_total += line.list_price
+                print('cubit_service_cost_total------------------->', cubit_service_cost_total)
         # poo = self.order_line.purchase_ids
         # soo = self.order_line
         # print('ss----------->', ss)
@@ -287,7 +306,11 @@ class SaleOrder(models.Model):
                 profit = profit - order.additional_cost
 
             # print "actual_cost_price_total",actual_cost_price_total
+
+            print('po_total--------------->', po_total)
+            print('addi_cost--------------->', addi_cost)
             line_total_cost_price = po_total + addi_cost
+            print('line_total_cost_price---------TTTTT------>', line_total_cost_price)
             profit_amt = 0.0
             _logger.info('po_total %s', po_total)
             _logger.info('addi_cost %s', addi_cost)

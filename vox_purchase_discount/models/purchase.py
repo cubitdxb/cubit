@@ -68,15 +68,33 @@ class PurchaseOrder(models.Model):
                             tax += c.get('amount', 0.0)
                     val += tax
                     # val3 += line.total_cost
+                    # if order.discount_distribution_type == 'against_item':
+                    #     line.discount_distribution = (order.discount_amount /
+                    #                                   qty_price_total) * (line.product_qty * line.price_unit)
+                    # elif order.distribution_tax_ids and line.taxes_id and line.taxes_id.ids[
+                    #     0] in order.distribution_tax_ids.ids:
+                    #     line.discount_distribution = (order.discount_amount /
+                    #                                   tax_wise_total) * (line.product_qty * line.price_unit)
+                    # else:
+                    #     line.discount_distribution = 0.0
+
+                    # To avoid division by zero
                     if order.discount_distribution_type == 'against_item':
-                        line.discount_distribution = (order.discount_amount /
-                                                      qty_price_total) * (line.product_qty * line.price_unit)
+                        if qty_price_total != 0:
+                            line.discount_distribution = (order.discount_amount / qty_price_total) * (
+                                        line.product_qty * line.price_unit)
+                        else:
+                            line.discount_distribution = 0.0
                     elif order.distribution_tax_ids and line.taxes_id and line.taxes_id.ids[
                         0] in order.distribution_tax_ids.ids:
-                        line.discount_distribution = (order.discount_amount /
-                                                      tax_wise_total) * (line.product_qty * line.price_unit)
+                        if tax_wise_total != 0:
+                            line.discount_distribution = (order.discount_amount / tax_wise_total) * (
+                                        line.product_qty * line.price_unit)
+                        else:
+                            line.discount_distribution = 0.0
                     else:
                         line.discount_distribution = 0.0
+
 
                     line.discount = (line.discount_distribution / (
                             line.product_qty * line.price_unit) * 100.0) if line.discount_distribution else 0.0

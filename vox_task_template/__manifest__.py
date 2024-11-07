@@ -36,6 +36,7 @@
         'data/mail_template.xml',
         'data/delivery_mail.xml',
         'data/purchase_amount_all_wrapper_server_action.xml',
+        'data/sale_amount_all_wrapper_server_action.xml',
         'wizard/create_project.xml',
         'wizard/create_delivery.xml',
         'wizard/purchase_import_excel.xml',
