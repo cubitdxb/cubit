@@ -50,6 +50,7 @@ class SaleOrder(models.Model):
         print('update_purchase_orders_amount------------------')
         """For each sale order, get all related purchase orders and call `_amount_all_wrapper`."""
         for sale_order in self:
+            _logger.info('so_number : %s', sale_order.name)
             # Fetch all related purchase orders
             purchase_orders = sale_order._get_purchase_orders()
             for purchase_order in purchase_orders:
@@ -365,7 +366,7 @@ class SaleOrder(models.Model):
         line_obj = self.env['sale.order.line']
         if self:
             for order in self:
-                _logger.info('so_number : %s', order.name)
+                _logger.info('order number : %s', order.name)
                 total_vat_on_net_taxable = total_net_taxable = val = val1 = val3 = global_disc = 0.0
                 qty_price_total = 0.0
                 tax_wise_total = 0.0
