@@ -365,7 +365,10 @@ class SaleOrder(models.Model):
         print('_amount_all_wrapper------------------------------')
         line_obj = self.env['sale.order.line']
         if self:
+            rec_count=0
             for order in self:
+                rec_count+=1
+                _logger.info('Record # : %s', str(rec_count))
                 _logger.info('order number : %s', order.name)
                 total_vat_on_net_taxable = total_net_taxable = val = val1 = val3 = global_disc = 0.0
                 qty_price_total = 0.0
