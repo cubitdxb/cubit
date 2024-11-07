@@ -365,6 +365,7 @@ class SaleOrder(models.Model):
         line_obj = self.env['sale.order.line']
         if self:
             for order in self:
+                _logger.info('so_number : %s', order.name)
                 total_vat_on_net_taxable = total_net_taxable = val = val1 = val3 = global_disc = 0.0
                 qty_price_total = 0.0
                 tax_wise_total = 0.0
