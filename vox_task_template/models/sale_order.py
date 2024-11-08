@@ -46,16 +46,53 @@ class SaleOrder(models.Model):
         return [('id', 'in', sale_obj)]
         # return [('id', 'in', self.env['sale.order'].search([]).ids)]
 
+    # cron job function to update purchase orders by year
+    def update_purchase_orders_by_year(self):
+        print('update_purchase_orders_by_year------------------')
+        # Group sale orders by year
+        sale_orders = self.search([], order="date_order")
+        grouped_by_year = {}
+
+        for order in sale_orders:
+            year = order.date_order.year if order.date_order else None
+            if year:
+                grouped_by_year.setdefault(year, []).append(order)
+
+        # Process each year
+        for year, orders in grouped_by_year.items():
+            start = 0
+            batch_size = 80
+            total_orders = len(orders)
+
+            while start < total_orders:
+                # Get batch of 80 orders
+                batch = orders[start:start + batch_size]
+                for order in batch:
+                    order.update_purchase_orders_amount()
+
+                # Update start index for next batch
+                start += batch_size
+
     def update_purchase_orders_amount(self):
         print('update_purchase_orders_amount------------------')
         """For each sale order, get all related purchase orders and call `_amount_all_wrapper`."""
         for sale_order in self:
-            _logger.info('so_number : %s', sale_order.name)
             # Fetch all related purchase orders
             purchase_orders = sale_order._get_purchase_orders()
+            # print('sale_order------->', sale_order)
+            print('sale_order------->', sale_order.name)
+            print('purchase_orders------->', purchase_orders)
             for purchase_order in purchase_orders:
                 # Call `_amount_all_wrapper` for each purchase order
+                print('purchase_order------->', purchase_order.name)
+                print('purchase_order------amount_untaxed->', purchase_order.amount_untaxed)
                 purchase_order._amount_all_wrapper()
+            sale_order._compute_cost_price()
+            # sale_order._amount_all_wrapper()
+            # profit = sale_order.profit
+            # print('profit-----after-->', profit)
+            print('purchase_price_total------>', sale_order.purchase_price_total)
+            # sale_order.profit = profit
 
     # is_procurement = fields.Boolean(compute="_compute_is_procurement")
     #
@@ -221,6 +258,7 @@ class SaleOrder(models.Model):
             actual_cost_price_total = purchase_price_total = 0.0
             po_total = 0.0
             profit = 0.0
+            n_ppppo = 0.0
             for s_line in order.order_line:
                 order_lines.append(s_line)
                 s_order_lines[s_line] = s_line
@@ -244,7 +282,7 @@ class SaleOrder(models.Model):
                         [('project_id', '=', project.id), ('project_id', '!=', False),
                          ('task_type', '=', 'is_purchase'),
                          ('purchase_ids', '!=', False)])
-            # print('purchase_tasks---------->', purchase_tasks)
+            print('purchase_tasks---------->', purchase_tasks)
             if purchase_tasks:
                 for task in purchase_tasks:
                     for purchase in task.purchase_ids:
@@ -254,8 +292,10 @@ class SaleOrder(models.Model):
                             purchase_discount_amount = purchase.discount_amount
                             purchase_order_line = purchase_line_obj.search([('order_id', '=',
                                                                              purchase.id)])  # Check with Manu      , '|', ('active', '=', True), ('active', '=', False)
+                            print('purchase_order_line-------------####-->', purchase_order_line)
                             for p_line in purchase_order_line:
-                                po_total += p_line.net_taxable# + p_line.price_tax
+                                po_total += p_line.price_subtotal# + p_line.price_tax
+                                # po_total += p_line.net_taxable# + p_line.price_tax
                                 # po_total += p_line.net_taxable + p_line.price_tax
                                 if p_line.import_purchase == True:
                                     import_price = p_line.price_subtotal
@@ -276,11 +316,14 @@ class SaleOrder(models.Model):
                                     purchase_price_total += p_line_cost
                             print('line_cost_price_total-------->', line_cost_price_total)
                             print('purchase_discount_amount-------->', purchase_discount_amount)
+                            print('purchase_price_total-------->', purchase_price_total)
                             # line_cost_price_total = line_cost_price_total - purchase_discount_amount
                             # if actual_cost_price_total > 0.0:
                             #    actual_cost_price_total = actual_cost_price_total - purchase_discount_amount
                             actual_cost_price_total = actual_cost_price_total - purchase_discount_amount
-                            purchase_price_total = purchase_price_total - purchase_discount_amount
+                            # purchase_price_total = purchase_price_total - purchase_discount_amount
+                            print('purchase_price_total-------cc->', purchase_price_total)
+                            n_ppppo = purchase_price_total
                             # print('purchase_price_total------- after cancel stat->', purchase_price_total)
             # amount_total = self.amount_total or 0.0
             amount_untaxed = order.amount_untaxed or 0.0
@@ -310,16 +353,20 @@ class SaleOrder(models.Model):
 
             print('po_total--------------->', po_total)
             print('addi_cost--------------->', addi_cost)
-            line_total_cost_price = po_total + addi_cost
+            line_total_cost_price = purchase_price_total + addi_cost
+            # line_total_cost_price = po_total + addi_cost
             print('line_total_cost_price---------TTTTT------>', line_total_cost_price)
+            print('purchase_price_total-------->', purchase_price_total)
+            print('n_ppppo-------->', n_ppppo)
             profit_amt = 0.0
             _logger.info('po_total %s', po_total)
             _logger.info('addi_cost %s', addi_cost)
             _logger.info('line_total_cost_price %s', line_total_cost_price)
             profit_amt = amount_untaxed - (line_total_cost_price + cubit_service_cost_total + order.additional_cost)
             order.update({
-                'purchase_price_total': po_total,
-                # 'purchase_price_total': purchase_price_total,
+                # 'purchase_price_total': po_total,
+                'purchase_price_total': purchase_price_total,
+                # 'purchase_price_total': n_ppppo,
                 'line_cost_price_total': line_total_cost_price,
                 # 'line_cost_price_total': line_cost_price_total,
                 'cubit_service_cost_price_total': cubit_service_cost_total,
@@ -365,11 +412,7 @@ class SaleOrder(models.Model):
         print('_amount_all_wrapper------------------------------')
         line_obj = self.env['sale.order.line']
         if self:
-            rec_count=0
             for order in self:
-                rec_count+=1
-                _logger.info('Record # : %s', str(rec_count))
-                _logger.info('order number : %s', order.name)
                 total_vat_on_net_taxable = total_net_taxable = val = val1 = val3 = global_disc = 0.0
                 qty_price_total = 0.0
                 tax_wise_total = 0.0
