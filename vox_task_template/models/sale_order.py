@@ -302,14 +302,13 @@ class SaleOrder(models.Model):
                                     # print('import_price------>', import_price)
                                     purchase_price_total += import_price
                                     line_cost_price_total += import_price
-
                                 # if p_line.state in ['confirmed', 'done'] and p_line.sale_line_id not in s_order_lines:
-                                # if p_line.order_id.state not in ['cancel'] and p_line.sale_line_id not in s_order_lines:
-                                if p_line.order_id.state not in ['cancel'] and p_line.sale_line_id == False:
-                                    print('p_line_cost----->', p_line_cost)
+                                if p_line.order_id.state not in ['cancel'] and p_line.sale_line_id not in s_order_lines:
+                                # if p_line.order_id.state not in ['cancel'] and p_line.sale_line_id == False:
                                     p_line_cost = p_line.price_subtotal
                                     line_cost_price_total += p_line_cost
                                     actual_cost_price_total += p_line_cost
+                                    print('p_line_cost----->', p_line_cost)
                                     # addi_cost += p_line.price_subtotal
                                     # if p_line.sale_line_id.exclude_costprice == False:
                                     #    actual_cost_price_total +=  p_line_cost
