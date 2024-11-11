@@ -216,6 +216,7 @@ class AccountFollowupReport(models.AbstractModel):
             # optional = "show"
             # attrs = "{'invisible': [['payment_state', 'in', ('paid', 'in_payment', 'reversed')]]}" / >
             columns =[]
+            total_over_due=0.0
             for aml in aml_recs:
                 if partner.date_start and partner.date_end:
                     if aml.move_id.invoice_date:
@@ -237,6 +238,10 @@ class AccountFollowupReport(models.AbstractModel):
                             if is_overdue:
                                 date_due = {'name': date_due, 'class': 'color-red date',
                                             'style': 'text-align:center;color: red;font-family:Calibri;'}
+                                total_over_due+=amount
+                            else:
+                                date_due = {'name': date_due,
+                                            'style': 'text-align:center;font-family:Calibri;'}
                             if is_payment:
                                 date_due = ''
                             move_line_name = self._format_aml_name(aml.name, aml.move_id.ref)
@@ -265,8 +270,11 @@ class AccountFollowupReport(models.AbstractModel):
                             payment_reference = {'name': payment_reference,
                                                  'style': 'text-align:left;border:1px solid black;padding:5px;font-family:Calibri;'}
                             Date = format_date(self.env, aml.move_id.invoice_date or aml.date, lang_code=lang_code)
+
+
                             Date = {'name': Date,
                                     'style': 'text-align:center;border:1px solid black;padding:5px;font-family:Calibri;'}
+
                             invoice_days_due = {'name': str((today-invoice_date_due).days) + ' Days',
                                                 'style': 'text-align:center;border:1px solid black;padding:5px;font-family:Calibri;'}
                             columns = [
@@ -436,6 +444,22 @@ class AccountFollowupReport(models.AbstractModel):
                 'columns': [{'name': v} for v in [''] * (6 if self.env.context.get('print_mode') else 9) + [
                     total >= 0 and _('Total Due') or '', total_due,'']],
             })
+
+            lines.append({
+                'id': line_num,
+                'account_move': '',
+                'name': '  ',
+                'class': 'total',
+                'style': 'text-align:right;padding:6px;font-weight: bold;font-size:18px;background-color:#2E64FE;border:1px solid black;padding:5px;font-family:Calibri;',
+                # 'style': 'border: 1px solid black' if self.env.context.get(
+                #     'print_mode') else 'border-top-style: double',
+                # 'style': 'border-top-style: double',
+                'unfoldable': False,
+                'level': 3,
+                'columns': [{'name': v} for v in [''] * (6 if self.env.context.get('print_mode') else 9) + [
+                    total >= 0 and _('Total Over Due') or '', total_over_due, '']],
+            })
+
             # if total_issued > 0:
             #     total_issued = formatLang(self.env, total_issued, currency_obj=currency)
             #     line_num += 1
