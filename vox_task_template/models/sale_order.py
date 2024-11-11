@@ -240,7 +240,7 @@ class SaleOrder(models.Model):
                     print('addi_cost------------------->', addi_cost)
                     # addi_cost += line.total_cost
             else:
-                cubit_service_cost_total += line.list_price
+                cubit_service_cost_total += line.list_price*0.5
                 print('cubit_service_cost_total------------------->', cubit_service_cost_total)
         # poo = self.order_line.purchase_ids
         # soo = self.order_line
@@ -263,7 +263,7 @@ class SaleOrder(models.Model):
                 order_lines.append(s_line)
                 s_order_lines[s_line] = s_line
                 if s_line.is_cubit_service == True:
-                    cubit_service_cost_price_total += s_line.actual_cost_price
+                    cubit_service_cost_price_total += s_line.actual_cost_price*0.5
                 else:
                     # print('if s_line.is_cubit_service-----------------else')
                     # print('actual_cost_price------>', s_line.actual_cost_price)
