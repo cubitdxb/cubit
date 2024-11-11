@@ -73,7 +73,7 @@ class AccountMove(models.Model):
                         line.quantity * line.price_unit)) * 100.0 if line.discount_distribution else 0.0
                 line._onchange_price_subtotal()
                 # line.price_subtotal = (line.price_unit * line.quantity) - line.discount_distribution
-                self._recompute_tax_lines(recompute_tax_base_amount=False, tax_rep_lines_to_recompute=None)
+                # self._recompute_tax_lines(recompute_tax_base_amount=False, tax_rep_lines_to_recompute=None)
                 # line._get_price_total_and_subtotal(price_unit=line.price_unit, quantity=line.quantity,
                 #                                    discount=line.discount, currency=line.currency_id, product=None,
                 #                                    partner=line.partner_id, taxes=line.tax_ids,
