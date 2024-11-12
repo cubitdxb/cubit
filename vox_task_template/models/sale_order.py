@@ -273,7 +273,7 @@ class SaleOrder(models.Model):
 
             for line in order.order_line:
                 if line.is_cubit_service == True:
-                    cubit_service_cost_price_total += line.actual_cost_price*0.5
+                    cubit_service_cost_price_total += line.actual_cost_price
                 else:
                     if line.product_uom_qty > line.purchase_qty and line.exclude_purchase == False:
                         if order.project_id:
