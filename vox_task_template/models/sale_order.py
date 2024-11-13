@@ -239,7 +239,7 @@ class SaleOrder(models.Model):
                     line_cost_price_total += s_line.actual_cost_price
                 if not s_line.exclude_costprice:
                     actual_cost_price_total += s_line.actual_cost_price
-                purchase_price_total += s_line.purchase_price
+                # purchase_price_total += s_line.purchase_price
             # line_cost_price_total -= order.discount_amount
             # cubit_service_cost_price_total -= order.service_discount_amount
             project_id = order.project_id and order.project_id.id or False
@@ -277,7 +277,7 @@ class SaleOrder(models.Model):
                             # if actual_cost_price_total > 0.0:
                             #    actual_cost_price_total = actual_cost_price_total - purchase_discount_amount
                             actual_cost_price_total = actual_cost_price_total - purchase_discount_amount
-                            purchase_price_total = purchase_price_total - purchase_discount_amount
+                            purchase_price_total = purchase_price_total #- purchase_discount_amount
             # amount_total = self.amount_total or 0.0
             amount_untaxed = order.amount_untaxed or 0.0
             discount_amount = order.discount_amount or 0.0
