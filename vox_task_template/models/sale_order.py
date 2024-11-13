@@ -279,8 +279,14 @@ class SaleOrder(models.Model):
                             actual_cost_price_total = actual_cost_price_total - purchase_discount_amount
 
                             purchase_price_total = purchase_price_total #- purchase_discount_amount
+
+
                             if actual_cost_price_total < purchase_price_total:
                                 actual_cost_price_total = purchase_price_total
+                            if line_cost_price_total<purchase_price_total:
+                                line_cost_price_total=purchase_price_total
+
+
             # amount_total = self.amount_total or 0.0
             amount_untaxed = order.amount_untaxed or 0.0
             discount_amount = order.discount_amount or 0.0
@@ -294,7 +300,7 @@ class SaleOrder(models.Model):
 
             # profit = amount_total - actual_cost_price_total
             # profit = amount_total - (line_cost_price_total+cubit_service_cost_price_total)
-            profit = order.amount_untaxed - (line_cost_price_total+cubit_service_cost_price_total+order.additional_cost)
+            profit = order.amount_untaxed - (line_cost_price_total+cubit_service_cost_price_total)
 
             # print(profit,"444444444444444")
             if order.additional_cost:
