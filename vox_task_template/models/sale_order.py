@@ -277,7 +277,10 @@ class SaleOrder(models.Model):
                             # if actual_cost_price_total > 0.0:
                             #    actual_cost_price_total = actual_cost_price_total - purchase_discount_amount
                             actual_cost_price_total = actual_cost_price_total - purchase_discount_amount
+
                             purchase_price_total = purchase_price_total #- purchase_discount_amount
+                            if actual_cost_price_total < purchase_price_total:
+                                actual_cost_price_total = purchase_price_total
             # amount_total = self.amount_total or 0.0
             amount_untaxed = order.amount_untaxed or 0.0
             discount_amount = order.discount_amount or 0.0
