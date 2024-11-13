@@ -224,81 +224,166 @@ class SaleOrder(models.Model):
     def _compute_cost_price(self):
         task_obj = self.env['project.task']
         purchase_line_obj = self.env['purchase.order.line']
-        addi_cost = 0.0
-        cubit_service_cost_total = 0.0
-
         for order in self:
+            order_lines = []
+            s_order_lines = {}
             line_cost_price_total = cubit_service_cost_price_total = 0.0
             actual_cost_price_total = purchase_price_total = 0.0
-            po_total = 0.0
-            # s_order_lines = {}
-
+            profit = 0.0
+            for s_line in order.order_line:
+                order_lines.append(s_line)
+                s_order_lines[s_line] = s_line
+                if s_line.is_cubit_service == True:
+                    cubit_service_cost_price_total += s_line.actual_cost_price
+                else:
+                    line_cost_price_total += s_line.actual_cost_price
+                if not s_line.exclude_costprice:
+                    actual_cost_price_total += s_line.actual_cost_price
+                purchase_price_total += s_line.purchase_price
+            # line_cost_price_total -= order.discount_amount
+            # cubit_service_cost_price_total -= order.service_discount_amount
+            project_id = order.project_id and order.project_id.id or False
             purchase_tasks = False
-
             if order.project_id:
                 for project in order.project_id:
                     purchase_tasks = task_obj.search(
-                        [('project_id', '=', project.id), ('project_id', '!=', False),
-                         ('task_type', '=', 'is_purchase'),
+                        [('project_id', '=', project.id), ('project_id', '!=', False), ('task_type', '=', 'is_purchase'),
                          ('purchase_ids', '!=', False)])
-            purchase_order_ids = []
             if purchase_tasks:
-
                 for task in purchase_tasks:
-                    purchase_price_total=0.0
-                    purchase_order_ids += [purch.id for purch in task.purchase_ids]
                     for purchase in task.purchase_ids:
+                        # if purchase.state in ['approved', 'done']:
                         if purchase.state not in ['cancel']:
-                            # purchase_discount_amount = purchase.discount_amount
-                            purchase_price_total += purchase.amount_untaxed
+                            # purchase_total += purchase.amount_total
+                            purchase_discount_amount = purchase.discount_amount
+                            purchase_order_line = purchase_line_obj.search([('order_id', '=',
+                                                                             purchase.id)])  # Check with Manu      , '|', ('active', '=', True), ('active', '=', False)
+                            for p_line in purchase_order_line:
+                                if p_line.import_purchase == True:
+                                    import_price = p_line.price_subtotal
+                                    purchase_price_total += import_price
+                                    line_cost_price_total += import_price
 
-
-
-            for line in order.order_line:
-                if line.is_cubit_service == True:
-                    cubit_service_cost_price_total += line.actual_cost_price
-                else:
-                    if line.product_uom_qty > line.purchase_qty and line.exclude_purchase == False:
-                        if order.project_id:
-                            purchased_qty=0
-                            for project in order.project_id:
-                                po_line = purchase_line_obj.search([('order_id','in', purchase_order_ids),
-                                     ('part_number', '=', line.part_number)])
-                                for rec_po_ln in po_line:
-                                    if rec_po_ln.order_id.state not in ['cancel']:
-                                        purchased_qty+=rec_po_ln.product_uom_qty
-
-                                if line.product_uom_qty>purchased_qty:
-                                    addi_cost += (line.cost_price * (line.product_uom_qty - line.product_uom_qty-purchased_qty))
-
-                        # addi_cost += (line.cost_price * (line.product_uom_qty - line.purchase_qty))
-
-                if not line.exclude_costprice:
-                    actual_cost_price_total += line.actual_cost_price
-                # purchase_price_total += line.purchase_price
-
-
+                                if p_line.order_id.state not in ['cancel'] and p_line.sale_line_id == False:
+                                    p_line_cost = p_line.price_subtotal
+                                    line_cost_price_total += p_line_cost
+                                    actual_cost_price_total += p_line_cost
+                                    # if p_line.sale_line_id.exclude_costprice == False:
+                                    #    actual_cost_price_total +=  p_line_cost
+                                    purchase_price_total += p_line_cost
+                            line_cost_price_total = line_cost_price_total - purchase_discount_amount
+                            # if actual_cost_price_total > 0.0:
+                            #    actual_cost_price_total = actual_cost_price_total - purchase_discount_amount
+                            actual_cost_price_total = actual_cost_price_total - purchase_discount_amount
+                            purchase_price_total = purchase_price_total - purchase_discount_amount
+            # amount_total = self.amount_total or 0.0
             amount_untaxed = order.amount_untaxed or 0.0
+            discount_amount = order.discount_amount or 0.0
+            # print(order.discount_amount ,"2333333333")
+            # print(order.amount_gross ,"99999999999")
+            # print(line_cost_price_total ,"33333333")
+            # print(cubit_service_cost_price_total ,"66666666666")
+            amount_total = amount_untaxed - discount_amount
+            actual_cost_price_total = actual_cost_price_total
+            # actual_cost_price_total = actual_cost_price_total - discount_amount
 
-            actual_cost_price_total=purchase_price_total + addi_cost
+            # profit = amount_total - actual_cost_price_total
+            # profit = amount_total - (line_cost_price_total+cubit_service_cost_price_total)
+            profit = order.amount_untaxed - (line_cost_price_total+cubit_service_cost_price_total+order.additional_cost)
+            print(line_cost_price_total,"order.line_cost_price_total")
+            print(cubit_service_cost_price_total,"order.cubit_service_cost_price_total")
+            print(order.amount_gross,"order.amount_gross")
+            # print(profit,"444444444444444")
+            if order.additional_cost:
+                profit = profit - order.additional_cost
 
-            _logger.info('po_total %s', purchase_price_total)
-            _logger.info('additonal cost %s', addi_cost)
-            _logger.info('actual cost %s', actual_cost_price_total)
-            # discount_amount = order.discount_amount or 0.0
-            # profit = order.amount_untaxed - (po_total + cubit_service_cost_price_total)
-            # if order.additional_cost:
-            #     profit = profit - order.additional_cost
-            # line_total_cost_price = purchase_price_total + addi_cost
-            profit_amt = 0.0
-            profit_amt = amount_untaxed - (actual_cost_price_total + cubit_service_cost_price_total + order.additional_cost)
+            # print "actual_cost_price_total",actual_cost_price_total
             order.update({
                 'purchase_price_total': purchase_price_total,
-                'line_cost_price_total': actual_cost_price_total,
+                'line_cost_price_total': line_cost_price_total,
                 'cubit_service_cost_price_total': cubit_service_cost_price_total,
-                'actual_cost_price_total': actual_cost_price_total + cubit_service_cost_price_total + order.additional_cost,
-                'profit': profit_amt,
+                'actual_cost_price_total': line_cost_price_total+cubit_service_cost_price_total,
+                # 'actual_cost_price_total': actual_cost_price_total,
+                'profit': profit,
             })
+    # def _compute_cost_price(self):
+    #     task_obj = self.env['project.task']
+    #     purchase_line_obj = self.env['purchase.order.line']
+    #     addi_cost = 0.0
+    #     cubit_service_cost_total = 0.0
+    #
+    #     for order in self:
+    #         line_cost_price_total = cubit_service_cost_price_total = 0.0
+    #         actual_cost_price_total = purchase_price_total = 0.0
+    #         po_total = 0.0
+    #         # s_order_lines = {}
+    #
+    #         purchase_tasks = False
+    #
+    #         if order.project_id:
+    #             for project in order.project_id:
+    #                 purchase_tasks = task_obj.search(
+    #                     [('project_id', '=', project.id), ('project_id', '!=', False),
+    #                      ('task_type', '=', 'is_purchase'),
+    #                      ('purchase_ids', '!=', False)])
+    #         purchase_order_ids = []
+    #         if purchase_tasks:
+    #
+    #             for task in purchase_tasks:
+    #                 purchase_price_total=0.0
+    #                 purchase_order_ids += [purch.id for purch in task.purchase_ids]
+    #                 for purchase in task.purchase_ids:
+    #                     if purchase.state not in ['cancel']:
+    #                         # purchase_discount_amount = purchase.discount_amount
+    #                         purchase_price_total += purchase.amount_untaxed
+    #
+    #
+    #
+    #         for line in order.order_line:
+    #             if line.is_cubit_service == True:
+    #                 cubit_service_cost_price_total += line.actual_cost_price
+    #             else:
+    #                 if line.product_uom_qty > line.purchase_qty and line.exclude_purchase == False:
+    #                     if order.project_id:
+    #                         purchased_qty=0
+    #                         for project in order.project_id:
+    #                             po_line = purchase_line_obj.search([('order_id','in', purchase_order_ids),
+    #                                  ('part_number', '=', line.part_number)])
+    #                             for rec_po_ln in po_line:
+    #                                 if rec_po_ln.order_id.state not in ['cancel']:
+    #                                     purchased_qty+=rec_po_ln.product_uom_qty
+    #
+    #                             if line.product_uom_qty>purchased_qty:
+    #                                 addi_cost += (line.cost_price * (line.product_uom_qty - line.product_uom_qty-purchased_qty))
+    #
+    #                     # addi_cost += (line.cost_price * (line.product_uom_qty - line.purchase_qty))
+    #
+    #             if not line.exclude_costprice:
+    #                 actual_cost_price_total += line.actual_cost_price
+    #             # purchase_price_total += line.purchase_price
+    #
+    #
+    #         amount_untaxed = order.amount_untaxed or 0.0
+    #
+    #         actual_cost_price_total=purchase_price_total + addi_cost
+    #
+    #         _logger.info('po_total %s', purchase_price_total)
+    #         _logger.info('additonal cost %s', addi_cost)
+    #         _logger.info('actual cost %s', actual_cost_price_total)
+    #         # discount_amount = order.discount_amount or 0.0
+    #         # profit = order.amount_untaxed - (po_total + cubit_service_cost_price_total)
+    #         # if order.additional_cost:
+    #         #     profit = profit - order.additional_cost
+    #         # line_total_cost_price = purchase_price_total + addi_cost
+    #         profit_amt = 0.0
+    #         profit_amt = amount_untaxed - (actual_cost_price_total + cubit_service_cost_price_total + order.additional_cost)
+    #         order.update({
+    #             'purchase_price_total': purchase_price_total,
+    #             'line_cost_price_total': actual_cost_price_total,
+    #             'cubit_service_cost_price_total': cubit_service_cost_price_total,
+    #             'actual_cost_price_total': actual_cost_price_total + cubit_service_cost_price_total + order.additional_cost,
+    #             'profit': profit_amt,
+    #         })
 
     #======================== Backup ====================
     # def _compute_cost_price(self):
