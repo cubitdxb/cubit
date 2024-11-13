@@ -279,7 +279,12 @@ class SaleOrder(models.Model):
 
 
             amount_untaxed = order.amount_untaxed or 0.0
+
             actual_cost_price_total=purchase_price_total + addi_cost
+
+            _logger.info('po_total %s', purchase_price_total)
+            _logger.info('additonal cost %s', addi_cost)
+            _logger.info('actual cost %s', actual_cost_price_total)
             # discount_amount = order.discount_amount or 0.0
             # profit = order.amount_untaxed - (po_total + cubit_service_cost_price_total)
             # if order.additional_cost:
