@@ -251,24 +251,7 @@ class SaleOrder(models.Model):
                         if purchase.state not in ['cancel']:
                             # purchase_discount_amount = purchase.discount_amount
                             purchase_price_total += purchase.amount_untaxed
-                            # actual_cost_price_total+=purchase_untax_amount
 
-                            #
-                            # purchase_order_line = purchase_line_obj.search([('order_id', '=',
-                            #                                                  purchase.id)])  # Check with Manu      , '|', ('active', '=', True), ('active', '=', False)
-                            #
-                            # for p_line in purchase_order_line:
-                            #     po_total += p_line.price_subtotal# + p_line.price_tax
-                            #     if p_line.import_purchase == True:
-                            #         import_price = p_line.price_subtotal
-                            #         purchase_price_total += import_price
-                            #         line_cost_price_total += import_price
-                            #     if p_line.order_id.state not in ['cancel'] and p_line.sale_line_id not in s_order_lines:
-                            #         p_line_cost = p_line.price_subtotal
-                            #         line_cost_price_total += p_line_cost
-                            #         actual_cost_price_total += p_line_cost
-                            #         purchase_price_total += p_line_cost
-                            # actual_cost_price_total = actual_cost_price_total - purchase_discount_amount
 
 
             for line in order.order_line:
@@ -296,7 +279,7 @@ class SaleOrder(models.Model):
 
 
             amount_untaxed = order.amount_untaxed or 0.0
-            actual_cost_price_total=actual_cost_price_total + addi_cost
+            actual_cost_price_total=purchase_price_total + addi_cost
             # discount_amount = order.discount_amount or 0.0
             # profit = order.amount_untaxed - (po_total + cubit_service_cost_price_total)
             # if order.additional_cost:
