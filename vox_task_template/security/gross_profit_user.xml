@@ -1,0 +1,12 @@
+<odoo>
+    <record id="module_gross_profit_user" model="ir.module.category">
+        <field name="name">Gross Profit User</field>
+        <field name="sequence">2</field>
+    </record>
+
+    <record id="group_gross_profit_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="category_id" ref="module_gross_profit_user"/>
+    </record>
+
+</odoo>

@@ -1,0 +1,11 @@
+<odoo>
+    <data>
+		    <record id="report_purchase_export_xls" model="ir.actions.report">
+           	<field name="name">Purchase Quote Export Report</field>
+			<field name="model">purchase.order</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">vox_task_template.report_helpdesk_ticket_xlsx</field>
+            <field name="report_file">vox_task_template.report_helpdesk_ticket_xlsx</field>
+        </record>
+    </data>
+</odoo>
