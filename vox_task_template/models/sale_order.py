@@ -296,18 +296,19 @@ class SaleOrder(models.Model):
 
 
             amount_untaxed = order.amount_untaxed or 0.0
-            discount_amount = order.discount_amount or 0.0
-            profit = order.amount_untaxed - (po_total + cubit_service_cost_price_total)
-            if order.additional_cost:
-                profit = profit - order.additional_cost
-            line_total_cost_price = purchase_price_total + addi_cost
+            actual_cost_price_total=actual_cost_price_total + addi_cost
+            # discount_amount = order.discount_amount or 0.0
+            # profit = order.amount_untaxed - (po_total + cubit_service_cost_price_total)
+            # if order.additional_cost:
+            #     profit = profit - order.additional_cost
+            # line_total_cost_price = purchase_price_total + addi_cost
             profit_amt = 0.0
-            profit_amt = amount_untaxed - (actual_cost_price_total + addi_cost+ cubit_service_cost_total + order.additional_cost)
+            profit_amt = amount_untaxed - (actual_cost_price_total + cubit_service_cost_price_total + order.additional_cost)
             order.update({
                 'purchase_price_total': purchase_price_total,
                 'line_cost_price_total': actual_cost_price_total,
                 'cubit_service_cost_price_total': cubit_service_cost_price_total,
-                'actual_cost_price_total': actual_cost_price_total + cubit_service_cost_total + order.additional_cost,
+                'actual_cost_price_total': actual_cost_price_total + cubit_service_cost_price_total + order.additional_cost,
                 'profit': profit_amt,
             })
 
